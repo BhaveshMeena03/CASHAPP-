@@ -2,7 +2,9 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
+const db = require('./config/db');
 const compression = require('compression');
+const startedAt = new Date();
 const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = require('./config/swagger');
 const errorHandler = require('./middleware/errorHandler');
@@ -15,6 +17,7 @@ const walletRoutes = require('./routes/wallet');
 const userRoutes = require('./routes/users');
 const notificationRoutes = require('./routes/notifications');
 const fundingRoutes = require('./routes/funding');
+const tradingRoutes = require('./routes/trading');
 
 const app = express();
 
@@ -36,9 +39,15 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
 // Raw OpenAPI spec as JSON
 app.get('/api-docs.json', (_req, res) => res.json(swaggerSpec));
 
-// ── Health Check ─────────────────────────────────────
-const db = require('./config/db');
-const startedAt = new Date();
+// ── Welcome/Home ─────────────────────────────────────
+app.get('/', (req, res) => {
+    res.json({
+        success: true,
+        message: 'Welcome to the FlowCash API!',
+        docs: '/api-docs',
+        health: '/health'
+    });
+});
 
 app.get('/health', async (_req, res) => {
     const uptimeSeconds = Math.floor((Date.now() - startedAt.getTime()) / 1000);
@@ -47,7 +56,7 @@ app.get('/health', async (_req, res) => {
     try {
         const { rows } = await db.query('SELECT NOW() AS server_time');
         serverTime = rows[0].server_time;
-    } catch {
+    } catch (err) {
         dbStatus = 'disconnected';
     }
     const healthy = dbStatus === 'connected';
@@ -78,6 +87,7 @@ app.use('/api/wallet', walletRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/funding', fundingRoutes);
+app.use('/api/trading', tradingRoutes);
 
 // ── 404 catch-all ────────────────────────────────────
 app.use((_req, res) => {

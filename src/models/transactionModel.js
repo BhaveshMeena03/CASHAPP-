@@ -3,18 +3,18 @@ const { v4: uuidv4 } = require('uuid');
 
 /**
  * Create a new transaction.
- * @param {object} data — { senderId, receiverId, amount, type, note, status }
+ * @param {object} data — { senderId, receiverId, amount, type, note, status, idempotencyKey }
  * @param {object} [client] — optional pg client (for external DB transactions)
  * @returns {object} the new transaction row
  */
-async function createTransaction({ senderId, receiverId, amount, type, note, status }, client) {
+async function createTransaction({ senderId, receiverId, amount, type, note, status, idempotencyKey }, client) {
     const conn = client || db;
     const id = uuidv4();
     const { rows } = await conn.query(
-        `INSERT INTO transactions (id, sender_id, receiver_id, amount, type, note, status)
-     VALUES ($1, $2, $3, $4, $5, $6, $7)
+        `INSERT INTO transactions (id, sender_id, receiver_id, amount, type, note, status, idempotency_key)
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
      RETURNING *`,
-        [id, senderId, receiverId, amount, type, note || null, status || 'pending']
+        [id, senderId, receiverId, amount, type, note || null, status || 'pending', idempotencyKey || null]
     );
     return rows[0];
 }
@@ -24,6 +24,18 @@ async function createTransaction({ senderId, receiverId, amount, type, note, sta
  */
 async function findById(id) {
     const { rows } = await db.query('SELECT * FROM transactions WHERE id = $1', [id]);
+    return rows[0] || null;
+}
+
+/**
+ * Find a transaction by sender and idempotency key.
+ */
+async function findByIdempotencyKey(senderId, idempotencyKey) {
+    if (!idempotencyKey) return null;
+    const { rows } = await db.query(
+        'SELECT * FROM transactions WHERE sender_id = $1 AND idempotency_key = $2',
+        [senderId, idempotencyKey]
+    );
     return rows[0] || null;
 }
 
@@ -101,6 +113,7 @@ async function updateStatus(id, status, client) {
 module.exports = {
     createTransaction,
     findById,
+    findByIdempotencyKey,
     findByUserId,
     updateStatus,
 };

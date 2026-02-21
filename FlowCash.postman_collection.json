@@ -500,6 +500,189 @@
             ]
         },
         {
+            "name": "Negative Tests",
+            "description": "Security and logic edge cases to verify app robustness.",
+            "item": [
+                {
+                    "name": "1.1 Zombie Token (Expired/Invalid)",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/api/auth/me",
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.invalid.payload",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "description": "Expected: 401 Unauthorized. Tests that invalid/expired tokens are rejected."
+                    }
+                },
+                {
+                    "name": "1.2 Impersonator (ID Traversal / BOLA)",
+                    "request": {
+                        "method": "PATCH",
+                        "url": "{{baseUrl}}/api/users/profile",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"id\": \"some-other-uuid\",\n  \"fullName\": \"Attacker Name\"\n}"
+                        },
+                        "description": "Expected: Success (but only updates YOUR profile). This verifies that the server ignores the 'id' in the body and uses the JWT for identity."
+                    }
+                },
+                {
+                    "name": "1.3 SQL Injection Registration",
+                    "request": {
+                        "method": "POST",
+                        "url": "{{baseUrl}}/api/auth/register",
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"email\": \"test@example.com' OR 1=1 --\",\n  \"password\": \"password123\",\n  \"fullName\": \"Hacker\",\n  \"phone\": \"123456789\",\n  \"cashtag\": \"$hacker\"\n}"
+                        },
+                        "description": "Expected: 400 Bad Request (Validation error). Tests sanitization."
+                    }
+                },
+                {
+                    "name": "2.1 Negative Wealth Bug",
+                    "request": {
+                        "method": "POST",
+                        "url": "{{baseUrl}}/api/transfer/send",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"cashtag\": \"$alice\",\n  \"amount\": -500,\n  \"note\": \"Stealing money 😈\"\n}"
+                        },
+                        "description": "Expected: 400 Bad Request. Tests that only positive amounts are allowed."
+                    }
+                },
+                {
+                    "name": "2.2 Empty Pocket (Overdraw)",
+                    "request": {
+                        "method": "POST",
+                        "url": "{{baseUrl}}/api/transfer/send",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"cashtag\": \"$alice\",\n  \"amount\": 9999999999,\n  \"note\": \"Overdrawing\"\n}"
+                        },
+                        "description": "Expected: 400 Bad Request (Insufficient balance)."
+                    }
+                },
+                {
+                    "name": "2.3 Self-Loop",
+                    "request": {
+                        "method": "POST",
+                        "url": "{{baseUrl}}/api/transfer/send",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"cashtag\": \"{{cashtag}}\",\n  \"amount\": 100,\n  \"note\": \"Sending to self\"\n}"
+                        },
+                        "description": "Expected: 400 Bad Request. Tests that you can't send money to yourself."
+                    }
+                },
+                {
+                    "name": "3.1 Stolen Webhook (Signature Verification)",
+                    "request": {
+                        "method": "POST",
+                        "url": "{{baseUrl}}/api/funding/webhook",
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"id\": \"evt_fake\",\n  \"type\": \"payment_intent.succeeded\"\n}"
+                        },
+                        "description": "Expected: 400 Bad Request. Tests that the server rejects webhooks without a valid Stripe signature."
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Financial Integrity",
+            "description": "Critical robustness tests for production readiness.",
+            "item": [
+                {
+                    "name": "Idempotency (Double-Pay Protection)",
+                    "request": {
+                        "method": "POST",
+                        "url": "{{baseUrl}}/api/transfer/send",
+                        "header": [
+                            {
+                                "key": "X-Idempotency-Key",
+                                "value": "unique-random-uuid-12345",
+                                "description": "Send same key twice: 1st returns 201, 2nd returns 200 (existing)"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"cashtag\": \"$alice\",\n  \"amount\": 100,\n  \"note\": \"Idempotent payment test\"\n}"
+                        },
+                        "description": "Tests that duplicate requests with the same key are ignored."
+                    }
+                },
+                {
+                    "name": "Manual Stripe Sync (Reconciliation)",
+                    "request": {
+                        "method": "POST",
+                        "url": "{{baseUrl}}/api/funding/sync/{{stripeReferenceId}}",
+                        "description": "Use this if a Stripe payment is SUCCESS on Stripe but PENDING in FlowCash. It fetches the latest from Stripe and updates our wallet."
+                    }
+                },
+                {
+                    "name": "Strict Login Rate Limit (10x)",
+                    "request": {
+                        "method": "POST",
+                        "url": "{{baseUrl}}/api/auth/login",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"email\": \"nonexistent@example.com\",\n  \"password\": \"wrongpass\"\n}"
+                        },
+                        "description": "Run this 10 times in a row using the Runner. On the 11th try, you will get a 429 Too Many Requests."
+                    }
+                }
+            ]
+        },
+        {
             "name": "Funding (Stripe)",
             "description": "Cash In / Cash Out via Stripe. Requires a Stripe test key in .env.",
             "item": [

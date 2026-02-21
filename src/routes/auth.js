@@ -1,6 +1,7 @@
 const { Router } = require('express');
 const auth = require('../middleware/auth');
 const validate = require('../middleware/validate');
+const { authLimiter } = require('../middleware/rateLimiter');
 const controller = require('../controllers/authController');
 
 const router = Router();
@@ -26,8 +27,8 @@ const refreshSchema = {
 
 // ── Routes ───────────────────────────────────────────
 
-router.post('/register', validate(registerSchema), controller.register);
-router.post('/login', validate(loginSchema), controller.login);
+router.post('/register', authLimiter, validate(registerSchema), controller.register);
+router.post('/login', authLimiter, validate(loginSchema), controller.login);
 router.get('/me', auth, controller.getMe);
 router.post('/logout', auth, controller.logout);
 router.post('/refresh', validate(refreshSchema), controller.refreshToken);

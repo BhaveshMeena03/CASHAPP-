@@ -1,0 +1,2022 @@
+(globalThis.TURBOPACK || (globalThis.TURBOPACK = [])).push([typeof document === "object" ? document.currentScript : undefined,
+"[project]/frontend/components/Navbar.js [app-client] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "default",
+    ()=>Navbar
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/frontend/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/frontend/node_modules/next/dist/client/app-dir/link.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/frontend/node_modules/next/navigation.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$house$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Home$3e$__ = __turbopack_context__.i("[project]/frontend/node_modules/lucide-react/dist/esm/icons/house.js [app-client] (ecmascript) <export default as Home>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$credit$2d$card$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__CreditCard$3e$__ = __turbopack_context__.i("[project]/frontend/node_modules/lucide-react/dist/esm/icons/credit-card.js [app-client] (ecmascript) <export default as CreditCard>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$clock$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Clock$3e$__ = __turbopack_context__.i("[project]/frontend/node_modules/lucide-react/dist/esm/icons/clock.js [app-client] (ecmascript) <export default as Clock>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$plus$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Plus$3e$__ = __turbopack_context__.i("[project]/frontend/node_modules/lucide-react/dist/esm/icons/plus.js [app-client] (ecmascript) <export default as Plus>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$clsx$2f$dist$2f$clsx$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/frontend/node_modules/clsx/dist/clsx.mjs [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$tailwind$2d$merge$2f$dist$2f$bundle$2d$mjs$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/frontend/node_modules/tailwind-merge/dist/bundle-mjs.mjs [app-client] (ecmascript)");
+;
+var _s = __turbopack_context__.k.signature();
+"use client";
+;
+;
+;
+;
+;
+// Custom Investing Icon combining a chart and Bitcoin logo
+const InvestingIcon = ({ className })=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
+        viewBox: "0 0 24 24",
+        fill: "none",
+        stroke: "currentColor",
+        strokeWidth: "2",
+        strokeLinecap: "round",
+        strokeLinejoin: "round",
+        className: className,
+        children: [
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                d: "M3 17l4-4 3 3"
+            }, void 0, false, {
+                fileName: "[project]/frontend/components/Navbar.js",
+                lineNumber: 21,
+                columnNumber: 5
+            }, ("TURBOPACK compile-time value", void 0)),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                d: "M10 16l4-4"
+            }, void 0, false, {
+                fileName: "[project]/frontend/components/Navbar.js",
+                lineNumber: 22,
+                columnNumber: 5
+            }, ("TURBOPACK compile-time value", void 0)),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                d: "M3 21h18"
+            }, void 0, false, {
+                fileName: "[project]/frontend/components/Navbar.js",
+                lineNumber: 23,
+                columnNumber: 5
+            }, ("TURBOPACK compile-time value", void 0)),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                d: "M17 11h2.5a1.5 1.5 0 0 0 0-3H17v6h3.5a1.5 1.5 0 0 0 0-3H17",
+                strokeWidth: "1.5"
+            }, void 0, false, {
+                fileName: "[project]/frontend/components/Navbar.js",
+                lineNumber: 25,
+                columnNumber: 5
+            }, ("TURBOPACK compile-time value", void 0)),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                d: "M18 7v1",
+                strokeWidth: "1.5"
+            }, void 0, false, {
+                fileName: "[project]/frontend/components/Navbar.js",
+                lineNumber: 29,
+                columnNumber: 5
+            }, ("TURBOPACK compile-time value", void 0)),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                d: "M20 7v1",
+                strokeWidth: "1.5"
+            }, void 0, false, {
+                fileName: "[project]/frontend/components/Navbar.js",
+                lineNumber: 30,
+                columnNumber: 5
+            }, ("TURBOPACK compile-time value", void 0)),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                d: "M18 14v1",
+                strokeWidth: "1.5"
+            }, void 0, false, {
+                fileName: "[project]/frontend/components/Navbar.js",
+                lineNumber: 31,
+                columnNumber: 5
+            }, ("TURBOPACK compile-time value", void 0)),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                d: "M20 14v1",
+                strokeWidth: "1.5"
+            }, void 0, false, {
+                fileName: "[project]/frontend/components/Navbar.js",
+                lineNumber: 32,
+                columnNumber: 5
+            }, ("TURBOPACK compile-time value", void 0))
+        ]
+    }, void 0, true, {
+        fileName: "[project]/frontend/components/Navbar.js",
+        lineNumber: 11,
+        columnNumber: 3
+    }, ("TURBOPACK compile-time value", void 0));
+_c = InvestingIcon;
+function cn(...inputs) {
+    return (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$tailwind$2d$merge$2f$dist$2f$bundle$2d$mjs$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["twMerge"])((0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$clsx$2f$dist$2f$clsx$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["clsx"])(inputs));
+}
+const navItems = [
+    {
+        href: "/",
+        icon: __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$house$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Home$3e$__["Home"],
+        label: "Home"
+    },
+    {
+        href: "/cards",
+        icon: __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$credit$2d$card$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__CreditCard$3e$__["CreditCard"],
+        label: "Cards"
+    },
+    {
+        href: "/pay",
+        icon: __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$plus$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Plus$3e$__["Plus"],
+        label: "Pay",
+        isCenter: true
+    },
+    {
+        href: "/investing",
+        icon: InvestingIcon,
+        label: "Investing"
+    },
+    {
+        href: "/activity",
+        icon: __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$clock$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Clock$3e$__["Clock"],
+        label: "Activity"
+    }
+];
+function Navbar() {
+    _s();
+    const pathname = (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["usePathname"])();
+    // Hide navbar on login/register screens
+    if ([
+        "/login",
+        "/register"
+    ].includes(pathname)) return null;
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("nav", {
+        className: "fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white/80 dark:bg-black/80 backdrop-blur-md border-t border-gray-100 dark:border-zinc-800 px-6 py-3 flex items-center justify-between z-50",
+        children: navItems.map((item)=>{
+            const Icon = item.icon;
+            const isActive = pathname === item.href;
+            if (item.isCenter) {
+                return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
+                    href: "/pay",
+                    className: "bg-cashapp text-white p-3 rounded-full -translate-y-6 shadow-lg shadow-cashapp/40 hover:scale-110 active:scale-95 transition-all",
+                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(Icon, {
+                        className: "w-8 h-8",
+                        strokeWidth: 3
+                    }, void 0, false, {
+                        fileName: "[project]/frontend/components/Navbar.js",
+                        lineNumber: 67,
+                        columnNumber: 15
+                    }, this)
+                }, item.href, false, {
+                    fileName: "[project]/frontend/components/Navbar.js",
+                    lineNumber: 62,
+                    columnNumber: 13
+                }, this);
+            }
+            return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
+                href: item.href,
+                className: cn("flex flex-col items-center space-y-1 transition-colors", isActive ? "text-cashapp" : "text-gray-400 hover:text-gray-600"),
+                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(Icon, {
+                    className: "w-6 h-6"
+                }, void 0, false, {
+                    fileName: "[project]/frontend/components/Navbar.js",
+                    lineNumber: 81,
+                    columnNumber: 13
+                }, this)
+            }, item.href, false, {
+                fileName: "[project]/frontend/components/Navbar.js",
+                lineNumber: 73,
+                columnNumber: 11
+            }, this);
+        })
+    }, void 0, false, {
+        fileName: "[project]/frontend/components/Navbar.js",
+        lineNumber: 55,
+        columnNumber: 5
+    }, this);
+}
+_s(Navbar, "xbyQPtUVMO7MNj7WjJlpdWqRcTo=", false, function() {
+    return [
+        __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["usePathname"]
+    ];
+});
+_c1 = Navbar;
+var _c, _c1;
+__turbopack_context__.k.register(_c, "InvestingIcon");
+__turbopack_context__.k.register(_c1, "Navbar");
+if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
+    __turbopack_context__.k.registerExports(__turbopack_context__.m, globalThis.$RefreshHelpers$);
+}
+}),
+"[project]/frontend/components/PriceChart.js [app-client] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "default",
+    ()=>PriceChart,
+    "generatePriceHistory",
+    ()=>generatePriceHistory
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/frontend/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
+"use client";
+;
+function generatePriceHistory(basePrice, volatility, points) {
+    const data = [];
+    let price = basePrice;
+    for(let i = 0; i < points; i++){
+        const change = (Math.random() - 0.48) * volatility * basePrice;
+        price = Math.max(price + change, basePrice * 0.5);
+        data.push(price);
+    }
+    return data;
+}
+function PriceChart({ data, color = "#00D632", height = 200 }) {
+    if (!data || data.length < 2) return null;
+    const min = Math.min(...data);
+    const max = Math.max(...data);
+    const range = max - min || 1;
+    const padding = 4;
+    const w = 100;
+    const h = 100;
+    const points = data.map((val, i)=>{
+        const x = padding + i / (data.length - 1) * (w - padding * 2);
+        const y = padding + (1 - (val - min) / range) * (h - padding * 2);
+        return `${x},${y}`;
+    }).join(" ");
+    const isDown = data[data.length - 1] < data[0];
+    const lineColor = isDown ? "#EF4444" : color;
+    // Gradient fill
+    const firstPoint = points.split(" ")[0];
+    const lastPoint = points.split(" ").pop();
+    const fillPoints = `${padding},${h} ${points} ${w - padding},${h}`;
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
+        viewBox: `0 0 ${w} ${h}`,
+        style: {
+            height,
+            width: "100%"
+        },
+        preserveAspectRatio: "none",
+        children: [
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("defs", {
+                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("linearGradient", {
+                    id: `grad-${lineColor.replace('#', '')}`,
+                    x1: "0",
+                    x2: "0",
+                    y1: "0",
+                    y2: "1",
+                    children: [
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("stop", {
+                            offset: "0%",
+                            stopColor: lineColor,
+                            stopOpacity: "0.15"
+                        }, void 0, false, {
+                            fileName: "[project]/frontend/components/PriceChart.js",
+                            lineNumber: 45,
+                            columnNumber: 21
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("stop", {
+                            offset: "100%",
+                            stopColor: lineColor,
+                            stopOpacity: "0"
+                        }, void 0, false, {
+                            fileName: "[project]/frontend/components/PriceChart.js",
+                            lineNumber: 46,
+                            columnNumber: 21
+                        }, this)
+                    ]
+                }, void 0, true, {
+                    fileName: "[project]/frontend/components/PriceChart.js",
+                    lineNumber: 44,
+                    columnNumber: 17
+                }, this)
+            }, void 0, false, {
+                fileName: "[project]/frontend/components/PriceChart.js",
+                lineNumber: 43,
+                columnNumber: 13
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("polygon", {
+                points: fillPoints,
+                fill: `url(#grad-${lineColor.replace('#', '')})`
+            }, void 0, false, {
+                fileName: "[project]/frontend/components/PriceChart.js",
+                lineNumber: 49,
+                columnNumber: 13
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("polyline", {
+                points: points,
+                fill: "none",
+                stroke: lineColor,
+                strokeWidth: "0.8",
+                strokeLinecap: "round",
+                strokeLinejoin: "round"
+            }, void 0, false, {
+                fileName: "[project]/frontend/components/PriceChart.js",
+                lineNumber: 53,
+                columnNumber: 13
+            }, this)
+        ]
+    }, void 0, true, {
+        fileName: "[project]/frontend/components/PriceChart.js",
+        lineNumber: 42,
+        columnNumber: 9
+    }, this);
+}
+_c = PriceChart;
+var _c;
+__turbopack_context__.k.register(_c, "PriceChart");
+if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
+    __turbopack_context__.k.registerExports(__turbopack_context__.m, globalThis.$RefreshHelpers$);
+}
+}),
+"[project]/frontend/lib/assets.js [app-client] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+/**
+ * Asset reference data + Alpaca API helpers.
+ *
+ * Static data (icons, colors, names) stays here.
+ * All price / holdings / trading data now comes from
+ * the backend via Alpaca.
+ */ __turbopack_context__.s([
+    "BITCOIN_DATA",
+    ()=>BITCOIN_DATA,
+    "CRYPTOS",
+    ()=>CRYPTOS,
+    "STOCKS",
+    ()=>STOCKS,
+    "getBarParams",
+    ()=>getBarParams,
+    "getCompanyInfo",
+    ()=>getCompanyInfo
+]);
+const BITCOIN_DATA = {
+    symbol: "BTC/USD",
+    alpacaSymbol: "BTCUSD",
+    name: "Bitcoin",
+    icon: "₿",
+    color: "#F7931A"
+};
+const CRYPTOS = [
+    {
+        symbol: "BTC/USD",
+        alpacaSymbol: "BTCUSD",
+        name: "Bitcoin",
+        icon: "₿",
+        color: "#F7931A",
+        coingeckoId: "bitcoin",
+        logo: "https://assets.coingecko.com/coins/images/1/large/bitcoin.png"
+    },
+    {
+        symbol: "ETH/USD",
+        alpacaSymbol: "ETHUSD",
+        name: "Ethereum",
+        icon: "♦",
+        color: "#627EEA",
+        coingeckoId: "ethereum",
+        logo: "https://assets.coingecko.com/coins/images/279/large/ethereum.png"
+    },
+    {
+        symbol: "LTC/USD",
+        alpacaSymbol: "LTCUSD",
+        name: "Litecoin",
+        icon: "Ł",
+        color: "#345D9D",
+        coingeckoId: "litecoin",
+        logo: "https://assets.coingecko.com/coins/images/2/large/litecoin.png"
+    },
+    {
+        symbol: "BCH/USD",
+        alpacaSymbol: "BCHUSD",
+        name: "Bitcoin Cash",
+        icon: "₿",
+        color: "#8DC351",
+        coingeckoId: "bitcoin-cash",
+        logo: "https://assets.coingecko.com/coins/images/780/large/bitcoin-cash-circle.png"
+    },
+    {
+        symbol: "LINK/USD",
+        alpacaSymbol: "LINKUSD",
+        name: "Chainlink",
+        icon: "🔗",
+        color: "#2A5ADA",
+        coingeckoId: "chainlink",
+        logo: "https://assets.coingecko.com/coins/images/877/large/chainlink-new-logo.png"
+    },
+    {
+        symbol: "UNI/USD",
+        alpacaSymbol: "UNIUSD",
+        name: "Uniswap",
+        icon: "🦄",
+        color: "#FF007A",
+        coingeckoId: "uniswap",
+        logo: "https://assets.coingecko.com/coins/images/12504/large/uni.jpg"
+    }
+];
+const STOCKS = [
+    {
+        symbol: "AAPL",
+        name: "Apple",
+        icon: "🍎",
+        color: "#555555",
+        logo: "https://logo.clearbit.com/apple.com"
+    },
+    {
+        symbol: "MSFT",
+        name: "Microsoft",
+        icon: "🪟",
+        color: "#00A4EF",
+        logo: "https://logo.clearbit.com/microsoft.com"
+    },
+    {
+        symbol: "NVDA",
+        name: "NVIDIA",
+        icon: "🟢",
+        color: "#76B900",
+        logo: "https://logo.clearbit.com/nvidia.com"
+    },
+    {
+        symbol: "AMZN",
+        name: "Amazon",
+        icon: "📦",
+        color: "#FF9900",
+        logo: "https://logo.clearbit.com/amazon.com"
+    },
+    {
+        symbol: "META",
+        name: "Meta Platforms",
+        icon: "♾️",
+        color: "#0080FB",
+        logo: "https://logo.clearbit.com/meta.com"
+    },
+    {
+        symbol: "GOOGL",
+        name: "Alphabet (Google)",
+        icon: "🔍",
+        color: "#4285F4",
+        logo: "https://logo.clearbit.com/google.com"
+    },
+    {
+        symbol: "TSLA",
+        name: "Tesla",
+        icon: "⚡",
+        color: "#E31937",
+        logo: "https://logo.clearbit.com/tesla.com"
+    },
+    {
+        symbol: "BRK.B",
+        name: "Berkshire Hathaway",
+        icon: "🏢",
+        color: "#000000",
+        logo: "https://logo.clearbit.com/berkshirehathaway.com"
+    },
+    {
+        symbol: "AVGO",
+        name: "Broadcom",
+        icon: "🔴",
+        color: "#CC0000",
+        logo: "https://logo.clearbit.com/broadcom.com"
+    },
+    {
+        symbol: "LLY",
+        name: "Eli Lilly",
+        icon: "💊",
+        color: "#D11920",
+        logo: "https://logo.clearbit.com/lilly.com"
+    },
+    {
+        symbol: "V",
+        name: "Visa",
+        icon: "💳",
+        color: "#1A1F71",
+        logo: "https://logo.clearbit.com/visa.com"
+    },
+    {
+        symbol: "JPM",
+        name: "JPMorgan Chase",
+        icon: "🏦",
+        color: "#000000",
+        logo: "https://logo.clearbit.com/jpmorganchase.com"
+    },
+    {
+        symbol: "UNH",
+        name: "UnitedHealth",
+        icon: "🩺",
+        color: "#003A70",
+        logo: "https://logo.clearbit.com/unitedhealthgroup.com"
+    },
+    {
+        symbol: "XOM",
+        name: "Exxon Mobil",
+        icon: "🛢️",
+        color: "#D8232A",
+        logo: "https://logo.clearbit.com/exxonmobil.com"
+    },
+    {
+        symbol: "MA",
+        name: "Mastercard",
+        icon: "💳",
+        color: "#EB001B",
+        logo: "https://logo.clearbit.com/mastercard.com"
+    },
+    {
+        symbol: "PG",
+        name: "Procter & Gamble",
+        icon: "🧼",
+        color: "#003DA5",
+        logo: "https://logo.clearbit.com/pg.com"
+    },
+    {
+        symbol: "JNJ",
+        name: "Johnson & Johnson",
+        icon: "🩹",
+        color: "#C8102E",
+        logo: "https://logo.clearbit.com/jnj.com"
+    },
+    {
+        symbol: "HD",
+        name: "Home Depot",
+        icon: "🔨",
+        color: "#F96302",
+        logo: "https://logo.clearbit.com/homedepot.com"
+    },
+    {
+        symbol: "MRK",
+        name: "Merck",
+        icon: "🔬",
+        color: "#00A3E0",
+        logo: "https://logo.clearbit.com/merck.com"
+    },
+    {
+        symbol: "ABBV",
+        name: "AbbVie",
+        icon: "🧪",
+        color: "#000000",
+        logo: "https://logo.clearbit.com/abbvie.com"
+    },
+    {
+        symbol: "CVX",
+        name: "Chevron",
+        icon: "⛽",
+        color: "#0054A4",
+        logo: "https://logo.clearbit.com/chevron.com"
+    },
+    {
+        symbol: "CRM",
+        name: "Salesforce",
+        icon: "☁️",
+        color: "#00A1E0",
+        logo: "https://logo.clearbit.com/salesforce.com"
+    },
+    {
+        symbol: "AMD",
+        name: "AMD",
+        icon: "💻",
+        color: "#000000",
+        logo: "https://logo.clearbit.com/amd.com"
+    },
+    {
+        symbol: "PEP",
+        name: "PepsiCo",
+        icon: "🥤",
+        color: "#004B93",
+        logo: "https://logo.clearbit.com/pepsico.com"
+    },
+    {
+        symbol: "KO",
+        name: "Coca-Cola",
+        icon: "🥤",
+        color: "#F40000",
+        logo: "https://logo.clearbit.com/coca-cola.com"
+    },
+    {
+        symbol: "BAC",
+        name: "Bank of America",
+        icon: "🏛️",
+        color: "#012169",
+        logo: "https://logo.clearbit.com/bankofamerica.com"
+    },
+    {
+        symbol: "TMO",
+        name: "Thermo Fisher",
+        icon: "🧬",
+        color: "#000000",
+        logo: "https://logo.clearbit.com/thermofisher.com"
+    },
+    {
+        symbol: "COST",
+        name: "Costco",
+        icon: "🛒",
+        color: "#E31837",
+        logo: "https://logo.clearbit.com/costco.com"
+    },
+    {
+        symbol: "WMT",
+        name: "Walmart",
+        icon: "🏪",
+        color: "#0071CE",
+        logo: "https://logo.clearbit.com/walmart.com"
+    },
+    {
+        symbol: "MCD",
+        name: "McDonald's",
+        icon: "🍟",
+        color: "#FFC72C",
+        logo: "https://logo.clearbit.com/mcdonalds.com"
+    },
+    {
+        symbol: "DIS",
+        name: "Disney",
+        icon: "🏰",
+        color: "#113CCF",
+        logo: "https://logo.clearbit.com/disney.com"
+    },
+    {
+        symbol: "ABT",
+        name: "Abbott",
+        icon: "🏥",
+        color: "#0093D0",
+        logo: "https://logo.clearbit.com/abbott.com"
+    },
+    {
+        symbol: "CSCO",
+        name: "Cisco",
+        icon: "🌐",
+        color: "#1BA0D7",
+        logo: "https://logo.clearbit.com/cisco.com"
+    },
+    {
+        symbol: "INTU",
+        name: "Intuit",
+        icon: "📊",
+        color: "#365EBF",
+        logo: "https://logo.clearbit.com/intuit.com"
+    },
+    {
+        symbol: "NFLX",
+        name: "Netflix",
+        icon: "🍿",
+        color: "#E50914",
+        logo: "https://logo.clearbit.com/netflix.com"
+    },
+    {
+        symbol: "NKE",
+        name: "Nike",
+        icon: "👟",
+        color: "#000000",
+        logo: "https://logo.clearbit.com/nike.com"
+    },
+    {
+        symbol: "IBM",
+        name: "IBM",
+        icon: "🖥️",
+        color: "#0F62FE",
+        logo: "https://logo.clearbit.com/ibm.com"
+    },
+    {
+        symbol: "ORCL",
+        name: "Oracle",
+        icon: "💾",
+        color: "#F80000",
+        logo: "https://logo.clearbit.com/oracle.com"
+    },
+    {
+        symbol: "CMCSA",
+        name: "Comcast",
+        icon: "📡",
+        color: "#000000",
+        logo: "https://logo.clearbit.com/comcast.com"
+    },
+    {
+        symbol: "VZ",
+        name: "Verizon",
+        icon: "📱",
+        color: "#CD040B",
+        logo: "https://logo.clearbit.com/verizon.com"
+    },
+    {
+        symbol: "QCOM",
+        name: "Qualcomm",
+        icon: "📱",
+        color: "#3253AD",
+        logo: "https://logo.clearbit.com/qualcomm.com"
+    },
+    {
+        symbol: "TXN",
+        name: "Texas Instruments",
+        icon: "🔌",
+        color: "#CC0000",
+        logo: "https://logo.clearbit.com/ti.com"
+    },
+    {
+        symbol: "PFE",
+        name: "Pfizer",
+        icon: "💊",
+        color: "#0000FF",
+        logo: "https://logo.clearbit.com/pfizer.com"
+    },
+    {
+        symbol: "GE",
+        name: "General Electric",
+        icon: "⚙️",
+        color: "#005EAD",
+        logo: "https://logo.clearbit.com/ge.com"
+    },
+    {
+        symbol: "WFC",
+        name: "Wells Fargo",
+        icon: "💳",
+        color: "#CD1409",
+        logo: "https://logo.clearbit.com/wellsfargo.com"
+    },
+    {
+        symbol: "NOW",
+        name: "ServiceNow",
+        icon: "☁️",
+        color: "#293E40",
+        logo: "https://logo.clearbit.com/servicenow.com"
+    },
+    {
+        symbol: "UNP",
+        name: "Union Pacific",
+        icon: "🚂",
+        color: "#005587",
+        logo: "https://logo.clearbit.com/up.com"
+    },
+    {
+        symbol: "BA",
+        name: "Boeing",
+        icon: "✈️",
+        color: "#1D439C",
+        logo: "https://logo.clearbit.com/boeing.com"
+    },
+    {
+        symbol: "UPS",
+        name: "UPS",
+        icon: "📦",
+        color: "#351C15",
+        logo: "https://logo.clearbit.com/ups.com"
+    },
+    {
+        symbol: "PM",
+        name: "Philip Morris",
+        icon: "🚬",
+        color: "#000000",
+        logo: "https://logo.clearbit.com/pmi.com"
+    }
+];
+function getBarParams(range) {
+    const now = new Date();
+    let start, timeframe, limit;
+    switch(range){
+        case "1D":
+            start = new Date(now);
+            start.setDate(now.getDate() - 1);
+            timeframe = "15Min";
+            limit = 96;
+            break;
+        case "1W":
+            start = new Date(now);
+            start.setDate(now.getDate() - 7);
+            timeframe = "1Hour";
+            limit = 168;
+            break;
+        case "1M":
+            start = new Date(now);
+            start.setMonth(now.getMonth() - 1);
+            timeframe = "1Day";
+            limit = 30;
+            break;
+        case "1Y":
+            start = new Date(now);
+            start.setFullYear(now.getFullYear() - 1);
+            timeframe = "1Day";
+            limit = 365;
+            break;
+        case "ALL":
+            start = new Date(now);
+            start.setFullYear(now.getFullYear() - 5);
+            timeframe = "1Week";
+            limit = 260;
+            break;
+        default:
+            start = new Date(now);
+            start.setDate(now.getDate() - 1);
+            timeframe = "15Min";
+            limit = 96;
+    }
+    return {
+        timeframe,
+        start: start.toISOString(),
+        limit
+    };
+}
+function getCompanyInfo(symbol, name) {
+    const known = {
+        AAPL: {
+            ceo: "Tim Cook",
+            employees: "161,000",
+            hq: "Cupertino, CA",
+            about: "Apple Inc. designs, manufactures, and markets smartphones, personal computers, tablets, wearables, and accessories worldwide."
+        },
+        MSFT: {
+            ceo: "Satya Nadella",
+            employees: "221,000",
+            hq: "Redmond, WA",
+            about: "Microsoft Corporation develops, licenses, and supports software, services, devices, and solutions worldwide."
+        },
+        TSLA: {
+            ceo: "Elon Musk",
+            employees: "127,855",
+            hq: "Austin, TX",
+            about: "Tesla, Inc. designs, develops, manufactures, leases, and sells electric vehicles, and energy generation and storage systems."
+        },
+        NVDA: {
+            ceo: "Jensen Huang",
+            employees: "26,196",
+            hq: "Santa Clara, CA",
+            about: "NVIDIA Corporation provides graphics, and compute and networking solutions in the United States, Taiwan, China, and internationally."
+        },
+        AMZN: {
+            ceo: "Andy Jassy",
+            employees: "1,541,000",
+            hq: "Seattle, WA",
+            about: "Amazon.com, Inc. engages in the retail sale of consumer products and subscriptions in North America and internationally."
+        },
+        META: {
+            ceo: "Mark Zuckerberg",
+            employees: "86,482",
+            hq: "Menlo Park, CA",
+            about: "Meta Platforms, Inc. engages in the development of products that enable people to connect and share with friends and family."
+        },
+        GOOGL: {
+            ceo: "Sundar Pichai",
+            employees: "190,234",
+            hq: "Mountain View, CA",
+            about: "Alphabet Inc. offers various products and platforms in the United States, Europe, the Middle East, Africa, the Asia-Pacific, Canada, and Latin America."
+        }
+    };
+    if (known[symbol]) return known[symbol];
+    // Fallback for the remaining top 50
+    return {
+        ceo: `CEO of ${name}`,
+        employees: `${Math.floor(Math.random() * 100) + 10},000+`,
+        hq: "United States",
+        about: `${name} is a leading publicly traded company listed on the US stock exchange, providing innovative products and services globally.`
+    };
+}
+if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
+    __turbopack_context__.k.registerExports(__turbopack_context__.m, globalThis.$RefreshHelpers$);
+}
+}),
+"[project]/frontend/app/investing/page.js [app-client] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "default",
+    ()=>InvestingPage
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/frontend/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/frontend/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$context$2f$AuthContext$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/frontend/context/AuthContext.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/frontend/node_modules/next/navigation.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$components$2f$Navbar$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/frontend/components/Navbar.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$components$2f$PriceChart$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/frontend/components/PriceChart.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$search$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Search$3e$__ = __turbopack_context__.i("[project]/frontend/node_modules/lucide-react/dist/esm/icons/search.js [app-client] (ecmascript) <export default as Search>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$loader$2d$circle$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Loader2$3e$__ = __turbopack_context__.i("[project]/frontend/node_modules/lucide-react/dist/esm/icons/loader-circle.js [app-client] (ecmascript) <export default as Loader2>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$lib$2f$api$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/frontend/lib/api.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$lib$2f$assets$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/frontend/lib/assets.js [app-client] (ecmascript)");
+;
+var _s = __turbopack_context__.k.signature(), _s1 = __turbopack_context__.k.signature();
+"use client";
+;
+;
+;
+;
+;
+;
+;
+;
+;
+const TIME_RANGES = [
+    "1D",
+    "1W",
+    "1M",
+    "1Y",
+    "ALL"
+];
+function StockLogo({ assetInfo, symbol, size = "w-12 h-12", textClass = "" }) {
+    _s();
+    const [error, setError] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    const symbolStr = symbol.split("/")[0];
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+        className: `${size} rounded-full flex items-center justify-center text-xl overflow-hidden shadow-sm bg-gray-50 dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800`,
+        children: assetInfo?.logo && !error ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("img", {
+            src: assetInfo.logo,
+            alt: symbolStr,
+            className: "w-full h-full object-cover",
+            onError: ()=>setError(true)
+        }, void 0, false, {
+            fileName: "[project]/frontend/app/investing/page.js",
+            lineNumber: 24,
+            columnNumber: 9
+        }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+            className: textClass,
+            children: assetInfo?.icon || symbolStr.charAt(0)
+        }, void 0, false, {
+            fileName: "[project]/frontend/app/investing/page.js",
+            lineNumber: 31,
+            columnNumber: 9
+        }, this)
+    }, void 0, false, {
+        fileName: "[project]/frontend/app/investing/page.js",
+        lineNumber: 20,
+        columnNumber: 5
+    }, this);
+}
+_s(StockLogo, "AvrsuJm02Cqlq6/LWpvA21zDecQ=");
+_c = StockLogo;
+function InvestingPage() {
+    _s1();
+    const { user, loading } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$context$2f$AuthContext$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useAuth"])();
+    const router = (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRouter"])();
+    const [tab, setTab] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])("stocks"); // 'stocks' | 'crypto'
+    const [timeRange, setTimeRange] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])("1D");
+    // Stocks State
+    const [stocksEquity, setStocksEquity] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(0);
+    const [stocksInvested, setStocksInvested] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(0);
+    const [stocksChart, setStocksChart] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])([]);
+    const [stocksActivity, setStocksActivity] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])([]);
+    const [stocksLoading, setStocksLoading] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(true);
+    // Crypto State
+    const [cryptoEquity, setCryptoEquity] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(0);
+    const [cryptoInvested, setCryptoInvested] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(0);
+    const [cryptoChart, setCryptoChart] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])([]);
+    const [cryptoActivity, setCryptoActivity] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])([]);
+    const [cryptoLoading, setCryptoLoading] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(true);
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
+        "InvestingPage.useEffect": ()=>{
+            if (!loading && !user) router.push("/login");
+        }
+    }["InvestingPage.useEffect"], [
+        user,
+        loading,
+        router
+    ]);
+    const fetchStocksData = (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
+        "InvestingPage.useCallback[fetchStocksData]": async ()=>{
+            setStocksLoading(true);
+            try {
+                const [posRes, histRes, ordersRes] = await Promise.all([
+                    __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$lib$2f$api$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].get("/trading/positions"),
+                    __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$lib$2f$api$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].get(`/trading/portfolio/history?period=${getPeriod(timeRange)}&timeframe=${getTimeframe(timeRange)}`),
+                    __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$lib$2f$api$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].get("/trading/orders?limit=30&status=all")
+                ]);
+                // Fix: User's invested balance is ONLY the value of their held STOCKS, not the giant $50k master cash pool.
+                const positions = posRes.data.data || [];
+                const userStockEquity = positions.filter({
+                    "InvestingPage.useCallback[fetchStocksData].userStockEquity": (p)=>!p.symbol.includes("/") && p.asset_class !== "crypto"
+                }["InvestingPage.useCallback[fetchStocksData].userStockEquity"]).reduce({
+                    "InvestingPage.useCallback[fetchStocksData].userStockEquity": (sum, p)=>sum + p.market_value
+                }["InvestingPage.useCallback[fetchStocksData].userStockEquity"], 0);
+                const userStockInvested = positions.filter({
+                    "InvestingPage.useCallback[fetchStocksData].userStockInvested": (p)=>!p.symbol.includes("/") && p.asset_class !== "crypto"
+                }["InvestingPage.useCallback[fetchStocksData].userStockInvested"]).reduce({
+                    "InvestingPage.useCallback[fetchStocksData].userStockInvested": (sum, p)=>sum + parseFloat(p.cost_basis || 0)
+                }["InvestingPage.useCallback[fetchStocksData].userStockInvested"], 0);
+                setStocksEquity(userStockEquity);
+                setStocksInvested(userStockInvested);
+                const bars = histRes.data.data.equity || [];
+                // Remove nulls which indicate non-trading hours
+                const validBars = bars.filter({
+                    "InvestingPage.useCallback[fetchStocksData].validBars": (b)=>b !== null
+                }["InvestingPage.useCallback[fetchStocksData].validBars"]);
+                setStocksChart(validBars);
+                const orders = ordersRes.data.data || [];
+                setStocksActivity(orders.filter({
+                    "InvestingPage.useCallback[fetchStocksData]": (o)=>!o.symbol.includes("/") && o.asset_class !== "crypto"
+                }["InvestingPage.useCallback[fetchStocksData]"]));
+            } catch (err) {
+                console.error("Failed to fetch stocks investing data", err);
+            } finally{
+                setStocksLoading(false);
+            }
+        }
+    }["InvestingPage.useCallback[fetchStocksData]"], [
+        timeRange
+    ]);
+    const fetchCryptoData = (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
+        "InvestingPage.useCallback[fetchCryptoData]": async ()=>{
+            setCryptoLoading(true);
+            try {
+                const [posRes, chartRes, ordersRes] = await Promise.all([
+                    __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$lib$2f$api$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].get(`/trading/positions`),
+                    __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$lib$2f$api$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].get(`/trading/crypto/bars/BTC/USD`, {
+                        params: getBtcBarParams(timeRange)
+                    }),
+                    __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$lib$2f$api$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].get("/trading/orders?limit=30&status=all")
+                ]);
+                const positions = posRes.data.data || [];
+                const userCryptoEquity = positions.filter({
+                    "InvestingPage.useCallback[fetchCryptoData].userCryptoEquity": (p)=>p.asset_class === "crypto" || p.symbol.includes("/")
+                }["InvestingPage.useCallback[fetchCryptoData].userCryptoEquity"]).reduce({
+                    "InvestingPage.useCallback[fetchCryptoData].userCryptoEquity": (sum, p)=>sum + p.market_value
+                }["InvestingPage.useCallback[fetchCryptoData].userCryptoEquity"], 0);
+                const userCryptoInvested = positions.filter({
+                    "InvestingPage.useCallback[fetchCryptoData].userCryptoInvested": (p)=>p.asset_class === "crypto" || p.symbol.includes("/")
+                }["InvestingPage.useCallback[fetchCryptoData].userCryptoInvested"]).reduce({
+                    "InvestingPage.useCallback[fetchCryptoData].userCryptoInvested": (sum, p)=>sum + parseFloat(p.cost_basis || 0)
+                }["InvestingPage.useCallback[fetchCryptoData].userCryptoInvested"], 0);
+                setCryptoEquity(userCryptoEquity);
+                setCryptoInvested(userCryptoInvested);
+                const bars = chartRes.data.data.bars || [];
+                setCryptoChart(bars.map({
+                    "InvestingPage.useCallback[fetchCryptoData]": (b)=>parseFloat(b.c)
+                }["InvestingPage.useCallback[fetchCryptoData]"]));
+                const orders = ordersRes.data.data || [];
+                setCryptoActivity(orders.filter({
+                    "InvestingPage.useCallback[fetchCryptoData]": (o)=>o.symbol.includes("/") || o.asset_class === "crypto"
+                }["InvestingPage.useCallback[fetchCryptoData]"]));
+            } catch (err) {
+                console.error("Failed to fetch crypto data", err);
+            } finally{
+                setCryptoLoading(false);
+            }
+        }
+    }["InvestingPage.useCallback[fetchCryptoData]"], [
+        timeRange
+    ]);
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
+        "InvestingPage.useEffect": ()=>{
+            if (user) {
+                if (tab === "stocks") fetchStocksData();
+                else fetchCryptoData();
+            }
+        }
+    }["InvestingPage.useEffect"], [
+        user,
+        tab,
+        timeRange,
+        fetchStocksData,
+        fetchCryptoData
+    ]);
+    if (loading || !user) return null;
+    // Helpers
+    function getPeriod(tr) {
+        if (tr === "1D") return "1D";
+        if (tr === "1W") return "1W";
+        if (tr === "1M") return "1M";
+        if (tr === "1Y") return "1A";
+        return "all";
+    }
+    function getTimeframe(tr) {
+        if (tr === "1D") return "5Min";
+        if (tr === "1W") return "15Min";
+        if (tr === "1M") return "1H";
+        if (tr === "1Y") return "1D";
+        return "1D";
+    }
+    function getBtcBarParams(tr) {
+        const now = new Date();
+        let start, timeframe, limit;
+        switch(tr){
+            case "1D":
+                start = new Date(now);
+                start.setDate(now.getDate() - 1);
+                timeframe = "15Min";
+                limit = 96;
+                break;
+            case "1W":
+                start = new Date(now);
+                start.setDate(now.getDate() - 7);
+                timeframe = "1Hour";
+                limit = 168;
+                break;
+            case "1M":
+                start = new Date(now);
+                start.setMonth(now.getMonth() - 1);
+                timeframe = "1Day";
+                limit = 30;
+                break;
+            case "1Y":
+                start = new Date(now);
+                start.setFullYear(now.getFullYear() - 1);
+                timeframe = "1Day";
+                limit = 365;
+                break;
+            case "ALL":
+                start = new Date(now);
+                start.setFullYear(now.getFullYear() - 5);
+                timeframe = "1Week";
+                limit = 260;
+                break;
+            default:
+                start = new Date(now);
+                start.setDate(now.getDate() - 1);
+                timeframe = "15Min";
+                limit = 96;
+        }
+        return {
+            timeframe,
+            start: start.toISOString(),
+            limit
+        };
+    }
+    // Render configuration
+    const isStocks = tab === "stocks";
+    const primaryColor = isStocks ? "#9333ea" : "#F7931A"; // Purple for stocks, Orange for Crypto
+    const textColorClass = isStocks ? "text-purple-600" : "text-[#F7931A]";
+    const balance = isStocks ? stocksEquity : cryptoEquity;
+    const invested = isStocks ? stocksInvested : cryptoInvested;
+    const totalGain = balance - invested;
+    const gainPrefix = totalGain >= 0 ? "+" : "";
+    const chartData = isStocks ? stocksChart : cryptoChart;
+    const activityData = isStocks ? stocksActivity : cryptoActivity;
+    const isLoading = isStocks ? stocksLoading : cryptoLoading;
+    // Calculate chart delta safely
+    let pctChange = 0;
+    let diff = 0;
+    if (chartData.length > 0) {
+        const first = chartData[0];
+        const last = chartData[chartData.length - 1];
+        if (first > 0) {
+            diff = last - first;
+            pctChange = diff / first * 100;
+        }
+    }
+    // We visually enforce the chart direction on the summary line for realism
+    const isUp = pctChange >= 0;
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+        className: "min-h-screen bg-white dark:bg-black pb-24",
+        children: [
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "flex items-center justify-between p-6 pb-2",
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
+                        className: "text-2xl font-bold",
+                        children: "Investing"
+                    }, void 0, false, {
+                        fileName: "[project]/frontend/app/investing/page.js",
+                        lineNumber: 250,
+                        columnNumber: 9
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "flex items-center space-x-4",
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                onClick: ()=>router.push("/search"),
+                                className: "p-2 -mr-2 text-gray-800 dark:text-gray-200",
+                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$search$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Search$3e$__["Search"], {
+                                    className: "w-6 h-6",
+                                    style: {
+                                        color: primaryColor
+                                    }
+                                }, void 0, false, {
+                                    fileName: "[project]/frontend/app/investing/page.js",
+                                    lineNumber: 256,
+                                    columnNumber: 13
+                                }, this)
+                            }, void 0, false, {
+                                fileName: "[project]/frontend/app/investing/page.js",
+                                lineNumber: 252,
+                                columnNumber: 11
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                className: "w-8 h-8 bg-cashapp/10 rounded-full flex items-center justify-center border border-transparent font-bold text-xs",
+                                style: {
+                                    color: primaryColor
+                                },
+                                children: (user.fullName || user.full_name || "?").charAt(0).toUpperCase()
+                            }, void 0, false, {
+                                fileName: "[project]/frontend/app/investing/page.js",
+                                lineNumber: 258,
+                                columnNumber: 11
+                            }, this)
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/frontend/app/investing/page.js",
+                        lineNumber: 251,
+                        columnNumber: 9
+                    }, this)
+                ]
+            }, void 0, true, {
+                fileName: "[project]/frontend/app/investing/page.js",
+                lineNumber: 249,
+                columnNumber: 7
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "mx-6 mt-4 mb-8 bg-gray-50 dark:bg-zinc-900 p-1 rounded-full flex overflow-hidden",
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                        onClick: ()=>setTab("stocks"),
+                        className: `flex-1 py-2.5 rounded-full font-bold text-sm transition-all ${isStocks ? "bg-white dark:bg-zinc-800 shadow-sm text-purple-600" : "text-gray-500 hover:text-gray-700"}`,
+                        children: "Stocks"
+                    }, void 0, false, {
+                        fileName: "[project]/frontend/app/investing/page.js",
+                        lineNumber: 269,
+                        columnNumber: 9
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                        onClick: ()=>setTab("crypto"),
+                        className: `flex-1 py-2.5 rounded-full font-bold text-sm transition-all ${!isStocks ? "bg-white dark:bg-zinc-800 shadow-sm text-[#F7931A]" : "text-gray-500 hover:text-gray-700"}`,
+                        children: "Crypto"
+                    }, void 0, false, {
+                        fileName: "[project]/frontend/app/investing/page.js",
+                        lineNumber: 278,
+                        columnNumber: 9
+                    }, this)
+                ]
+            }, void 0, true, {
+                fileName: "[project]/frontend/app/investing/page.js",
+                lineNumber: 268,
+                columnNumber: 7
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "px-6 text-center mt-6",
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
+                        className: "text-5xl font-bold tracking-tight mb-2",
+                        children: [
+                            "$",
+                            balance.toLocaleString(undefined, {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2
+                            })
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/frontend/app/investing/page.js",
+                        lineNumber: 291,
+                        columnNumber: 9
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "flex items-center justify-center space-x-1 font-bold text-sm",
+                        style: {
+                            color: primaryColor
+                        },
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                children: [
+                                    isUp ? "+" : "-",
+                                    " $",
+                                    Math.abs(diff).toFixed(2)
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/frontend/app/investing/page.js",
+                                lineNumber: 302,
+                                columnNumber: 11
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                className: "mx-1",
+                                children: [
+                                    isUp ? "↑" : "↓",
+                                    " ",
+                                    Math.abs(pctChange).toFixed(2),
+                                    "%"
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/frontend/app/investing/page.js",
+                                lineNumber: 305,
+                                columnNumber: 11
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                children: "Today"
+                            }, void 0, false, {
+                                fileName: "[project]/frontend/app/investing/page.js",
+                                lineNumber: 308,
+                                columnNumber: 11
+                            }, this)
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/frontend/app/investing/page.js",
+                        lineNumber: 298,
+                        columnNumber: 9
+                    }, this)
+                ]
+            }, void 0, true, {
+                fileName: "[project]/frontend/app/investing/page.js",
+                lineNumber: 290,
+                columnNumber: 7
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "mt-8 px-2 relative h-[250px]",
+                children: isLoading ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                    className: "absolute inset-0 flex items-center justify-center",
+                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$loader$2d$circle$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Loader2$3e$__["Loader2"], {
+                        className: "w-8 h-8 animate-spin text-gray-300"
+                    }, void 0, false, {
+                        fileName: "[project]/frontend/app/investing/page.js",
+                        lineNumber: 316,
+                        columnNumber: 13
+                    }, this)
+                }, void 0, false, {
+                    fileName: "[project]/frontend/app/investing/page.js",
+                    lineNumber: 315,
+                    columnNumber: 11
+                }, this) : chartData.length > 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$components$2f$PriceChart$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
+                    data: chartData,
+                    color: primaryColor,
+                    height: 250
+                }, void 0, false, {
+                    fileName: "[project]/frontend/app/investing/page.js",
+                    lineNumber: 319,
+                    columnNumber: 11
+                }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                    className: "absolute inset-0 flex items-center justify-center text-gray-500 text-sm",
+                    children: "No data available"
+                }, void 0, false, {
+                    fileName: "[project]/frontend/app/investing/page.js",
+                    lineNumber: 321,
+                    columnNumber: 11
+                }, this)
+            }, void 0, false, {
+                fileName: "[project]/frontend/app/investing/page.js",
+                lineNumber: 313,
+                columnNumber: 7
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "flex justify-center space-x-2 px-6 mt-4 mb-8",
+                children: TIME_RANGES.map((t)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                        onClick: ()=>setTimeRange(t),
+                        className: `w-10 h-10 rounded-full flex items-center justify-center text-xs font-bold transition-all ${timeRange === t ? "bg-gray-100 dark:bg-zinc-800 text-black dark:text-white" : "text-gray-400 hover:text-gray-600"}`,
+                        children: t
+                    }, t, false, {
+                        fileName: "[project]/frontend/app/investing/page.js",
+                        lineNumber: 330,
+                        columnNumber: 11
+                    }, this))
+            }, void 0, false, {
+                fileName: "[project]/frontend/app/investing/page.js",
+                lineNumber: 328,
+                columnNumber: 7
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "mx-6 mb-8 bg-gray-50 dark:bg-zinc-900 rounded-3xl p-6 border border-gray-100 dark:border-zinc-800/60 shadow-sm relative overflow-hidden",
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "flex justify-between items-center mb-6",
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
+                                className: "font-bold text-lg text-gray-900 dark:text-gray-100",
+                                children: "My Investments"
+                            }, void 0, false, {
+                                fileName: "[project]/frontend/app/investing/page.js",
+                                lineNumber: 346,
+                                columnNumber: 11
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "w-8 h-8 rounded-full bg-white dark:bg-black/50 flex items-center justify-center shadow-sm",
+                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                    className: "text-gray-400",
+                                    children: "•••"
+                                }, void 0, false, {
+                                    fileName: "[project]/frontend/app/investing/page.js",
+                                    lineNumber: 350,
+                                    columnNumber: 13
+                                }, this)
+                            }, void 0, false, {
+                                fileName: "[project]/frontend/app/investing/page.js",
+                                lineNumber: 349,
+                                columnNumber: 11
+                            }, this)
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/frontend/app/investing/page.js",
+                        lineNumber: 345,
+                        columnNumber: 9
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "grid grid-cols-2 gap-4 relative z-10",
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                children: [
+                                    isLoading ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "h-6 w-24 bg-gray-200 dark:bg-zinc-800 animate-pulse rounded mb-2"
+                                    }, void 0, false, {
+                                        fileName: "[project]/frontend/app/investing/page.js",
+                                        lineNumber: 357,
+                                        columnNumber: 15
+                                    }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                        className: "text-xl font-bold text-gray-900 dark:text-white",
+                                        children: [
+                                            "$",
+                                            invested.toLocaleString(undefined, {
+                                                minimumFractionDigits: 2,
+                                                maximumFractionDigits: 2
+                                            })
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/frontend/app/investing/page.js",
+                                        lineNumber: 359,
+                                        columnNumber: 15
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                        className: "text-sm font-semibold text-gray-500",
+                                        children: "Total Invested"
+                                    }, void 0, false, {
+                                        fileName: "[project]/frontend/app/investing/page.js",
+                                        lineNumber: 367,
+                                        columnNumber: 13
+                                    }, this)
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/frontend/app/investing/page.js",
+                                lineNumber: 355,
+                                columnNumber: 11
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                children: [
+                                    isLoading ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "h-6 w-24 bg-gray-200 dark:bg-zinc-800 animate-pulse rounded mb-2"
+                                    }, void 0, false, {
+                                        fileName: "[project]/frontend/app/investing/page.js",
+                                        lineNumber: 374,
+                                        columnNumber: 15
+                                    }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                        className: `text-xl font-bold ${totalGain > 0 ? "text-cashapp" : totalGain < 0 ? "text-red-500" : "text-gray-500"}`,
+                                        children: [
+                                            gainPrefix,
+                                            "$",
+                                            Math.abs(totalGain).toLocaleString(undefined, {
+                                                minimumFractionDigits: 2,
+                                                maximumFractionDigits: 2
+                                            })
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/frontend/app/investing/page.js",
+                                        lineNumber: 376,
+                                        columnNumber: 15
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                        className: "text-sm font-semibold text-gray-500",
+                                        children: "Total Gain"
+                                    }, void 0, false, {
+                                        fileName: "[project]/frontend/app/investing/page.js",
+                                        lineNumber: 386,
+                                        columnNumber: 13
+                                    }, this)
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/frontend/app/investing/page.js",
+                                lineNumber: 372,
+                                columnNumber: 11
+                            }, this)
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/frontend/app/investing/page.js",
+                        lineNumber: 354,
+                        columnNumber: 9
+                    }, this)
+                ]
+            }, void 0, true, {
+                fileName: "[project]/frontend/app/investing/page.js",
+                lineNumber: 344,
+                columnNumber: 7
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "px-6 space-y-4",
+                children: isStocks ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                    onClick: ()=>router.push("/stocks"),
+                    className: "w-full bg-gray-50 dark:bg-zinc-900 rounded-2xl p-5 flex items-center justify-between group hover:bg-gray-100 dark:hover:bg-zinc-800 transition-all font-bold",
+                    children: [
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "flex items-center space-x-3",
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                    className: "text-xl",
+                                    children: "📈"
+                                }, void 0, false, {
+                                    fileName: "[project]/frontend/app/investing/page.js",
+                                    lineNumber: 398,
+                                    columnNumber: 15
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                    children: "Discover Stocks"
+                                }, void 0, false, {
+                                    fileName: "[project]/frontend/app/investing/page.js",
+                                    lineNumber: 399,
+                                    columnNumber: 15
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/frontend/app/investing/page.js",
+                            lineNumber: 397,
+                            columnNumber: 13
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                            className: "text-gray-400 group-hover:text-purple-600 transition-colors",
+                            children: "Buy"
+                        }, void 0, false, {
+                            fileName: "[project]/frontend/app/investing/page.js",
+                            lineNumber: 401,
+                            columnNumber: 13
+                        }, this)
+                    ]
+                }, void 0, true, {
+                    fileName: "[project]/frontend/app/investing/page.js",
+                    lineNumber: 393,
+                    columnNumber: 11
+                }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                    onClick: ()=>router.push("/crypto"),
+                    className: "w-full bg-gray-50 dark:bg-zinc-900 rounded-2xl p-5 flex items-center justify-between group hover:bg-gray-100 dark:hover:bg-zinc-800 transition-all font-bold",
+                    children: [
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "flex items-center space-x-3",
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                    className: "text-xl text-[#F7931A]",
+                                    children: "₿"
+                                }, void 0, false, {
+                                    fileName: "[project]/frontend/app/investing/page.js",
+                                    lineNumber: 411,
+                                    columnNumber: 15
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                    children: "Explore Crypto"
+                                }, void 0, false, {
+                                    fileName: "[project]/frontend/app/investing/page.js",
+                                    lineNumber: 412,
+                                    columnNumber: 15
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/frontend/app/investing/page.js",
+                            lineNumber: 410,
+                            columnNumber: 13
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                            className: "text-gray-400 group-hover:text-[#F7931A] transition-colors",
+                            children: "Buy / Sell"
+                        }, void 0, false, {
+                            fileName: "[project]/frontend/app/investing/page.js",
+                            lineNumber: 414,
+                            columnNumber: 13
+                        }, this)
+                    ]
+                }, void 0, true, {
+                    fileName: "[project]/frontend/app/investing/page.js",
+                    lineNumber: 406,
+                    columnNumber: 11
+                }, this)
+            }, void 0, false, {
+                fileName: "[project]/frontend/app/investing/page.js",
+                lineNumber: 391,
+                columnNumber: 7
+            }, this),
+            activityData.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "px-6 mt-8 mb-4",
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "flex justify-between items-center mb-4",
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
+                                className: "font-bold text-lg text-gray-900 dark:text-gray-100",
+                                children: "Activity"
+                            }, void 0, false, {
+                                fileName: "[project]/frontend/app/investing/page.js",
+                                lineNumber: 425,
+                                columnNumber: 13
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                onClick: ()=>router.push("/activity?filter=investing"),
+                                className: "px-4 py-1.5 bg-gray-100 dark:bg-zinc-800 rounded-full text-xs font-bold text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-zinc-700 transition-all",
+                                children: "See All"
+                            }, void 0, false, {
+                                fileName: "[project]/frontend/app/investing/page.js",
+                                lineNumber: 428,
+                                columnNumber: 13
+                            }, this)
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/frontend/app/investing/page.js",
+                        lineNumber: 424,
+                        columnNumber: 11
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "space-y-4",
+                        children: activityData.slice(0, 5).map((order)=>{
+                            const amount = parseFloat(order.filled_avg_price || 0) * parseFloat(order.filled_qty || 0) || parseFloat(order.notional) || 0;
+                            const isBuy = order.side === "buy";
+                            const isCrypto = order.asset_class === "crypto" || order.symbol.includes("/");
+                            const symbolStr = isCrypto ? order.symbol.split("/")[0] : order.symbol;
+                            const date = new Date(order.filled_at || order.submitted_at || order.created_at).toLocaleDateString(undefined, {
+                                month: "short",
+                                day: "numeric"
+                            });
+                            const assetInfo = isCrypto ? __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$lib$2f$assets$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["CRYPTOS"].find((c)=>c.symbol === order.symbol || c.alpacaSymbol === order.symbol) : __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$lib$2f$assets$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["STOCKS"].find((s)=>s.symbol === order.symbol);
+                            return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                onClick: ()=>router.push(`/activity/${order.id}`),
+                                className: "w-full flex items-center justify-between group hover:bg-gray-50 dark:hover:bg-zinc-900 p-2 -mx-2 rounded-xl transition-all",
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "flex items-center space-x-4",
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(StockLogo, {
+                                                assetInfo: assetInfo,
+                                                symbol: order.symbol,
+                                                textClass: isBuy ? "text-cashapp" : "text-red-500"
+                                            }, void 0, false, {
+                                                fileName: "[project]/frontend/app/investing/page.js",
+                                                lineNumber: 466,
+                                                columnNumber: 21
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                className: "text-left",
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                        className: "font-bold text-sm text-gray-900 dark:text-gray-100",
+                                                        children: [
+                                                            isBuy ? "Bought" : "Sold",
+                                                            " ",
+                                                            Number(order.filled_qty) > 0 ? Number(order.filled_qty).toLocaleString(undefined, {
+                                                                maximumFractionDigits: isCrypto ? 6 : 4
+                                                            }) + " " : "",
+                                                            symbolStr
+                                                        ]
+                                                    }, void 0, true, {
+                                                        fileName: "[project]/frontend/app/investing/page.js",
+                                                        lineNumber: 472,
+                                                        columnNumber: 23
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                        className: "text-xs text-gray-500 font-medium capitalize",
+                                                        children: [
+                                                            order.status,
+                                                            " • ",
+                                                            date
+                                                        ]
+                                                    }, void 0, true, {
+                                                        fileName: "[project]/frontend/app/investing/page.js",
+                                                        lineNumber: 481,
+                                                        columnNumber: 23
+                                                    }, this)
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/frontend/app/investing/page.js",
+                                                lineNumber: 471,
+                                                columnNumber: 21
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/frontend/app/investing/page.js",
+                                        lineNumber: 465,
+                                        columnNumber: 19
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "text-right",
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                className: "font-bold text-sm text-gray-900 dark:text-gray-100",
+                                                children: [
+                                                    "$",
+                                                    amount.toLocaleString(undefined, {
+                                                        minimumFractionDigits: 2,
+                                                        maximumFractionDigits: 2
+                                                    })
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/frontend/app/investing/page.js",
+                                                lineNumber: 487,
+                                                columnNumber: 21
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                className: `text-xs font-bold ${isBuy ? "text-gray-400" : "text-cashapp"}`,
+                                                children: [
+                                                    isBuy ? "-" : "+",
+                                                    "$",
+                                                    amount.toLocaleString(undefined, {
+                                                        minimumFractionDigits: 2,
+                                                        maximumFractionDigits: 2
+                                                    })
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/frontend/app/investing/page.js",
+                                                lineNumber: 494,
+                                                columnNumber: 21
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/frontend/app/investing/page.js",
+                                        lineNumber: 486,
+                                        columnNumber: 19
+                                    }, this)
+                                ]
+                            }, order.id, true, {
+                                fileName: "[project]/frontend/app/investing/page.js",
+                                lineNumber: 460,
+                                columnNumber: 17
+                            }, this);
+                        })
+                    }, void 0, false, {
+                        fileName: "[project]/frontend/app/investing/page.js",
+                        lineNumber: 435,
+                        columnNumber: 11
+                    }, this)
+                ]
+            }, void 0, true, {
+                fileName: "[project]/frontend/app/investing/page.js",
+                lineNumber: 423,
+                columnNumber: 9
+            }, this),
+            isStocks && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "px-6 space-y-6 mt-2 mb-8",
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "bg-gray-50 dark:bg-zinc-900 rounded-3xl p-6 border border-gray-100 dark:border-zinc-800/60 shadow-sm relative overflow-hidden",
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
+                                className: "font-bold text-lg text-gray-900 dark:text-gray-100 mb-2",
+                                children: "Most Traded Monthly"
+                            }, void 0, false, {
+                                fileName: "[project]/frontend/app/investing/page.js",
+                                lineNumber: 516,
+                                columnNumber: 13
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                className: "text-xs text-gray-500 mb-6 leading-relaxed hidden sm:block",
+                                children: "These stocks were bought and sold more over the last 30 days than any other stocks available on Cash App."
+                            }, void 0, false, {
+                                fileName: "[project]/frontend/app/investing/page.js",
+                                lineNumber: 519,
+                                columnNumber: 13
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                className: "text-xs text-gray-500 mb-6 leading-relaxed sm:hidden",
+                                children: "These stocks were bought and sold more over the last 30 days than any other stocks available."
+                            }, void 0, false, {
+                                fileName: "[project]/frontend/app/investing/page.js",
+                                lineNumber: 523,
+                                columnNumber: 13
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "space-y-4",
+                                children: [
+                                    "V",
+                                    "NVDA",
+                                    "NFLX"
+                                ].map((sym)=>{
+                                    const stock = __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$lib$2f$assets$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["STOCKS"].find((s)=>s.symbol === sym);
+                                    if (!stock) return null;
+                                    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "flex justify-between items-center cursor-pointer group hover:bg-white dark:hover:bg-zinc-800 p-2 -mx-2 rounded-xl transition-all",
+                                        onClick: ()=>router.push(`/stocks/${stock.symbol}`),
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                className: "flex items-center space-x-4",
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(StockLogo, {
+                                                        assetInfo: stock,
+                                                        symbol: stock.symbol,
+                                                        size: "w-10 h-10",
+                                                        textClass: "text-purple-600"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/frontend/app/investing/page.js",
+                                                        lineNumber: 543,
+                                                        columnNumber: 23
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                        className: "font-bold text-sm text-gray-900 dark:text-gray-100",
+                                                        children: stock.name
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/frontend/app/investing/page.js",
+                                                        lineNumber: 549,
+                                                        columnNumber: 23
+                                                    }, this)
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/frontend/app/investing/page.js",
+                                                lineNumber: 542,
+                                                columnNumber: 21
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                className: "text-right",
+                                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                    className: "text-xs font-bold text-cashapp",
+                                                    children: [
+                                                        "↑ ",
+                                                        (Math.random() * 2).toFixed(2),
+                                                        "%"
+                                                    ]
+                                                }, void 0, true, {
+                                                    fileName: "[project]/frontend/app/investing/page.js",
+                                                    lineNumber: 554,
+                                                    columnNumber: 23
+                                                }, this)
+                                            }, void 0, false, {
+                                                fileName: "[project]/frontend/app/investing/page.js",
+                                                lineNumber: 553,
+                                                columnNumber: 21
+                                            }, this)
+                                        ]
+                                    }, stock.symbol, true, {
+                                        fileName: "[project]/frontend/app/investing/page.js",
+                                        lineNumber: 537,
+                                        columnNumber: 19
+                                    }, this);
+                                })
+                            }, void 0, false, {
+                                fileName: "[project]/frontend/app/investing/page.js",
+                                lineNumber: 528,
+                                columnNumber: 13
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "flex justify-center mt-6 space-x-1.5",
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "w-1.5 h-1.5 rounded-full bg-gray-300"
+                                    }, void 0, false, {
+                                        fileName: "[project]/frontend/app/investing/page.js",
+                                        lineNumber: 564,
+                                        columnNumber: 15
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "w-1.5 h-1.5 rounded-full bg-gray-300"
+                                    }, void 0, false, {
+                                        fileName: "[project]/frontend/app/investing/page.js",
+                                        lineNumber: 565,
+                                        columnNumber: 15
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "w-1.5 h-1.5 rounded-full bg-gray-300"
+                                    }, void 0, false, {
+                                        fileName: "[project]/frontend/app/investing/page.js",
+                                        lineNumber: 566,
+                                        columnNumber: 15
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "w-1.5 h-1.5 rounded-full bg-black dark:bg-white"
+                                    }, void 0, false, {
+                                        fileName: "[project]/frontend/app/investing/page.js",
+                                        lineNumber: 567,
+                                        columnNumber: 15
+                                    }, this)
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/frontend/app/investing/page.js",
+                                lineNumber: 563,
+                                columnNumber: 13
+                            }, this)
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/frontend/app/investing/page.js",
+                        lineNumber: 515,
+                        columnNumber: 11
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "bg-gray-50 dark:bg-zinc-900 rounded-3xl p-6 border border-gray-100 dark:border-zinc-800/60 shadow-sm relative overflow-hidden",
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
+                                className: "font-bold text-lg text-gray-900 dark:text-gray-100 mb-2",
+                                children: "Biggest Daily Movers"
+                            }, void 0, false, {
+                                fileName: "[project]/frontend/app/investing/page.js",
+                                lineNumber: 573,
+                                columnNumber: 13
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                className: "text-xs text-gray-500 mb-6 leading-relaxed",
+                                children: "These companies gained or lost the most value today of any stock on Cash App."
+                            }, void 0, false, {
+                                fileName: "[project]/frontend/app/investing/page.js",
+                                lineNumber: 576,
+                                columnNumber: 13
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "space-y-4",
+                                children: [
+                                    "TSLA",
+                                    "AAPL",
+                                    "META"
+                                ].map((sym)=>{
+                                    const stock = __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$lib$2f$assets$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["STOCKS"].find((s)=>s.symbol === sym);
+                                    if (!stock) return null;
+                                    const isUp = Math.random() > 0.5;
+                                    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "flex justify-between items-center cursor-pointer group hover:bg-white dark:hover:bg-zinc-800 p-2 -mx-2 rounded-xl transition-all",
+                                        onClick: ()=>router.push(`/stocks/${stock.symbol}`),
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                className: "flex items-center space-x-4",
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(StockLogo, {
+                                                        assetInfo: stock,
+                                                        symbol: stock.symbol,
+                                                        size: "w-10 h-10",
+                                                        textClass: isUp ? "text-cashapp" : "text-red-500"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/frontend/app/investing/page.js",
+                                                        lineNumber: 597,
+                                                        columnNumber: 23
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                        className: "font-bold text-sm text-gray-900 dark:text-gray-100",
+                                                        children: stock.name
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/frontend/app/investing/page.js",
+                                                        lineNumber: 603,
+                                                        columnNumber: 23
+                                                    }, this)
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/frontend/app/investing/page.js",
+                                                lineNumber: 596,
+                                                columnNumber: 21
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                className: "text-right",
+                                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                    className: `text-xs font-bold ${isUp ? "text-cashapp" : "text-red-500"}`,
+                                                    children: [
+                                                        isUp ? "↑" : "↓",
+                                                        " ",
+                                                        (Math.random() * 5).toFixed(2),
+                                                        "%"
+                                                    ]
+                                                }, void 0, true, {
+                                                    fileName: "[project]/frontend/app/investing/page.js",
+                                                    lineNumber: 608,
+                                                    columnNumber: 23
+                                                }, this)
+                                            }, void 0, false, {
+                                                fileName: "[project]/frontend/app/investing/page.js",
+                                                lineNumber: 607,
+                                                columnNumber: 21
+                                            }, this)
+                                        ]
+                                    }, stock.symbol, true, {
+                                        fileName: "[project]/frontend/app/investing/page.js",
+                                        lineNumber: 591,
+                                        columnNumber: 19
+                                    }, this);
+                                })
+                            }, void 0, false, {
+                                fileName: "[project]/frontend/app/investing/page.js",
+                                lineNumber: 581,
+                                columnNumber: 13
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "flex justify-center mt-6 space-x-1.5",
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "w-1.5 h-1.5 rounded-full bg-black dark:bg-white"
+                                    }, void 0, false, {
+                                        fileName: "[project]/frontend/app/investing/page.js",
+                                        lineNumber: 618,
+                                        columnNumber: 15
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "w-1.5 h-1.5 rounded-full bg-gray-300"
+                                    }, void 0, false, {
+                                        fileName: "[project]/frontend/app/investing/page.js",
+                                        lineNumber: 619,
+                                        columnNumber: 15
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "w-1.5 h-1.5 rounded-full bg-gray-300"
+                                    }, void 0, false, {
+                                        fileName: "[project]/frontend/app/investing/page.js",
+                                        lineNumber: 620,
+                                        columnNumber: 15
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "w-1.5 h-1.5 rounded-full bg-gray-300"
+                                    }, void 0, false, {
+                                        fileName: "[project]/frontend/app/investing/page.js",
+                                        lineNumber: 621,
+                                        columnNumber: 15
+                                    }, this)
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/frontend/app/investing/page.js",
+                                lineNumber: 617,
+                                columnNumber: 13
+                            }, this)
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/frontend/app/investing/page.js",
+                        lineNumber: 572,
+                        columnNumber: 11
+                    }, this)
+                ]
+            }, void 0, true, {
+                fileName: "[project]/frontend/app/investing/page.js",
+                lineNumber: 513,
+                columnNumber: 9
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$components$2f$Navbar$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
+                fileName: "[project]/frontend/app/investing/page.js",
+                lineNumber: 627,
+                columnNumber: 7
+            }, this)
+        ]
+    }, void 0, true, {
+        fileName: "[project]/frontend/app/investing/page.js",
+        lineNumber: 247,
+        columnNumber: 5
+    }, this);
+}
+_s1(InvestingPage, "WSRnIVM9MenktFYlVdFILE8cofo=", false, function() {
+    return [
+        __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$context$2f$AuthContext$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useAuth"],
+        __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRouter"]
+    ];
+});
+_c1 = InvestingPage;
+var _c, _c1;
+__turbopack_context__.k.register(_c, "StockLogo");
+__turbopack_context__.k.register(_c1, "InvestingPage");
+if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
+    __turbopack_context__.k.registerExports(__turbopack_context__.m, globalThis.$RefreshHelpers$);
+}
+}),
+]);
+
+//# sourceMappingURL=frontend_518b1b53._.js.map

@@ -1,0 +1,159 @@
+{
+  "version": 3,
+  "pages404": true,
+  "appType": "app",
+  "caseSensitive": false,
+  "basePath": "",
+  "redirects": [
+    {
+      "source": "/:path+/",
+      "destination": "/:path+",
+      "internal": true,
+      "priority": true,
+      "statusCode": 308,
+      "regex": "^(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))/$"
+    }
+  ],
+  "headers": [],
+  "rewrites": {
+    "beforeFiles": [],
+    "afterFiles": [],
+    "fallback": []
+  },
+  "dynamicRoutes": [
+    {
+      "page": "/activity/[id]",
+      "regex": "^/activity/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/activity/(?<nxtPid>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/crypto/[symbol]",
+      "regex": "^/crypto/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPsymbol": "nxtPsymbol"
+      },
+      "namedRegex": "^/crypto/(?<nxtPsymbol>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/stocks/[symbol]",
+      "regex": "^/stocks/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPsymbol": "nxtPsymbol"
+      },
+      "namedRegex": "^/stocks/(?<nxtPsymbol>[^/]+?)(?:/)?$"
+    }
+  ],
+  "staticRoutes": [
+    {
+      "page": "/",
+      "regex": "^/(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/(?:/)?$"
+    },
+    {
+      "page": "/_global-error",
+      "regex": "^/_global\\-error(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/_global\\-error(?:/)?$"
+    },
+    {
+      "page": "/_not-found",
+      "regex": "^/_not\\-found(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/_not\\-found(?:/)?$"
+    },
+    {
+      "page": "/activity",
+      "regex": "^/activity(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/activity(?:/)?$"
+    },
+    {
+      "page": "/banking",
+      "regex": "^/banking(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/banking(?:/)?$"
+    },
+    {
+      "page": "/cards",
+      "regex": "^/cards(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/cards(?:/)?$"
+    },
+    {
+      "page": "/crypto",
+      "regex": "^/crypto(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/crypto(?:/)?$"
+    },
+    {
+      "page": "/investing",
+      "regex": "^/investing(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/investing(?:/)?$"
+    },
+    {
+      "page": "/login",
+      "regex": "^/login(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/login(?:/)?$"
+    },
+    {
+      "page": "/pay",
+      "regex": "^/pay(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/pay(?:/)?$"
+    },
+    {
+      "page": "/profile",
+      "regex": "^/profile(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/profile(?:/)?$"
+    },
+    {
+      "page": "/register",
+      "regex": "^/register(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/register(?:/)?$"
+    },
+    {
+      "page": "/search",
+      "regex": "^/search(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/search(?:/)?$"
+    },
+    {
+      "page": "/settings",
+      "regex": "^/settings(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/settings(?:/)?$"
+    },
+    {
+      "page": "/stocks",
+      "regex": "^/stocks(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/stocks(?:/)?$"
+    }
+  ],
+  "dataRoutes": [],
+  "rsc": {
+    "header": "rsc",
+    "varyHeader": "rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch",
+    "prefetchHeader": "next-router-prefetch",
+    "didPostponeHeader": "x-nextjs-postponed",
+    "contentTypeHeader": "text/x-component",
+    "suffix": ".rsc",
+    "prefetchSegmentHeader": "next-router-segment-prefetch",
+    "prefetchSegmentSuffix": ".segment.rsc",
+    "prefetchSegmentDirSuffix": ".segments",
+    "clientParamParsing": false,
+    "dynamicRSCPrerender": false
+  },
+  "rewriteHeaders": {
+    "pathHeader": "x-nextjs-rewritten-path",
+    "queryHeader": "x-nextjs-rewritten-query"
+  }
+}

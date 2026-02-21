@@ -30,6 +30,7 @@ router.delete('/methods/:id', auth, controller.removePaymentMethod);
 router.post('/cash-in', auth, validate(cashInSchema), controller.cashIn);
 router.post('/cash-out', auth, validate(cashOutSchema), controller.cashOut);
 router.get('/history', auth, controller.getFundingHistory);
+router.post('/sync/:stripeId', auth, controller.syncFundMovement);
 
 // Webhook — PUBLIC (no jwt, raw body handled in app.js)
 router.post('/webhook', controller.stripeWebhook);

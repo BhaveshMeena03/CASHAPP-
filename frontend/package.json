@@ -1,0 +1,34 @@
+{
+  "name": "flowcash-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.28.6",
+    "@tailwindcss/postcss": "^4.2.0",
+    "axios": "latest",
+    "clsx": "latest",
+    "framer-motion": "latest",
+    "lucide-react": "latest",
+    "next": "latest",
+    "next-themes": "^0.4.6",
+    "qrcode.react": "^4.2.0",
+    "react": "latest",
+    "react-dom": "latest",
+    "react-qr-scanner": "^1.0.0-alpha.11",
+    "tailwind-merge": "latest"
+  },
+  "devDependencies": {
+    "autoprefixer": "latest",
+    "eslint": "latest",
+    "eslint-config-next": "latest",
+    "postcss": "latest",
+    "tailwindcss": "latest"
+  }
+}
