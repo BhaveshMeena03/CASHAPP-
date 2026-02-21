@@ -327,68 +327,23 @@ async function getTransactionHistory(req, res, next) {
       100,
       Math.max(1, parseInt(req.query.limit, 10) || 20),
     );
-    const typeFilter = req.query.type; // 'sent' | 'received' | 'requests'
+    const typeFilter = req.query.type;
 
-    // Build query with optional type filter
-    let conditions = [];
-    const values = [userId];
-    let paramIdx = 2;
-
-    if (typeFilter === "sent") {
-      conditions.push("sender_id = $1");
-      conditions.push("type = 'send'");
-    } else if (typeFilter === "received") {
-      conditions.push("receiver_id = $1");
-      conditions.push("type = 'send'");
-    } else if (typeFilter === "requests") {
-      conditions.push("(sender_id = $1 OR receiver_id = $1)");
-      conditions.push("type = 'request'");
-    } else if (typeFilter === "bitcoin") {
-      conditions.push("(sender_id = $1 OR receiver_id = $1)");
-      conditions.push("type = 'bitcoin_send'");
-    } else {
-      conditions.push("(sender_id = $1 OR receiver_id = $1)");
-    }
-
-    const whereClause = conditions.join(" AND ");
-    const offset = (page - 1) * limit;
-
-    // Count
-    const countResult = await db.query(
-      `SELECT COUNT(*) AS total FROM transactions WHERE ${whereClause}`,
-      values,
-    );
-    const total = parseInt(countResult.rows[0].total, 10);
-
-    // Fetch transactions with counterparty info joined
-    const { rows: transactions } = await db.query(
-      `SELECT 
-         t.*,
-         s.full_name  AS sender_name,
-         s.cashtag    AS sender_cashtag,
-         r.full_name  AS receiver_name,
-         r.cashtag    AS receiver_cashtag
-       FROM transactions t
-       JOIN users s ON t.sender_id   = s.id
-       JOIN users r ON t.receiver_id = r.id
-       WHERE ${whereClause
-        .replace(/sender_id/g, "t.sender_id")
-        .replace(/receiver_id/g, "t.receiver_id")
-        .replace(/type/g, "t.type")}
-       ORDER BY t.created_at DESC
-       LIMIT $${paramIdx} OFFSET $${paramIdx + 1}`,
-      [...values, limit, offset],
-    );
+    const result = await transactionModel.getHistory(userId, {
+      typeFilter,
+      page,
+      limit,
+    });
 
     res.json({
       success: true,
       data: {
-        transactions,
+        transactions: result.transactions,
         pagination: {
-          total,
-          page,
+          total: result.total,
+          page: result.page,
           limit,
-          totalPages: Math.ceil(total / limit),
+          totalPages: result.totalPages,
         },
       },
       message: "",
@@ -410,19 +365,7 @@ async function getTransactionById(req, res, next) {
     const { transactionId } = req.params;
 
     // 1. First search standard transactions (P2P, Cash In/Out)
-    const { rows } = await db.query(
-      `SELECT 
-         t.*,
-         s.full_name AS sender_name,   s.cashtag AS sender_cashtag,
-         r.full_name AS receiver_name, r.cashtag AS receiver_cashtag
-       FROM transactions t
-       JOIN users s ON t.sender_id   = s.id
-       JOIN users r ON t.receiver_id = r.id
-       WHERE t.id = $1`,
-      [transactionId],
-    );
-
-    let tx = rows[0];
+    let tx = await transactionModel.findByIdWithDetails(transactionId);
 
     // 2. If not found, check the orders table (Crypto / Stocks)
     if (!tx) {

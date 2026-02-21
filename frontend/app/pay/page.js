@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import Keypad from "@/components/Keypad";
+import useDebounce from "@/hooks/useDebounce";
 import api from "@/lib/api";
 import { X, Search, Loader2, CheckCircle2 } from "lucide-react";
 import { v4 as uuidv4 } from "uuid";
@@ -26,9 +27,10 @@ export default function PayPage() {
     const [searchResults, setSearchResults] = useState([]);
     const [isSearching, setIsSearching] = useState(false);
     const [showResults, setShowResults] = useState(false);
-    const searchTimeout = useRef(null);
     const [isPinOpen, setIsPinOpen] = useState(false);
     const pendingAction = useRef(null);
+
+    const debouncedCashtag = useDebounce(cashtag, 300);
 
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
@@ -43,7 +45,7 @@ export default function PayPage() {
 
     // Debounced user search
     useEffect(() => {
-        const query = cashtag.replace(/^\$/, '').trim();
+        const query = debouncedCashtag.replace(/^\$/, '').trim();
         if (query.length < 1) {
             setSearchResults([]);
             setShowResults(false);
@@ -51,8 +53,7 @@ export default function PayPage() {
         }
 
         setShowResults(true);
-        if (searchTimeout.current) clearTimeout(searchTimeout.current);
-        searchTimeout.current = setTimeout(async () => {
+        const search = async () => {
             setIsSearching(true);
             try {
                 const { data } = await api.get(`/users/search?q=${encodeURIComponent(query)}`);
@@ -62,10 +63,9 @@ export default function PayPage() {
             } finally {
                 setIsSearching(false);
             }
-        }, 300);
-
-        return () => clearTimeout(searchTimeout.current);
-    }, [cashtag]);
+        };
+        search();
+    }, [debouncedCashtag]);
 
     const selectUser = (selectedUser) => {
         setCashtag(selectedUser.cashtag);

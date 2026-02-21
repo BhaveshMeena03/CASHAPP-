@@ -14,7 +14,7 @@ VALUES
     'alice@example.com',
     '+15551234001',
     '$alice',
-    '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy',
+    '$2a$10$1QOqQu9pthy8OxREJ4awT.6OawnCpYuw6eA4G4UOFyyL.SmegBJLy',
     'Alice Johnson',
     TRUE
   ),
@@ -23,7 +23,7 @@ VALUES
     'bob@example.com',
     '+15551234002',
     '$bob',
-    '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy',
+    '$2a$10$1QOqQu9pthy8OxREJ4awT.6OawnCpYuw6eA4G4UOFyyL.SmegBJLy',
     'Bob Smith',
     TRUE
   ),
@@ -32,7 +32,7 @@ VALUES
     'charlie@example.com',
     '+15551234003',
     '$charlie',
-    '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy',
+    '$2a$10$1QOqQu9pthy8OxREJ4awT.6OawnCpYuw6eA4G4UOFyyL.SmegBJLy',
     'Charlie Davis',
     FALSE
   )

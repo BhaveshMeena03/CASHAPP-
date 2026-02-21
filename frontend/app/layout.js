@@ -1,24 +1,55 @@
 import { AuthProvider } from "@/context/AuthContext";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import ErrorBoundary from "@/components/ErrorBoundary";
+import { ToastProvider } from "@/components/Toast";
+import MainContent from "@/components/MainContent";
 import "./globals.css";
 
 export const metadata = {
     title: "FlowCash",
     description: "Spend, save, and invest with FlowCash.",
+    manifest: "/manifest.json",
+    themeColor: "#00D632",
+    viewport: "width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover",
+    appleWebApp: {
+        capable: true,
+        statusBarStyle: "black-translucent",
+        title: "FlowCash",
+    },
 };
 
 export default function RootLayout({ children }) {
     return (
         <html lang="en" suppressHydrationWarning>
+            <head>
+                <link rel="apple-touch-icon" href="/flowcash-logo.png" />
+                <meta name="apple-mobile-web-app-capable" content="yes" />
+            </head>
             <body className="antialiased overflow-x-hidden">
-                <AuthProvider>
-                    <ThemeProvider>
-                        <div className="flex flex-col min-h-screen bg-white dark:bg-black p-6 transition-colors duration-300 mx-auto relative border-x border-gray-100 dark:border-zinc-800 shadow-xl">
-                            {children}
-                        </div>
-                    </ThemeProvider>
-                </AuthProvider>
+                <ErrorBoundary>
+                    <AuthProvider>
+                        <ThemeProvider>
+                            <ToastProvider>
+                                <MainContent>
+                                    {children}
+                                </MainContent>
+                            </ToastProvider>
+                        </ThemeProvider>
+                    </AuthProvider>
+                </ErrorBoundary>
+                <script
+                    dangerouslySetInnerHTML={{
+                        __html: `
+                            if ('serviceWorker' in navigator) {
+                                window.addEventListener('load', () => {
+                                    navigator.serviceWorker.register('/sw.js').catch(() => {});
+                                });
+                            }
+                        `,
+                    }}
+                />
             </body>
         </html>
     );
 }
+

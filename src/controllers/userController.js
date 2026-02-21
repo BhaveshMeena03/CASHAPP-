@@ -1,4 +1,3 @@
-const db = require('../config/db');
 const userModel = require('../models/userModel');
 const ApiError = require('../utils/errors');
 const { hashPassword, comparePassword } = require('../utils/password');
@@ -15,23 +14,11 @@ async function searchUsers(req, res, next) {
 
         // Strip leading $ if user typed it, for flexible matching
         const term = q.startsWith('$') ? q.slice(1) : q;
-        const pattern = `%${term}%`;
-
-        const { rows } = await db.query(
-            `SELECT id, full_name, cashtag, avatar_url
-       FROM users
-       WHERE id != $1
-         AND (cashtag ILIKE $2 OR full_name ILIKE $2)
-       ORDER BY
-         CASE WHEN cashtag ILIKE $3 THEN 0 ELSE 1 END,
-         full_name ASC
-       LIMIT 20`,
-            [req.user.id, pattern, `$${term}%`]
-        );
+        const users = await userModel.searchByNameOrCashtag(term, req.user.id, 20);
 
         res.json({
             success: true,
-            data: { users: rows },
+            data: { users },
             message: '',
             error: '',
         });

@@ -1,5 +1,4 @@
 const notificationModel = require('../models/notificationModel');
-const db = require('../config/db');
 const ApiError = require('../utils/errors');
 
 // ────────────────────────────────────────────────────────
@@ -12,28 +11,11 @@ async function getNotifications(req, res, next) {
         const limit = Math.min(100, Math.max(1, parseInt(req.query.limit, 10) || 20));
         const offset = (page - 1) * limit;
 
-        // Unread count
-        const unreadResult = await db.query(
-            'SELECT COUNT(*) AS count FROM notifications WHERE user_id = $1 AND is_read = FALSE',
-            [userId]
-        );
-        const unreadCount = parseInt(unreadResult.rows[0].count, 10);
-
-        // Total count
-        const totalResult = await db.query(
-            'SELECT COUNT(*) AS count FROM notifications WHERE user_id = $1',
-            [userId]
-        );
-        const total = parseInt(totalResult.rows[0].count, 10);
-
-        // Paginated list
-        const { rows: notifications } = await db.query(
-            `SELECT * FROM notifications
-       WHERE user_id = $1
-       ORDER BY created_at DESC
-       LIMIT $2 OFFSET $3`,
-            [userId, limit, offset]
-        );
+        const [unreadCount, total, notifications] = await Promise.all([
+            notificationModel.countUnread(userId),
+            notificationModel.countAll(userId),
+            notificationModel.findPaginated(userId, limit, offset),
+        ]);
 
         res.json({
             success: true,
@@ -93,3 +75,4 @@ async function markAllAsRead(req, res, next) {
 }
 
 module.exports = { getNotifications, markAsRead, markAllAsRead };
+

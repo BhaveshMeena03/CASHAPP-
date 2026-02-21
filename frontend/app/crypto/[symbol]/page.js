@@ -8,6 +8,7 @@ import { CRYPTOS, getBarParams } from "@/lib/assets";
 import { ArrowLeft, X, CheckCircle2, Loader2 } from "lucide-react";
 import PinModal from "@/components/PinModal";
 import Keypad from "@/components/Keypad";
+import { useToast } from "@/components/Toast";
 import api from "@/lib/api";
 
 const TIME_RANGES = ["1D", "1W", "1M", "1Y", "ALL"];
@@ -26,6 +27,7 @@ export default function CryptoDetailPage() {
   const { user, loading } = useAuth();
   const router = useRouter();
   const params = useParams();
+  const toast = useToast();
 
   const decodedSymbol = decodeURIComponent(params.symbol);
   const cryptoInfo =
@@ -223,7 +225,7 @@ export default function CryptoDetailPage() {
       }, 1800);
     } catch (err) {
       setIsProcessing(false);
-      alert("Order failed: " + (err.response?.data?.message || err.message));
+      toast.error("Order failed: " + (err.response?.data?.message || err.message));
       setShowConfirm(false);
     }
   };

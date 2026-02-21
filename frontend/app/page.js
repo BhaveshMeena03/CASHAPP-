@@ -7,6 +7,7 @@ import Navbar from "@/components/Navbar";
 import ThemeToggle from "@/components/ThemeToggle";
 import Modal from "@/components/Modal";
 import PinModal from "@/components/PinModal";
+import { useToast } from "@/components/Toast";
 import api from "@/lib/api";
 import {
   User,
@@ -36,6 +37,7 @@ export default function Home() {
   const [paymentMethods, setPaymentMethods] = useState([]);
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
+  const toast = useToast();
 
   // Modals state
   const [isProfileOpen, setIsProfileOpen] = useState(false);
@@ -216,7 +218,7 @@ export default function Home() {
       await api.post(`/transfer/respond/${transactionId}`, { action });
       await fetchData();
     } catch (err) {
-      alert(
+      toast.error(
         `Failed to ${action} request: ` +
         (err.response?.data?.message || err.message),
       );
@@ -274,7 +276,7 @@ export default function Home() {
       setIsAddCashOpen(false);
       setAddAmount("");
     } catch (err) {
-      alert(
+      toast.error(
         "Failed to add cash: " + (err.response?.data?.message || err.message),
       );
     } finally {
@@ -297,7 +299,7 @@ export default function Home() {
       setIsCashOutOpen(false);
       setCashOutAmount("");
     } catch (err) {
-      alert(
+      toast.error(
         "Withdrawal failed: " + (err.response?.data?.message || err.message),
       );
     } finally {
@@ -587,7 +589,7 @@ export default function Home() {
             <button
               onClick={() => {
                 navigator.clipboard.writeText(user.cashtag);
-                alert("Cashtag copied!");
+                toast.success("Cashtag copied!");
               }}
               className="flex items-center space-x-2 bg-gray-50 dark:bg-zinc-800 px-6 py-3 rounded-full font-bold text-sm hover:bg-gray-100 dark:hover:bg-zinc-700 transition-all border border-gray-100 dark:border-zinc-800"
             >
@@ -598,7 +600,7 @@ export default function Home() {
               onClick={() => {
                 const link = `${window.location.origin}/pay?cashtag=${user.cashtag}`;
                 navigator.clipboard.writeText(link);
-                alert("Payment link copied!");
+                toast.success("Payment link copied!");
               }}
               className="flex items-center space-x-2 bg-cashapp text-white px-6 py-3 rounded-full font-bold text-sm hover:scale-105 transition-all shadow-lg shadow-cashapp/20"
             >

@@ -11,13 +11,36 @@ export default function LoginPage() {
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [fieldErrors, setFieldErrors] = useState({});
+    const [touched, setTouched] = useState({});
 
     const { login } = useAuth();
     const router = useRouter();
 
+    const validate = (field, value) => {
+        const errors = { ...fieldErrors };
+        if (field === 'email') {
+            if (!value) errors.email = 'Email is required';
+            else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) errors.email = 'Enter a valid email';
+            else delete errors.email;
+        }
+        if (field === 'password') {
+            if (!value) errors.password = 'Password is required';
+            else if (value.length < 6) errors.password = 'At least 6 characters';
+            else delete errors.password;
+        }
+        setFieldErrors(errors);
+    };
+
+    const isValid = email && password.length >= 6 && !fieldErrors.email && !fieldErrors.password;
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError("");
+        setTouched({ email: true, password: true });
+        validate('email', email);
+        validate('password', password);
+        if (!isValid) return;
         setIsSubmitting(true);
 
         try {
@@ -49,11 +72,15 @@ export default function LoginPage() {
                         <input
                             type="email"
                             required
-                            className="w-full px-4 py-3 bg-gray-50 dark:bg-zinc-900 border border-transparent focus:border-cashapp rounded-xl outline-none transition-all"
+                            className={`w-full px-4 py-3 bg-gray-50 dark:bg-zinc-900 border ${touched.email && fieldErrors.email ? 'border-red-400' : 'border-transparent'} focus:border-cashapp rounded-xl outline-none transition-all`}
                             placeholder="name@example.com"
                             value={email}
-                            onChange={(e) => setEmail(e.target.value)}
+                            onChange={(e) => { setEmail(e.target.value); validate('email', e.target.value); }}
+                            onBlur={() => { setTouched(t => ({ ...t, email: true })); validate('email', email); }}
                         />
+                        {touched.email && fieldErrors.email && (
+                            <p className="text-red-500 text-xs font-medium mt-1">{fieldErrors.email}</p>
+                        )}
                     </div>
 
                     <div className="space-y-2">
@@ -63,11 +90,15 @@ export default function LoginPage() {
                         <input
                             type="password"
                             required
-                            className="w-full px-4 py-3 bg-gray-50 dark:bg-zinc-900 border border-transparent focus:border-cashapp rounded-xl outline-none transition-all"
+                            className={`w-full px-4 py-3 bg-gray-50 dark:bg-zinc-900 border ${touched.password && fieldErrors.password ? 'border-red-400' : 'border-transparent'} focus:border-cashapp rounded-xl outline-none transition-all`}
                             placeholder="••••••••"
                             value={password}
-                            onChange={(e) => setPassword(e.target.value)}
+                            onChange={(e) => { setPassword(e.target.value); validate('password', e.target.value); }}
+                            onBlur={() => { setTouched(t => ({ ...t, password: true })); validate('password', password); }}
                         />
+                        {touched.password && fieldErrors.password && (
+                            <p className="text-red-500 text-xs font-medium mt-1">{fieldErrors.password}</p>
+                        )}
                     </div>
 
                     {error && (
@@ -78,7 +109,7 @@ export default function LoginPage() {
 
                     <button
                         type="submit"
-                        disabled={isSubmitting}
+                        disabled={isSubmitting || !isValid}
                         className="w-full bg-cashapp hover:bg-green-600 text-white font-bold py-4 rounded-full flex items-center justify-center space-x-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed group"
                     >
                         <span>{isSubmitting ? "Signing in..." : "Sign In"}</span>

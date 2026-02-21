@@ -22,14 +22,46 @@ const tradingRoutes = require('./routes/trading');
 const app = express();
 
 // ── Global Middleware ────────────────────────────────
-app.use(helmet());
-app.use(cors());
+app.use(helmet({
+    contentSecurityPolicy: {
+        directives: {
+            defaultSrc: ["'self'"],
+            scriptSrc: ["'self'", "'unsafe-inline'"],
+            styleSrc: ["'self'", "'unsafe-inline'"],
+            imgSrc: ["'self'", "data:", "https:"],
+            connectSrc: ["'self'", process.env.FRONTEND_URL || 'http://localhost:3001'],
+            fontSrc: ["'self'", "https://fonts.gstatic.com"],
+        },
+    },
+}));
+
+const allowedOrigins = (process.env.CORS_ORIGINS || 'http://localhost:3001').split(',').map(o => o.trim());
+app.use(cors({
+    origin: (origin, cb) => {
+        // Allow requests with no origin (server-to-server, curl, mobile apps)
+        if (!origin || allowedOrigins.includes(origin)) return cb(null, true);
+        cb(new Error('Not allowed by CORS'));
+    },
+    credentials: true,
+}));
 app.use(compression());
 // Stripe webhook needs raw body — MUST be before express.json()
 app.use('/api/funding/webhook', express.raw({ type: 'application/json' }));
 app.use(express.json({ limit: '1mb' }));
 app.use(morgan('dev'));
 app.use(globalLimiter);
+
+// ── Slow query / request logger ──────────────────────
+app.use((req, res, next) => {
+    const start = Date.now();
+    res.on('finish', () => {
+        const duration = Date.now() - start;
+        if (duration > 500) {
+            console.warn(`[SLOW REQUEST] ${req.method} ${req.originalUrl} — ${duration}ms (status ${res.statusCode})`);
+        }
+    });
+    next();
+});
 
 // ── Swagger UI ───────────────────────────────────────
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {

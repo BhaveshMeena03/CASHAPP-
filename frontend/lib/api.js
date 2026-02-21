@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-    baseURL: "http://localhost:3000/api",
+    baseURL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000/api",
     headers: {
         "Content-Type": "application/json",
     },
@@ -15,5 +15,19 @@ api.interceptors.request.use((config) => {
     }
     return config;
 });
+
+// Auto-logout on 401 (expired/invalid token)
+api.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        if (error.response?.status === 401) {
+            localStorage.removeItem("fc_token");
+            if (typeof window !== "undefined" && !window.location.pathname.startsWith("/login")) {
+                window.location.href = "/login";
+            }
+        }
+        return Promise.reject(error);
+    }
+);
 
 export default api;

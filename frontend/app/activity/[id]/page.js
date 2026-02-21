@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter, useParams } from "next/navigation";
 import api from "@/lib/api";
+import { useToast } from "@/components/Toast";
 import { ArrowLeft, ArrowUpRight, ArrowDownLeft, Building2, Copy, Check, X, Clock, CheckCircle2, XCircle, AlertCircle } from "lucide-react";
 
 export default function TransactionDetailPage() {
@@ -14,6 +15,7 @@ export default function TransactionDetailPage() {
     const [ledger, setLedger] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [copied, setCopied] = useState(false);
+    const toast = useToast();
 
     useEffect(() => {
         if (!loading && !user) router.push("/login");
@@ -41,7 +43,7 @@ export default function TransactionDetailPage() {
             await api.post(`/transfer/respond/${params.id}`, { action });
             await fetchDetail();
         } catch (err) {
-            alert(`Failed to ${action}: ` + (err.response?.data?.message || err.message));
+            toast.error(`Failed to ${action}: ` + (err.response?.data?.message || err.message));
         }
     };
 

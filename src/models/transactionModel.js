@@ -110,10 +110,100 @@ async function updateStatus(id, status, client) {
     return rows[0] || null;
 }
 
+/**
+ * Get transaction history with counterparty info and type filtering.
+ * @param {string} userId
+ * @param {object} options
+ * @param {string} [options.typeFilter] — 'sent' | 'received' | 'requests' | 'bitcoin'
+ * @param {number} [options.page=1]
+ * @param {number} [options.limit=20]
+ * @returns {{ transactions: object[], total: number, page: number, totalPages: number }}
+ */
+async function getHistory(userId, { typeFilter, page = 1, limit = 20 } = {}) {
+    let conditions = [];
+    const values = [userId];
+    let paramIdx = 2;
+
+    if (typeFilter === 'sent') {
+        conditions.push('t.sender_id = $1');
+        conditions.push("t.type = 'send'");
+    } else if (typeFilter === 'received') {
+        conditions.push('t.receiver_id = $1');
+        conditions.push("t.type = 'send'");
+    } else if (typeFilter === 'requests') {
+        conditions.push('(t.sender_id = $1 OR t.receiver_id = $1)');
+        conditions.push("t.type = 'request'");
+    } else if (typeFilter === 'bitcoin') {
+        conditions.push('(t.sender_id = $1 OR t.receiver_id = $1)');
+        conditions.push("t.type = 'bitcoin_send'");
+    } else {
+        conditions.push('(t.sender_id = $1 OR t.receiver_id = $1)');
+    }
+
+    const whereClause = conditions.join(' AND ');
+    const offset = (page - 1) * limit;
+
+    // Count — use base conditions on the raw transactions table
+    const rawWhere = whereClause.replace(/t\./g, '');
+    const countResult = await db.query(
+        `SELECT COUNT(*) AS total FROM transactions WHERE ${rawWhere}`,
+        values,
+    );
+    const total = parseInt(countResult.rows[0].total, 10);
+
+    // Fetch transactions with counterparty info joined
+    const { rows: transactions } = await db.query(
+        `SELECT
+           t.id, t.sender_id, t.receiver_id, t.amount, t.type, t.note,
+           t.status, t.idempotency_key, t.created_at, t.updated_at,
+           s.full_name  AS sender_name,
+           s.cashtag    AS sender_cashtag,
+           r.full_name  AS receiver_name,
+           r.cashtag    AS receiver_cashtag
+         FROM transactions t
+         JOIN users s ON t.sender_id   = s.id
+         JOIN users r ON t.receiver_id = r.id
+         WHERE ${whereClause}
+         ORDER BY t.created_at DESC
+         LIMIT $${paramIdx} OFFSET $${paramIdx + 1}`,
+        [...values, limit, offset],
+    );
+
+    return {
+        transactions,
+        total,
+        page,
+        totalPages: Math.ceil(total / limit),
+    };
+}
+
+/**
+ * Find a single transaction by ID with sender/receiver details.
+ * @param {string} transactionId
+ * @returns {object|null}
+ */
+async function findByIdWithDetails(transactionId) {
+    const { rows } = await db.query(
+        `SELECT
+           t.id, t.sender_id, t.receiver_id, t.amount, t.type, t.note,
+           t.status, t.idempotency_key, t.created_at, t.updated_at,
+           s.full_name AS sender_name,   s.cashtag AS sender_cashtag,
+           r.full_name AS receiver_name, r.cashtag AS receiver_cashtag
+         FROM transactions t
+         JOIN users s ON t.sender_id   = s.id
+         JOIN users r ON t.receiver_id = r.id
+         WHERE t.id = $1`,
+        [transactionId],
+    );
+    return rows[0] || null;
+}
+
 module.exports = {
     createTransaction,
     findById,
     findByIdempotencyKey,
     findByUserId,
     updateStatus,
+    getHistory,
+    findByIdWithDetails,
 };

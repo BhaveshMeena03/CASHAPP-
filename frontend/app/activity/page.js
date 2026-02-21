@@ -4,6 +4,8 @@ import { useEffect, useState, useRef } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import Navbar from "@/components/Navbar";
+import StockLogo from "@/components/StockLogo";
+import { useToast } from "@/components/Toast";
 import api from "@/lib/api";
 import {
   ArrowLeft,
@@ -18,36 +20,13 @@ import {
 
 import { STOCKS, CRYPTOS } from "@/lib/assets";
 
-function StockLogo({ assetInfo, symbol, size = "w-12 h-12", textClass = "" }) {
-  const [error, setError] = useState(false);
-  const symbolStr = symbol.split("/")[0];
-
-  return (
-    <div
-      className={`${size} rounded-full flex items-center justify-center text-xl overflow-hidden shadow-sm bg-white dark:bg-black border border-gray-100 dark:border-zinc-800`}
-    >
-      {assetInfo?.logo && !error ? (
-        <img
-          src={assetInfo.logo}
-          alt={symbolStr}
-          className="w-full h-full object-cover"
-          onError={() => setError(true)}
-        />
-      ) : (
-        <span className={textClass}>
-          {assetInfo?.icon || symbolStr.charAt(0)}
-        </span>
-      )}
-    </div>
-  );
-}
-
 export default function ActivityPage() {
   const { user, loading } = useAuth();
   const router = useRouter();
   const [activity, setActivity] = useState([]);
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const [filter, setFilter] = useState("all"); // all | sent | received | requests
+  const [filter, setFilter] = useState("all");
+  const toast = useToast();
 
   // Read filter from URL on mount
   useEffect(() => {
@@ -174,7 +153,7 @@ export default function ActivityPage() {
       await api.post(`/transfer/respond/${transactionId}`, { action });
       await fetchActivity();
     } catch (err) {
-      alert(
+      toast.error(
         `Failed to ${action} request: ` +
         (err.response?.data?.message || err.message),
       );

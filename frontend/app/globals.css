@@ -35,3 +35,19 @@
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+/* ── Accessibility: Focus Rings ─────────────────────── */
+*:focus-visible {
+  outline: 2px solid #00D632;
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
+/* Skip focus ring on mouse clicks */
+*:focus:not(:focus-visible) {
+  outline: none;
+}
+
+.focus-ring:focus-visible {
+  box-shadow: 0 0 0 3px rgba(0, 214, 50, 0.4);
+}

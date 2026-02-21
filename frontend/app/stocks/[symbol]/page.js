@@ -8,6 +8,7 @@ import { STOCKS, getBarParams, getCompanyInfo } from "@/lib/assets";
 import { ArrowLeft, X, CheckCircle2, Loader2 } from "lucide-react";
 import PinModal from "@/components/PinModal";
 import Keypad from "@/components/Keypad";
+import { useToast } from "@/components/Toast";
 import api from "@/lib/api";
 
 const TIME_RANGES = ["1D", "1W", "1M", "1Y", "ALL"];
@@ -17,6 +18,7 @@ export default function StockDetailPage() {
   const { user, loading } = useAuth();
   const router = useRouter();
   const params = useParams();
+  const toast = useToast();
   const symbol = params.symbol?.toUpperCase();
 
   const stock = STOCKS.find((s) => s.symbol === symbol);
@@ -163,7 +165,7 @@ export default function StockDetailPage() {
       }, 1800);
     } catch (err) {
       setIsProcessing(false);
-      alert("Order failed: " + (err.response?.data?.message || err.message));
+      toast.error("Order failed: " + (err.response?.data?.message || err.message));
       setShowConfirm(false);
     }
   };
@@ -284,11 +286,10 @@ export default function StockDetailPage() {
           <button
             key={t}
             onClick={() => setTimeRange(t)}
-            className={`px-4 py-2 rounded-full text-sm font-bold transition-all ${
-              timeRange === t
+            className={`px-4 py-2 rounded-full text-sm font-bold transition-all ${timeRange === t
                 ? "bg-black dark:bg-white text-white dark:text-black"
                 : "text-gray-400 hover:text-gray-600"
-            }`}
+              }`}
           >
             {t}
           </button>
@@ -368,9 +369,9 @@ export default function StockDetailPage() {
                 {orderType === "buy"
                   ? cashBalance.toLocaleString()
                   : shareValue.toLocaleString(undefined, {
-                      minimumFractionDigits: 2,
-                      maximumFractionDigits: 2,
-                    })}{" "}
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}{" "}
                 Available
               </span>
             </div>
@@ -401,11 +402,10 @@ export default function StockDetailPage() {
                     <button
                       key={a}
                       onClick={() => setAmount(String(a))}
-                      className={`py-4 rounded-2xl font-bold text-lg transition-all border ${
-                        amount === String(a)
+                      className={`py-4 rounded-2xl font-bold text-lg transition-all border ${amount === String(a)
                           ? "border-black dark:border-white bg-gray-50 dark:bg-zinc-800"
                           : "border-gray-200 dark:border-zinc-700 hover:border-gray-400"
-                      }`}
+                        }`}
                     >
                       ${a}
                     </button>
@@ -415,11 +415,10 @@ export default function StockDetailPage() {
                       setShowKeypad(true);
                       setAmount("");
                     }}
-                    className={`py-4 rounded-2xl font-bold text-lg transition-all border ${
-                      amount && !PRESET_AMOUNTS.includes(Number(amount))
+                    className={`py-4 rounded-2xl font-bold text-lg transition-all border ${amount && !PRESET_AMOUNTS.includes(Number(amount))
                         ? "border-black dark:border-white bg-gray-50 dark:bg-zinc-800"
                         : "border-gray-200 dark:border-zinc-700 hover:border-gray-400"
-                    }`}
+                      }`}
                   >
                     {amount && !PRESET_AMOUNTS.includes(Number(amount))
                       ? `$${amount}`

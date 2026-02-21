@@ -1,7 +1,7 @@
 const walletModel = require('../models/walletModel');
+const ledgerModel = require('../models/ledgerModel');
 const ApiError = require('../utils/errors');
 const { formatCurrency } = require('../utils/money');
-const db = require('../config/db');
 
 // ────────────────────────────────────────────────────────
 // GET /api/wallet/balance
@@ -39,31 +39,8 @@ async function getStatement(req, res, next) {
         const limit = Math.min(100, Math.max(1, parseInt(req.query.limit, 10) || 20));
         const offset = (page - 1) * limit;
 
-        // Count total entries
-        const countResult = await db.query(
-            'SELECT COUNT(*) AS total FROM ledger_entries WHERE wallet_id = $1',
-            [wallet.id]
-        );
-        const total = parseInt(countResult.rows[0].total, 10);
-
-        // Fetch paginated entries with transaction details
-        const { rows: entries } = await db.query(
-            `SELECT 
-         le.*,
-         t.type   AS transaction_type,
-         t.note   AS transaction_note,
-         t.status AS transaction_status,
-         s.full_name AS sender_name,   s.cashtag AS sender_cashtag,
-         r.full_name AS receiver_name, r.cashtag AS receiver_cashtag
-       FROM ledger_entries le
-       JOIN transactions t ON le.transaction_id = t.id
-       JOIN users s ON t.sender_id   = s.id
-       JOIN users r ON t.receiver_id = r.id
-       WHERE le.wallet_id = $1
-       ORDER BY le.created_at DESC
-       LIMIT $2 OFFSET $3`,
-            [wallet.id, limit, offset]
-        );
+        const total = await ledgerModel.countByWalletId(wallet.id);
+        const entries = await ledgerModel.findByWalletIdPaginated(wallet.id, limit, offset);
 
         res.json({
             success: true,
@@ -83,3 +60,4 @@ async function getStatement(req, res, next) {
 }
 
 module.exports = { getBalance, getStatement };
+

@@ -85,10 +85,34 @@ async function updateUser(id, data) {
     return rows[0] || null;
 }
 
+/**
+ * Search users by name or cashtag (case-insensitive, excludes a specific user).
+ * @param {string} term — search term (without leading $)
+ * @param {string} excludeUserId — user ID to exclude from results
+ * @param {number} [limit=20] — max results
+ * @returns {object[]} array of { id, full_name, cashtag, avatar_url }
+ */
+async function searchByNameOrCashtag(term, excludeUserId, limit = 20) {
+    const pattern = `%${term}%`;
+    const { rows } = await db.query(
+        `SELECT id, full_name, cashtag, avatar_url
+       FROM users
+       WHERE id != $1
+         AND (cashtag ILIKE $2 OR full_name ILIKE $2)
+       ORDER BY
+         CASE WHEN cashtag ILIKE $3 THEN 0 ELSE 1 END,
+         full_name ASC
+       LIMIT $4`,
+        [excludeUserId, pattern, `$${term}%`, limit]
+    );
+    return rows;
+}
+
 module.exports = {
     findById,
     findByEmail,
     findByCashtag,
     createUser,
     updateUser,
+    searchByNameOrCashtag,
 };
