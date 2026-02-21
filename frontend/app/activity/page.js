@@ -34,7 +34,7 @@ export default function ActivityPage() {
     const urlFilter = params.get("filter");
     if (
       urlFilter &&
-      ["all", "sent", "received", "requests", "investing", "bitcoin"].includes(
+      ["all", "sent", "received", "requests", "investing", "bitcoin", "savings"].includes(
         urlFilter,
       )
     ) {
@@ -140,7 +140,46 @@ export default function ActivityPage() {
         (a, b) => new Date(b.created_at) - new Date(a.created_at),
       );
 
-      setActivity(combined);
+      // Load savings activities from localStorage
+      let savingsItems = [];
+      try {
+        const savingsRaw = localStorage.getItem(`flowcash_savings_activity_${user.id}`);
+        if (savingsRaw) {
+          savingsItems = JSON.parse(savingsRaw).map((s) => {
+            const isDeposit = s.type === 'save' || s.type === 'goal_complete';
+            let displayType;
+            switch (s.type) {
+              case 'save': displayType = 'Saved to'; break;
+              case 'goal_complete': displayType = '🎉 Goal Reached:'; break;
+              case 'withdraw': displayType = 'Withdrew from'; break;
+              case 'withdraw_all': displayType = 'Withdrew all from'; break;
+              case 'goal_deleted': displayType = 'Deleted goal:'; break;
+              default: displayType = 'Savings';
+            }
+            return {
+              ...s,
+              displayType,
+              otherParty: s.goalName,
+              isCashIn: isDeposit,
+              isSavings: true,
+              type: 'savings',
+              amount: Math.round((s.amount || 0) * 100),
+              status: 'completed',
+            };
+          });
+        }
+      } catch { }
+
+      // Filter savings based on active filter
+      if (filter === "savings") {
+        setActivity(savingsItems.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)));
+      } else if (filter === "all") {
+        setActivity([...combined, ...savingsItems].sort(
+          (a, b) => new Date(b.created_at) - new Date(a.created_at),
+        ));
+      } else {
+        setActivity(combined);
+      }
     } catch (err) {
       console.error("Failed to fetch activity");
     } finally {
@@ -184,6 +223,7 @@ export default function ActivityPage() {
     { key: "all", label: "All" },
     { key: "investing", label: "Investing" },
     { key: "bitcoin", label: "Bitcoin" },
+    { key: "savings", label: "Savings" },
     { key: "sent", label: "Sent" },
     { key: "received", label: "Received" },
     { key: "requests", label: "Requests" },
@@ -251,129 +291,93 @@ export default function ActivityPage() {
       </div>
 
       {/* Activity List */}
-      <div className="space-y-3 flex-1">
+      <div className="space-y-0 flex-1">
         {activity.length > 0 ? (
-          activity.map((item) => {
+          activity.map((item, idx) => {
             const isSender = item.sender_id === user.id;
+            const isIncoming = item.isSavings
+              ? !item.isCashIn  // savings withdraw = money back to you
+              : (item.isCashIn || (!isSender && item.type === "send"));
 
             return (
               <div
                 key={item.id}
-                className="p-4 bg-gray-50 dark:bg-zinc-900 rounded-2xl cursor-pointer hover:bg-gray-100 dark:hover:bg-zinc-800 transition-all active:scale-[0.98]"
+                className={`flex items-center justify-between py-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-zinc-900 px-1 -mx-1 rounded-xl transition-all ${idx < activity.length - 1 ? "border-b border-gray-100 dark:border-zinc-800/50" : ""
+                  }`}
                 onClick={() =>
-                  !item.isCashIn && router.push(`/activity/${item.id}`)
+                  !item.isCashIn && !item.isSavings && router.push(`/activity/${item.id}`)
                 }
               >
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-4">
-                    {item.isTrade ? (
-                      <StockLogo
-                        assetInfo={
-                          CRYPTOS.find(c => c.symbol.startsWith(item.otherParty)) || STOCKS.find(s => s.symbol === item.otherParty)
-                        }
-                        symbol={item.otherParty}
-                        textClass={item.isCashIn ? "text-cashapp" : "text-red-500"}
-                      />
-                    ) : item.type === "bitcoin_send" ? (
-                      <StockLogo
-                        assetInfo={CRYPTOS.find(c => c.alpacaSymbol === "BTCUSD")}
-                        symbol="BTC"
-                        textClass="text-[#F7931A]"
-                      />
-                    ) : (
-                      <div
-                        className={`w-12 h-12 bg-white dark:bg-black rounded-full flex items-center justify-center font-bold shadow-sm border border-gray-100 dark:border-zinc-800 text-cashapp`}
-                      >
-                        {item.isCashIn
-                          ? "🏦"
-                          : item.type === "request"
-                            ? "🔔"
-                            : isSender
-                              ? "↑"
-                              : "↓"}
-                      </div>
-                    )}
-                    <div className="flex-1 min-w-0">
-                      <p className="font-bold text-sm">
-                        {item.displayType}{" "}
-                        <span className="text-cashapp">
-                          {item.otherCashtag || item.otherParty}
-                        </span>
-                      </p>
-                      {item.note && (
-                        <p className="text-xs text-gray-500 mt-0.5 italic truncate">
-                          "{item.note}"
-                        </p>
-                      )}
-                      <p className="text-[10px] text-gray-400 uppercase font-bold tracking-wider mt-1">
-                        {new Date(item.created_at).toLocaleDateString(
-                          undefined,
-                          { weekday: "short", month: "short", day: "numeric" },
-                        )}{" "}
-                        • {item.status}
-                      </p>
+                <div className="flex items-center space-x-3 flex-1 min-w-0">
+                  {/* Icon */}
+                  {item.isTrade ? (
+                    <StockLogo
+                      assetInfo={
+                        CRYPTOS.find(c => c.symbol.startsWith(item.otherParty)) || STOCKS.find(s => s.symbol === item.otherParty)
+                      }
+                      symbol={item.otherParty}
+                      size="w-10 h-10"
+                    />
+                  ) : item.type === "bitcoin_send" ? (
+                    <StockLogo
+                      assetInfo={CRYPTOS.find(c => c.alpacaSymbol === "BTCUSD")}
+                      symbol="BTC"
+                      size="w-10 h-10"
+                    />
+                  ) : item.isSavings ? (
+                    <div className="w-10 h-10 bg-amber-100 dark:bg-amber-900/30 rounded-full flex items-center justify-center text-sm">
+                      💰
                     </div>
-                  </div>
-                  <p
-                    className={`font-bold text-lg ml-4 ${item.isCashIn || (!isSender && item.type === "send")
-                      ? "text-cashapp"
-                      : ""
-                      }`}
-                  >
-                    {item.isCashIn || (!isSender && item.type === "send")
-                      ? "+"
-                      : "-"}
-                    ${(item.amount / 100).toFixed(2)}
-                  </p>
-                </div>
-
-                {/* Accept/Decline for pending requests */}
-                {item.type === "request" &&
-                  item.status === "pending" &&
-                  item.sender_id === user.id && (
-                    <div className="flex space-x-3 mt-3 pt-3 border-t border-gray-100 dark:border-zinc-800">
-                      <button
-                        onClick={() =>
-                          handleRespondToRequest(item.id, "accept")
-                        }
-                        className="flex-1 flex items-center justify-center space-x-2 bg-cashapp text-white font-bold py-3 rounded-xl hover:scale-[1.02] active:scale-95 transition-all text-sm shadow-sm"
-                      >
-                        <Check className="w-4 h-4" />
-                        <span>Pay ${(item.amount / 100).toFixed(2)}</span>
-                      </button>
-                      <button
-                        onClick={() =>
-                          handleRespondToRequest(item.id, "decline")
-                        }
-                        className="flex-1 flex items-center justify-center space-x-2 bg-gray-100 dark:bg-zinc-800 font-bold py-3 rounded-xl hover:scale-[1.02] active:scale-95 transition-all text-sm"
-                      >
-                        <X className="w-4 h-4" />
-                        <span>Decline</span>
-                      </button>
+                  ) : (
+                    <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-bold ${item.isCashIn ? "bg-blue-500" :
+                        item.type === "request" ? "bg-orange-500" :
+                          isIncoming ? "bg-cashapp" : "bg-gray-400 dark:bg-zinc-600"
+                      }`}>
+                      {item.isCashIn ? "🏦" :
+                        item.type === "request" ? "!" :
+                          isIncoming ? "↓" : "↑"}
                     </div>
                   )}
+
+                  {/* Text */}
+                  <div className="flex-1 min-w-0">
+                    <p className="font-semibold text-[15px] truncate">
+                      {item.otherCashtag || item.otherParty}
+                    </p>
+                    <p className="text-xs text-gray-500 mt-0.5">
+                      {item.displayType}
+                      {" · "}
+                      {new Date(item.created_at).toLocaleDateString(undefined, { month: "short", day: "numeric" })}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Amount */}
+                <div className="text-right ml-3 shrink-0">
+                  <p className={`font-bold text-[15px] ${isIncoming ? "text-cashapp" : ""}`}>
+                    {isIncoming ? "+" : "-"}${(item.amount / 100).toFixed(2)}
+                  </p>
+                  {item.status && item.status !== "completed" && item.status !== "filled" && (
+                    <p className={`text-[10px] font-medium mt-0.5 ${item.status === "pending" ? "text-amber-500" :
+                        item.status === "failed" || item.status === "declined" ? "text-red-500" :
+                          "text-gray-400"
+                      }`}>
+                      {item.status}
+                    </p>
+                  )}
+                </div>
               </div>
             );
           })
         ) : (
           <div className="flex flex-col items-center justify-center pt-20 text-gray-500">
-            <Clock className="w-16 h-16 mb-4 opacity-20" />
-            <p className="font-medium">No activity yet</p>
+            <Clock className="w-12 h-12 mb-4 opacity-15" />
+            <p className="font-medium text-sm">No activity yet</p>
           </div>
-        )}
-
-        {/* Load More Option */}
-        {activity.length > 0 && (
-          <button
-            onClick={() => setFilter("all")}
-            className="w-full mt-6 py-4 flex items-center justify-center space-x-2 text-cashapp font-bold hover:bg-gray-50 dark:hover:bg-zinc-900 rounded-2xl transition-all"
-          >
-            <span>View all activity</span>
-          </button>
         )}
       </div>
 
       <Navbar />
-    </div>
+    </div >
   );
 }

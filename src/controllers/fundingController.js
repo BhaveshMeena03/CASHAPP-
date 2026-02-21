@@ -312,7 +312,7 @@ async function cashOut(req, res, next) {
       error: "",
     });
   } catch (err) {
-    await client.query("ROLLBACK").catch(() => {});
+    await client.query("ROLLBACK").catch(() => { });
     next(err);
   } finally {
     client.release();
@@ -531,6 +531,76 @@ async function processCashInSuccess(movement, user) {
   });
 }
 
+// ────────────────────────────────────────────────────────
+// POST /api/funding/methods/link-card
+// Accept raw card details (for demo purposes) and save to DB
+// ────────────────────────────────────────────────────────
+async function linkCard(req, res, next) {
+  try {
+    const { cardNumber, expiry, cvv, nickname } = req.body;
+
+    if (!cardNumber || !expiry || !cvv) {
+      throw ApiError.badRequest("Card number, expiry, and CVV are required");
+    }
+
+    // Sanitize card number (remove spaces/dashes)
+    const cleaned = cardNumber.replace(/[\s-]/g, "");
+    if (cleaned.length < 13 || cleaned.length > 19) {
+      throw ApiError.badRequest("Invalid card number");
+    }
+
+    // Detect brand from first digits
+    let brand = "Card";
+    if (cleaned.startsWith("4")) brand = "Visa";
+    else if (/^5[1-5]/.test(cleaned) || /^2[2-7]/.test(cleaned)) brand = "Mastercard";
+    else if (cleaned.startsWith("37") || cleaned.startsWith("34")) brand = "Amex";
+    else if (cleaned.startsWith("6011") || cleaned.startsWith("65")) brand = "Discover";
+
+    const lastFour = cleaned.slice(-4);
+
+    const user = await userModel.findById(req.user.id);
+    if (!user) throw ApiError.notFound("User not found");
+
+    // Check if this is the user's first payment method
+    const existing = await fundingModel.findPaymentMethodsByUserId(user.id);
+    const isDefault = existing.length === 0;
+
+    // Generate a fake stripe PM id for demo purposes
+    const fakePmId = `pm_demo_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+
+    const saved = await fundingModel.createPaymentMethod({
+      userId: user.id,
+      type: "card",
+      stripePaymentMethodId: fakePmId,
+      lastFour,
+      brand,
+      nickname: nickname || `${brand} •••• ${lastFour}`,
+      isDefault,
+    });
+
+    res.status(201).json({
+      success: true,
+      data: { paymentMethod: saved },
+      message: `${brand} card ending in ${lastFour} linked successfully`,
+      error: "",
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
+// ────────────────────────────────────────────────────────
+// GET /api/funding/stripe-config
+// ────────────────────────────────────────────────────────
+function getStripeConfig(_req, res) {
+  res.json({
+    success: true,
+    data: { publishableKey: process.env.STRIPE_PUBLISHABLE_KEY },
+    message: "",
+    error: "",
+  });
+}
+
 module.exports = {
   addPaymentMethod,
   removePaymentMethod,
@@ -540,4 +610,6 @@ module.exports = {
   getFundingHistory,
   stripeWebhook,
   syncFundMovement,
+  linkCard,
+  getStripeConfig,
 };

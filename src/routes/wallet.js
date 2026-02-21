@@ -7,5 +7,7 @@ const router = Router();
 
 router.get('/balance', auth, cacheFor(15), controller.getBalance);
 router.get('/statement', auth, cacheFor(30), controller.getStatement);
+router.post('/debit', auth, controller.debitForSavings);
+router.post('/credit', auth, controller.creditForSavings);
 
 module.exports = router;

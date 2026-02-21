@@ -24,8 +24,10 @@ const cashOutSchema = {
 
 // ── Routes ───────────────────────────────────────────
 
+router.get('/stripe-config', controller.getStripeConfig);
 router.get('/methods', auth, controller.getPaymentMethods);
 router.post('/methods', auth, validate(addMethodSchema), controller.addPaymentMethod);
+router.post('/methods/link-card', auth, controller.linkCard);
 router.delete('/methods/:id', auth, controller.removePaymentMethod);
 router.post('/cash-in', auth, validate(cashInSchema), controller.cashIn);
 router.post('/cash-out', auth, validate(cashOutSchema), controller.cashOut);

@@ -8,6 +8,7 @@ import ThemeToggle from "@/components/ThemeToggle";
 import Modal from "@/components/Modal";
 import PinModal from "@/components/PinModal";
 import { useToast } from "@/components/Toast";
+import StripeCardForm from "@/components/StripeCardForm";
 import api from "@/lib/api";
 import {
   User,
@@ -23,11 +24,13 @@ import {
   Check,
   X,
   Search,
+  ChevronDown,
+  Plus,
 } from "lucide-react";
 import { QRCodeSVG } from "qrcode.react";
 import QrScanner from "react-qr-scanner";
-import StockLogo from "@/components/StockLogo"; // Using the extracted component
-import { STOCKS, CRYPTOS } from "@/lib/assets"; // Using the extracted constants
+import StockLogo from "@/components/StockLogo";
+import { STOCKS, CRYPTOS } from "@/lib/assets";
 
 export default function Home() {
   const { user, loading, logout } = useAuth();
@@ -52,6 +55,22 @@ export default function Home() {
   const [cashOutAmount, setCashOutAmount] = useState("");
   const [cashOutSpeed, setCashOutSpeed] = useState("standard");
   const [isCashingOut, setIsCashingOut] = useState(false);
+
+  // Savings goal state
+  const [isSavingsOpen, setIsSavingsOpen] = useState(false);
+  const [savingsGoalName, setSavingsGoalName] = useState("");
+  const [savingsTargetAmount, setSavingsTargetAmount] = useState("");
+  const [savingsGoals, setSavingsGoals] = useState([]);
+  const [isSaveToGoalOpen, setIsSaveToGoalOpen] = useState(false);
+  const [selectedGoalIndex, setSelectedGoalIndex] = useState(null);
+  const [saveToGoalAmount, setSaveToGoalAmount] = useState("");
+  const [isSavingToGoal, setIsSavingToGoal] = useState(false);
+
+  // Stripe & card management state
+  const [stripePublishableKey, setStripePublishableKey] = useState(null);
+  const [selectedCardIndex, setSelectedCardIndex] = useState(0);
+  const [showAddCard, setShowAddCard] = useState(false);
+  const [showCardSelector, setShowCardSelector] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [pullDistance, setPullDistance] = useState(0);
   const [isPinOpen, setIsPinOpen] = useState(false);
@@ -68,6 +87,11 @@ export default function Home() {
   useEffect(() => {
     if (user) {
       fetchData();
+      // Load savings goals from localStorage
+      try {
+        const saved = localStorage.getItem(`flowcash_savings_${user.id}`);
+        if (saved) setSavingsGoals(JSON.parse(saved));
+      } catch { }
     }
   }, [user]);
 
@@ -225,23 +249,18 @@ export default function Home() {
     }
   };
 
-  const ensurePaymentMethod = async () => {
-    if (paymentMethods && paymentMethods.length > 0)
-      return paymentMethods[0].id;
+  // Fetch Stripe publishable key on mount
+  useEffect(() => {
+    api.get("/funding/stripe-config")
+      .then(res => setStripePublishableKey(res.data.data?.publishableKey))
+      .catch(() => { });
+  }, []);
 
-    // Auto-link a test card if none exist
-    try {
-      const res = await api.post("/funding/methods", {
-        stripe_payment_method_id: "pm_card_visa",
-        nickname: "Test Visa",
-      });
-      return res.data.data?.paymentMethod?.id;
-    } catch (err) {
-      throw new Error(
-        "Could not link test card: " +
-        (err.response?.data?.message || err.message),
-      );
-    }
+  const handleCardLinked = async () => {
+    await fetchData();
+    setShowAddCard(false);
+    // Select the newly added card (last in the array)
+    setSelectedCardIndex(paymentMethods.length); // Will be set after refresh
   };
 
   const handleMarkAsRead = async (id) => {
@@ -264,12 +283,15 @@ export default function Home() {
 
   const handleAddCashDirect = async () => {
     if (!addAmount || isNaN(addAmount)) return;
+    if (!paymentMethods || paymentMethods.length === 0) {
+      alert("Please link a card first");
+      return;
+    }
+    const idx = Math.min(selectedCardIndex, paymentMethods.length - 1);
     setIsAdding(true);
     try {
-      const pmId = await ensurePaymentMethod();
-
       await api.post("/funding/cash-in", {
-        payment_method_db_id: pmId,
+        payment_method_db_id: paymentMethods[idx].id,
         amount: Math.round(parseFloat(addAmount) * 100),
       });
       await fetchData();
@@ -308,6 +330,23 @@ export default function Home() {
   };
 
   const handleCashOut = () => requirePin(handleCashOutDirect);
+
+  // Record savings activity to localStorage for the activity page
+  const recordSavingsActivity = (type, goalName, amount) => {
+    try {
+      const key = `flowcash_savings_activity_${user.id}`;
+      const existing = JSON.parse(localStorage.getItem(key) || "[]");
+      existing.unshift({
+        id: `sav_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+        type, // 'save' | 'withdraw' | 'withdraw_all' | 'goal_complete' | 'goal_deleted'
+        goalName,
+        amount, // in dollars
+        created_at: new Date().toISOString(),
+      });
+      // Keep last 100 entries
+      localStorage.setItem(key, JSON.stringify(existing.slice(0, 100)));
+    } catch { }
+  };
 
   if (loading || !user) {
     return (
@@ -466,13 +505,59 @@ export default function Home() {
           <div className="flex items-center justify-between">
             <div>
               <p className="font-bold text-sm">💰 Savings</p>
-              <p className="text-2xl font-bold mt-1">$0.00</p>
-              <p className="text-xs text-gray-500 mt-1">Save for a goal</p>
+              {savingsGoals.length > 0 ? (
+                <>
+                  <p className="text-2xl font-bold mt-1">
+                    ${savingsGoals.reduce((sum, g) => sum + (g.saved || 0), 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                  </p>
+                  <p className="text-xs text-gray-500 mt-1">
+                    {savingsGoals.length} goal{savingsGoals.length > 1 ? "s" : ""} • Earning 5% interest
+                  </p>
+                </>
+              ) : (
+                <>
+                  <p className="text-2xl font-bold mt-1">$0.00</p>
+                  <p className="text-xs text-gray-500 mt-1">Start saving & earn 5% interest</p>
+                </>
+              )}
             </div>
-            <button className="px-4 py-2 bg-white dark:bg-black rounded-full text-sm font-bold border border-amber-200 dark:border-amber-700 hover:border-amber-400 transition-all text-amber-600">
-              Start
+            <button
+              onClick={() => setIsSavingsOpen(true)}
+              className="px-4 py-2 bg-white dark:bg-black rounded-full text-sm font-bold border border-amber-200 dark:border-amber-700 hover:border-amber-400 transition-all text-amber-600 hover:scale-105 active:scale-95"
+            >
+              {savingsGoals.length > 0 ? "+ New" : "Start"}
             </button>
           </div>
+          {savingsGoals.length > 0 && (
+            <div className="mt-4 space-y-3">
+              {savingsGoals.map((goal, idx) => {
+                const saved = goal.saved || 0;
+                const target = parseFloat(goal.target) || 1;
+                const pct = Math.min(100, (saved / target) * 100);
+                return (
+                  <div
+                    key={idx}
+                    onClick={() => { setSelectedGoalIndex(idx); setSaveToGoalAmount(""); setIsSaveToGoalOpen(true); }}
+                    className="bg-white/60 dark:bg-black/20 rounded-xl p-3 cursor-pointer hover:bg-white/80 dark:hover:bg-black/30 transition-all active:scale-[0.98]"
+                  >
+                    <div className="flex justify-between items-center text-sm">
+                      <span className="font-bold">{goal.name}</span>
+                      <span className="text-xs text-gray-500">
+                        ${saved.toLocaleString(undefined, { minimumFractionDigits: 2 })} / ${target.toLocaleString()}
+                      </span>
+                    </div>
+                    <div className="w-full bg-gray-200 dark:bg-zinc-700 rounded-full h-1.5 mt-2">
+                      <div
+                        className="bg-amber-500 h-1.5 rounded-full transition-all duration-500"
+                        style={{ width: `${pct}%` }}
+                      />
+                    </div>
+                    <p className="text-[10px] text-amber-600 font-bold mt-1.5">Tap to add money →</p>
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </div>
 
         {/* Scan / QR / Search Quick Actions */}
@@ -737,39 +822,106 @@ export default function Home() {
         title="Add Cash"
       >
         <div className="py-4 space-y-6">
-          <div className="flex items-center space-x-4 bg-gray-50 dark:bg-zinc-800 p-4 rounded-2xl">
-            <span className="text-3xl font-bold text-cashapp">$</span>
-            <input
-              type="number"
-              autoFocus
-              placeholder="0.00"
-              className="bg-transparent text-3xl font-bold outline-none w-full"
-              value={addAmount}
-              onChange={(e) => setAddAmount(e.target.value)}
-            />
-          </div>
+          {showAddCard || !paymentMethods || paymentMethods.length === 0 ? (
+            /* ── Stripe Elements Card Entry ── */
+            stripePublishableKey ? (
+              <StripeCardForm
+                publishableKey={stripePublishableKey}
+                onSuccess={handleCardLinked}
+                onCancel={paymentMethods?.length > 0 ? () => setShowAddCard(false) : null}
+              />
+            ) : (
+              <div className="text-center py-8">
+                <CreditCard className="w-10 h-10 text-cashapp mx-auto mb-3" />
+                <p className="text-sm text-gray-500">Loading payment form...</p>
+              </div>
+            )
+          ) : (
+            <>
+              {/* ── Amount Input ── */}
+              <div className="flex items-center space-x-4 bg-gray-50 dark:bg-zinc-800 p-4 rounded-2xl">
+                <span className="text-3xl font-bold text-cashapp">$</span>
+                <input
+                  type="number"
+                  autoFocus
+                  placeholder="0.00"
+                  className="bg-transparent text-3xl font-bold outline-none w-full"
+                  value={addAmount}
+                  onChange={(e) => setAddAmount(e.target.value)}
+                />
+              </div>
 
-          <div className="p-4 bg-gray-50 dark:bg-zinc-800 rounded-2xl flex items-center space-x-4 border border-transparent hover:border-cashapp transition-all cursor-pointer">
-            <div className="w-12 h-10 bg-zinc-900 border border-zinc-700 rounded-lg flex items-center justify-center overflow-hidden">
-              <span className="text-[10px] text-zinc-400 font-bold tracking-tighter">
-                VISA
-              </span>
-            </div>
-            <div>
-              <p className="font-bold text-sm">Visa •••• 4242</p>
-              <p className="text-xs text-gray-500">Connected</p>
-            </div>
-          </div>
+              {/* ── Card Selector ── */}
+              <div className="relative">
+                <div
+                  onClick={() => setShowCardSelector(!showCardSelector)}
+                  className="p-4 bg-gray-50 dark:bg-zinc-800 rounded-2xl flex items-center space-x-4 border border-transparent hover:border-cashapp transition-all cursor-pointer"
+                >
+                  <div className="w-12 h-10 bg-zinc-900 border border-zinc-700 rounded-lg flex items-center justify-center overflow-hidden">
+                    <span className="text-[10px] text-zinc-400 font-bold tracking-tighter uppercase">
+                      {paymentMethods[Math.min(selectedCardIndex, paymentMethods.length - 1)]?.brand || "CARD"}
+                    </span>
+                  </div>
+                  <div className="flex-1">
+                    <p className="font-bold text-sm">
+                      {paymentMethods[Math.min(selectedCardIndex, paymentMethods.length - 1)]?.brand || "Card"} •••• {paymentMethods[Math.min(selectedCardIndex, paymentMethods.length - 1)]?.last_four || "****"}
+                    </p>
+                    <p className="text-xs text-gray-500">Connected</p>
+                  </div>
+                  <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${showCardSelector ? "rotate-180" : ""}`} />
+                </div>
 
-          <button
-            disabled={!addAmount || isAdding}
-            onClick={handleAddCash}
-            className="w-full bg-cashapp text-white font-bold py-5 rounded-full flex items-center justify-center space-x-2 disabled:opacity-50 shadow-lg shadow-cashapp/20 hover:scale-[1.02] active:scale-95 transition-all"
-          >
-            {isAdding
-              ? "Processing..."
-              : `Add $${parseFloat(addAmount || 0).toFixed(2)}`}
-          </button>
+                {/* ── Card Dropdown ── */}
+                {showCardSelector && (
+                  <div className="absolute left-0 right-0 top-full mt-2 bg-white dark:bg-zinc-800 rounded-2xl shadow-xl border border-gray-100 dark:border-zinc-700 z-50 overflow-hidden">
+                    {paymentMethods.map((pm, idx) => (
+                      <div
+                        key={pm.id}
+                        onClick={() => { setSelectedCardIndex(idx); setShowCardSelector(false); }}
+                        className={`flex items-center space-x-4 p-4 cursor-pointer transition-colors ${idx === Math.min(selectedCardIndex, paymentMethods.length - 1)
+                          ? "bg-cashapp/10"
+                          : "hover:bg-gray-50 dark:hover:bg-zinc-700"
+                          }`}
+                      >
+                        <div className="w-10 h-8 bg-zinc-900 border border-zinc-700 rounded-lg flex items-center justify-center">
+                          <span className="text-[9px] text-zinc-400 font-bold uppercase">
+                            {pm.brand || "CARD"}
+                          </span>
+                        </div>
+                        <div className="flex-1">
+                          <p className="font-bold text-sm">{pm.brand || "Card"} •••• {pm.last_four || "****"}</p>
+                        </div>
+                        {idx === Math.min(selectedCardIndex, paymentMethods.length - 1) && (
+                          <Check className="w-4 h-4 text-cashapp" />
+                        )}
+                      </div>
+                    ))}
+                    {/* Add new card option */}
+                    <div
+                      onClick={() => { setShowCardSelector(false); setShowAddCard(true); }}
+                      className="flex items-center space-x-4 p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-zinc-700 border-t border-gray-100 dark:border-zinc-700"
+                    >
+                      <div className="w-10 h-8 bg-cashapp/10 rounded-lg flex items-center justify-center">
+                        <Plus className="w-4 h-4 text-cashapp" />
+                      </div>
+                      <p className="font-bold text-sm text-cashapp">Add Another Card</p>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* ── Submit Button ── */}
+              <button
+                disabled={!addAmount || isAdding}
+                onClick={handleAddCash}
+                className="w-full bg-cashapp text-white font-bold py-5 rounded-full flex items-center justify-center space-x-2 disabled:opacity-50 shadow-lg shadow-cashapp/20 hover:scale-[1.02] active:scale-95 transition-all"
+              >
+                {isAdding
+                  ? "Processing..."
+                  : `Add $${parseFloat(addAmount || 0).toFixed(2)}`}
+              </button>
+            </>
+          )}
         </div>
       </Modal>
 
@@ -791,7 +943,26 @@ export default function Home() {
               onChange={(e) => setCashOutAmount(e.target.value)}
             />
           </div>
-
+          <div className="flex justify-center mb-4">
+            {paymentMethods && paymentMethods.length > 0 ? (
+              <div className="flex items-center space-x-2 bg-gray-100 dark:bg-zinc-800 px-4 py-2 rounded-full cursor-pointer hover:bg-gray-200 dark:hover:bg-zinc-700 transition-all border border-gray-200 dark:border-zinc-700/50">
+                <span className="text-[10px] text-zinc-500 font-bold uppercase">
+                  Cash out to
+                </span>
+                <span className="text-sm font-bold">
+                  {paymentMethods[0].brand || "Card"} •••• {paymentMethods[0].last_four || "****"}
+                </span>
+              </div>
+            ) : (
+              <button
+                onClick={() => router.push("/cards")}
+                className="flex items-center space-x-2 bg-cashapp/10 text-cashapp px-4 py-2 rounded-full cursor-pointer hover:bg-cashapp/20 transition-all border border-cashapp/20 text-sm font-bold"
+              >
+                <CreditCard className="w-4 h-4" />
+                <span>Link a Bank or Card to Cash Out</span>
+              </button>
+            )}
+          </div>
           <div className="text-center">
             <p className="text-xs text-gray-500 mb-3 font-bold uppercase tracking-widest">
               Transfer Speed
@@ -894,107 +1065,347 @@ export default function Home() {
             </button>
           </div>
         </div>
-        <div className="space-y-3">
+        <div className="space-y-0">
           {activity.length > 0 ? (
-            activity.map((item) => (
-              <div
-                key={item.id}
-                className="p-4 bg-gray-50 dark:bg-zinc-900 rounded-2xl cursor-pointer hover:bg-gray-100 dark:hover:bg-zinc-800 transition-all active:scale-[0.98]"
-                onClick={() =>
-                  !item.isCashIn && router.push(`/activity/${item.id}`)
-                }
-              >
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-4">
+            activity.map((item, idx) => {
+              const isSender = item.sender_id === user.id;
+              const isIncoming = item.isCashIn || (!isSender && item.type === "send");
+
+              return (
+                <div
+                  key={item.id}
+                  className={`flex items-center justify-between py-3.5 cursor-pointer hover:bg-gray-50 dark:hover:bg-zinc-900 px-1 -mx-1 rounded-xl transition-all ${idx < activity.length - 1 ? "border-b border-gray-100 dark:border-zinc-800/50" : ""
+                    }`}
+                  onClick={() =>
+                    !item.isCashIn && router.push(`/activity/${item.id}`)
+                  }
+                >
+                  <div className="flex items-center space-x-3 flex-1 min-w-0">
                     {item.isTrade ? (
                       <StockLogo
                         assetInfo={
                           CRYPTOS.find(c => c.symbol.startsWith(item.otherParty)) || STOCKS.find(s => s.symbol === item.otherParty)
                         }
                         symbol={item.otherParty}
-                        textClass={item.isCashIn ? "text-cashapp" : "text-red-500"}
+                        size="w-10 h-10"
                       />
                     ) : item.type === "bitcoin_send" ? (
                       <StockLogo
                         assetInfo={CRYPTOS.find(c => c.alpacaSymbol === "BTCUSD")}
                         symbol="BTC"
-                        textClass="text-[#F7931A]"
+                        size="w-10 h-10"
                       />
                     ) : (
-                      <div
-                        className={`w-10 h-10 bg-white dark:bg-black rounded-full flex items-center justify-center font-bold shadow-sm border border-gray-100 dark:border-zinc-800 text-sm text-cashapp`}
-                      >
-                        {item.isCashIn
-                          ? "🏦"
-                          : item.type === "request"
-                            ? "🔔"
-                            : item.sender_id === user.id
-                              ? "↑"
-                              : "↓"}
+                      <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-bold ${item.isCashIn ? "bg-blue-500" :
+                          item.type === "request" ? "bg-orange-500" :
+                            isIncoming ? "bg-cashapp" : "bg-gray-400 dark:bg-zinc-600"
+                        }`}>
+                        {item.isCashIn ? "🏦" :
+                          item.type === "request" ? "!" :
+                            isIncoming ? "↓" : "↑"}
                       </div>
                     )}
-                    <div>
-                      <p className="font-bold text-sm">
-                        {item.displayType}{" "}
-                        <span className="text-cashapp">
-                          {item.otherCashtag || item.otherParty}
-                        </span>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-semibold text-[15px] truncate">
+                        {item.otherCashtag || item.otherParty}
                       </p>
-                      {item.note && (
-                        <p className="text-xs text-gray-500 mt-0.5 italic">
-                          "{item.note}"
-                        </p>
-                      )}
-                      <p className="text-[10px] text-gray-400 uppercase font-bold tracking-wider mt-1">
-                        {new Date(item.created_at).toLocaleDateString()} •{" "}
-                        {item.status}
+                      <p className="text-xs text-gray-500 mt-0.5">
+                        {item.displayType}
+                        {" · "}
+                        {new Date(item.created_at).toLocaleDateString(undefined, { month: "short", day: "numeric" })}
                       </p>
                     </div>
                   </div>
-                  <p
-                    className={`font-bold text-lg ${item.isCashIn || (item.receiver_id === user.id && item.type === "send") ? "text-cashapp" : ""}`}
-                  >
-                    {item.isCashIn ||
-                      (item.receiver_id === user.id && item.type === "send")
-                      ? "+"
-                      : "-"}
-                    ${(item.amount / 100).toFixed(2)}
-                  </p>
+                  <div className="text-right ml-3 shrink-0">
+                    <p className={`font-bold text-[15px] ${isIncoming ? "text-cashapp" : ""}`}>
+                      {isIncoming ? "+" : "-"}${(item.amount / 100).toFixed(2)}
+                    </p>
+                    {item.status && item.status !== "completed" && item.status !== "filled" && (
+                      <p className={`text-[10px] font-medium mt-0.5 ${item.status === "pending" ? "text-amber-500" :
+                          item.status === "failed" || item.status === "declined" ? "text-red-500" :
+                            "text-gray-400"
+                        }`}>
+                        {item.status}
+                      </p>
+                    )}
+                  </div>
                 </div>
-                {/* Accept/Decline for pending requests where the current user is the sender (person being asked to pay) */}
-                {item.type === "request" &&
-                  item.status === "pending" &&
-                  item.sender_id === user.id && (
-                    <div className="flex space-x-3 mt-3 pt-3 border-t border-gray-100 dark:border-zinc-800">
-                      <button
-                        onClick={() =>
-                          handleRespondToRequest(item.id, "accept")
-                        }
-                        className="flex-1 flex items-center justify-center space-x-2 bg-cashapp text-white font-bold py-3 rounded-xl hover:scale-[1.02] active:scale-95 transition-all text-sm shadow-sm"
-                      >
-                        <Check className="w-4 h-4" />
-                        <span>Pay ${(item.amount / 100).toFixed(2)}</span>
-                      </button>
-                      <button
-                        onClick={() =>
-                          handleRespondToRequest(item.id, "decline")
-                        }
-                        className="flex-1 flex items-center justify-center space-x-2 bg-gray-100 dark:bg-zinc-800 font-bold py-3 rounded-xl hover:scale-[1.02] active:scale-95 transition-all text-sm"
-                      >
-                        <X className="w-4 h-4" />
-                        <span>Decline</span>
-                      </button>
-                    </div>
-                  )}
-              </div>
-            ))
+              );
+            })
           ) : (
-            <p className="text-center text-gray-500 py-8 italic">
+            <p className="text-center text-gray-500 py-8 text-sm">
               No recent activity
             </p>
           )}
         </div>
       </div>
+
+      {/* Savings Goal Modal */}
+      <Modal
+        isOpen={isSavingsOpen}
+        onClose={() => { setIsSavingsOpen(false); setSavingsGoalName(""); setSavingsTargetAmount(""); }}
+        title="Start Saving & Earn 5% Interest"
+      >
+        <div className="py-4 space-y-5">
+          <p className="text-sm text-gray-500 text-center">
+            What are you saving for? Enter a goal name and target amount.
+          </p>
+
+          <div className="space-y-3">
+            <div className="bg-gray-50 dark:bg-zinc-800 rounded-2xl p-4">
+              <label className="text-[10px] text-gray-500 font-bold uppercase tracking-widest mb-1 block">Goal Name</label>
+              <input
+                type="text"
+                placeholder="e.g. Vacation, Emergency Fund..."
+                className="bg-transparent text-base font-bold outline-none w-full"
+                value={savingsGoalName}
+                onChange={(e) => setSavingsGoalName(e.target.value)}
+              />
+            </div>
+            <div className="bg-gray-50 dark:bg-zinc-800 rounded-2xl p-4">
+              <label className="text-[10px] text-gray-500 font-bold uppercase tracking-widest mb-1 block">Target Amount</label>
+              <div className="flex items-center space-x-2">
+                <span className="text-xl font-bold text-cashapp">$</span>
+                <input
+                  type="number"
+                  placeholder="1,000"
+                  className="bg-transparent text-base font-bold outline-none w-full"
+                  value={savingsTargetAmount}
+                  onChange={(e) => setSavingsTargetAmount(e.target.value)}
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="flex space-x-3">
+            <button
+              onClick={() => { setIsSavingsOpen(false); setSavingsGoalName(""); setSavingsTargetAmount(""); }}
+              className="flex-1 bg-gray-100 dark:bg-zinc-800 text-gray-700 dark:text-gray-300 font-bold py-4 rounded-full hover:bg-gray-200 dark:hover:bg-zinc-700 transition-all"
+            >
+              Cancel
+            </button>
+            <button
+              disabled={!savingsGoalName || !savingsTargetAmount || parseFloat(savingsTargetAmount) <= 0}
+              onClick={() => {
+                const newGoal = { name: savingsGoalName, target: savingsTargetAmount, createdAt: new Date().toISOString() };
+                const updated = [...savingsGoals, newGoal];
+                setSavingsGoals(updated);
+                localStorage.setItem(`flowcash_savings_${user.id}`, JSON.stringify(updated));
+                setSavingsGoalName("");
+                setSavingsTargetAmount("");
+                setIsSavingsOpen(false);
+              }}
+              className="flex-1 bg-cashapp text-white font-bold py-4 rounded-full shadow-lg shadow-cashapp/20 hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50"
+            >
+              Create Goal
+            </button>
+          </div>
+        </div>
+      </Modal>
+
+      {/* Save to Goal Modal */}
+      <Modal
+        isOpen={isSaveToGoalOpen}
+        onClose={() => { setIsSaveToGoalOpen(false); setSaveToGoalAmount(""); setSelectedGoalIndex(null); }}
+        title={selectedGoalIndex !== null && savingsGoals[selectedGoalIndex]
+          ? savingsGoals[selectedGoalIndex].name
+          : "Savings Goal"}
+      >
+        {selectedGoalIndex !== null && savingsGoals[selectedGoalIndex] && (() => {
+          const goal = savingsGoals[selectedGoalIndex];
+          const saved = goal.saved || 0;
+          const target = parseFloat(goal.target) || 1;
+          const pct = Math.min(100, (saved / target) * 100);
+          const isComplete = pct >= 100;
+
+          return (
+            <div className="py-4 space-y-5">
+              {/* Completion Celebration */}
+              {isComplete && (
+                <div className="text-center py-4 space-y-2">
+                  <p className="text-5xl">🎉</p>
+                  <p className="text-xl font-bold text-amber-600">Goal Reached!</p>
+                  <p className="text-sm text-gray-500">
+                    Congratulations! You saved ${target.toLocaleString()} for "{goal.name}"
+                  </p>
+                </div>
+              )}
+
+              {/* Progress */}
+              <div className="text-center">
+                <p className="text-3xl font-bold">
+                  ${saved.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                  <span className="text-base text-gray-500 font-medium"> / ${target.toLocaleString()}</span>
+                </p>
+                <div className="w-full bg-gray-200 dark:bg-zinc-700 rounded-full h-2 mt-3">
+                  <div
+                    className={`h-2 rounded-full transition-all duration-500 ${isComplete ? "bg-cashapp" : "bg-amber-500"}`}
+                    style={{ width: `${pct}%` }}
+                  />
+                </div>
+                <p className="text-xs text-gray-500 mt-2">
+                  {isComplete ? "✅ Goal complete!" : `${pct.toFixed(1)}% of goal reached`}
+                </p>
+              </div>
+
+              {/* Amount input */}
+              <div className="flex items-center space-x-4 bg-gray-50 dark:bg-zinc-800 p-4 rounded-2xl">
+                <span className="text-3xl font-bold text-amber-600">$</span>
+                <input
+                  type="number"
+                  autoFocus
+                  placeholder="0.00"
+                  className="bg-transparent text-3xl font-bold outline-none w-full"
+                  value={saveToGoalAmount}
+                  onChange={(e) => setSaveToGoalAmount(e.target.value)}
+                />
+              </div>
+
+              <p className="text-xs text-gray-500 text-center">
+                Balance: <span className="font-bold">${(balance / 100).toFixed(2)}</span>
+                {saved > 0 && <> · In savings: <span className="font-bold">${saved.toFixed(2)}</span></>}
+              </p>
+
+              {/* Action buttons */}
+              <div className="flex space-x-3">
+                {/* Withdraw button */}
+                <button
+                  disabled={!saveToGoalAmount || parseFloat(saveToGoalAmount) <= 0 || parseFloat(saveToGoalAmount) > saved || isSavingToGoal}
+                  onClick={async () => {
+                    const amt = parseFloat(saveToGoalAmount);
+                    if (!amt || amt <= 0 || amt > saved) return;
+                    const cents = Math.round(amt * 100);
+                    setIsSavingToGoal(true);
+                    try {
+                      await api.post("/wallet/credit", { amount: cents, description: `Withdraw from: ${goal.name}` });
+                      const updated = [...savingsGoals];
+                      updated[selectedGoalIndex] = {
+                        ...updated[selectedGoalIndex],
+                        saved: Math.max(0, (updated[selectedGoalIndex].saved || 0) - amt),
+                      };
+                      setSavingsGoals(updated);
+                      localStorage.setItem(`flowcash_savings_${user.id}`, JSON.stringify(updated));
+                      await fetchData();
+                      setSaveToGoalAmount("");
+                      toast.success(`$${amt.toFixed(2)} withdrawn to balance`);
+                      recordSavingsActivity('withdraw', goal.name, amt);
+                    } catch (err) {
+                      toast.error("Withdraw failed: " + (err.response?.data?.message || err.message));
+                    } finally {
+                      setIsSavingToGoal(false);
+                    }
+                  }}
+                  className="flex-1 bg-gray-100 dark:bg-zinc-800 text-gray-700 dark:text-gray-300 font-bold py-4 rounded-full hover:bg-gray-200 dark:hover:bg-zinc-700 transition-all disabled:opacity-50"
+                >
+                  {isSavingToGoal ? "..." : "Withdraw"}
+                </button>
+
+                {/* Save button */}
+                <button
+                  disabled={!saveToGoalAmount || parseFloat(saveToGoalAmount) <= 0 || parseFloat(saveToGoalAmount) * 100 > balance || isSavingToGoal}
+                  onClick={async () => {
+                    const amt = parseFloat(saveToGoalAmount);
+                    if (!amt || amt <= 0) return;
+                    const cents = Math.round(amt * 100);
+                    if (cents > balance) {
+                      toast.error("Insufficient balance");
+                      return;
+                    }
+                    setIsSavingToGoal(true);
+                    try {
+                      await api.post("/wallet/debit", { amount: cents, description: `Savings: ${goal.name}` });
+                      const updated = [...savingsGoals];
+                      updated[selectedGoalIndex] = {
+                        ...updated[selectedGoalIndex],
+                        saved: (updated[selectedGoalIndex].saved || 0) + amt,
+                      };
+                      setSavingsGoals(updated);
+                      localStorage.setItem(`flowcash_savings_${user.id}`, JSON.stringify(updated));
+                      await fetchData();
+                      setSaveToGoalAmount("");
+                      const newPct = Math.min(100, ((updated[selectedGoalIndex].saved || 0) / target) * 100);
+                      if (newPct >= 100) {
+                        toast.success(`🎉 Goal "${goal.name}" reached!`);
+                        recordSavingsActivity('goal_complete', goal.name, amt);
+                      } else {
+                        toast.success(`$${amt.toFixed(2)} saved to "${goal.name}"`);
+                        recordSavingsActivity('save', goal.name, amt);
+                      }
+                    } catch (err) {
+                      toast.error("Failed to save: " + (err.response?.data?.message || err.message));
+                    } finally {
+                      setIsSavingToGoal(false);
+                    }
+                  }}
+                  className="flex-1 bg-amber-500 text-white font-bold py-4 rounded-full shadow-lg shadow-amber-500/20 hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50"
+                >
+                  {isSavingToGoal ? "..." : "Save"}
+                </button>
+              </div>
+
+              {/* Withdraw All & Delete Goal */}
+              <div className="flex space-x-3 pt-1">
+                {saved > 0 && (
+                  <button
+                    disabled={isSavingToGoal}
+                    onClick={async () => {
+                      const cents = Math.round(saved * 100);
+                      setIsSavingToGoal(true);
+                      try {
+                        await api.post("/wallet/credit", { amount: cents, description: `Withdraw all from: ${goal.name}` });
+                        const updated = [...savingsGoals];
+                        updated[selectedGoalIndex] = { ...updated[selectedGoalIndex], saved: 0 };
+                        setSavingsGoals(updated);
+                        localStorage.setItem(`flowcash_savings_${user.id}`, JSON.stringify(updated));
+                        await fetchData();
+                        toast.success(`$${saved.toFixed(2)} withdrawn to balance`);
+                        recordSavingsActivity('withdraw_all', goal.name, saved);
+                      } catch (err) {
+                        toast.error("Withdraw failed: " + (err.response?.data?.message || err.message));
+                      } finally {
+                        setIsSavingToGoal(false);
+                      }
+                    }}
+                    className="flex-1 text-amber-600 font-bold text-sm py-3 rounded-full border border-amber-200 dark:border-amber-800 hover:bg-amber-50 dark:hover:bg-amber-900/20 transition-all disabled:opacity-50"
+                  >
+                    Withdraw All
+                  </button>
+                )}
+                <button
+                  disabled={isSavingToGoal}
+                  onClick={() => {
+                    if (saved > 0 && !confirm(`This goal has $${saved.toFixed(2)} saved. Withdraw to balance and delete?`)) return;
+                    (async () => {
+                      setIsSavingToGoal(true);
+                      try {
+                        if (saved > 0) {
+                          const cents = Math.round(saved * 100);
+                          await api.post("/wallet/credit", { amount: cents, description: `Deleted goal: ${goal.name}` });
+                          await fetchData();
+                        }
+                        const updated = savingsGoals.filter((_, i) => i !== selectedGoalIndex);
+                        setSavingsGoals(updated);
+                        localStorage.setItem(`flowcash_savings_${user.id}`, JSON.stringify(updated));
+                        setIsSaveToGoalOpen(false);
+                        setSelectedGoalIndex(null);
+                        toast.success(`Goal "${goal.name}" deleted`);
+                        recordSavingsActivity('goal_deleted', goal.name, saved);
+                      } catch (err) {
+                        toast.error("Failed: " + (err.response?.data?.message || err.message));
+                      } finally {
+                        setIsSavingToGoal(false);
+                      }
+                    })();
+                  }}
+                  className="flex-1 text-red-500 font-bold text-sm py-3 rounded-full border border-red-200 dark:border-red-800 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all disabled:opacity-50"
+                >
+                  Delete Goal
+                </button>
+              </div>
+            </div>
+          );
+        })()}
+      </Modal>
 
       <PinModal
         isOpen={isPinOpen}

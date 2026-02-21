@@ -54,7 +54,7 @@ async function register(req, res, next) {
 
             await client.query(
                 `INSERT INTO wallets (id, user_id, balance)
-         VALUES (uuid_generate_v4(), $1, 100000)`,
+         VALUES (uuid_generate_v4(), $1, 0)`,
                 [newUser.id]
             );
 

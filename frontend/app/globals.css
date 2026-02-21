@@ -51,3 +51,10 @@
 .focus-ring:focus-visible {
   box-shadow: 0 0 0 3px rgba(0, 214, 50, 0.4);
 }
+
+/* Suppress double focus ring on inputs inside styled containers */
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: none;
+}

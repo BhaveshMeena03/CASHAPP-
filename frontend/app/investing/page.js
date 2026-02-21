@@ -194,8 +194,8 @@ export default function InvestingPage() {
 
   // Render configuration
   const isStocks = tab === "stocks";
-  const primaryColor = isStocks ? "#9333ea" : "#F7931A"; // Purple for stocks, Orange for Crypto
-  const textColorClass = isStocks ? "text-purple-600" : "text-[#F7931A]";
+  const primaryColor = isStocks ? "#00d632" : "#F7931A"; // Green for stocks, Orange for Crypto
+  const textColorClass = isStocks ? "text-cashapp" : "text-[#F7931A]";
 
   const balance = isStocks ? stocksEquity : cryptoEquity;
   const invested = isStocks ? stocksInvested : cryptoInvested;
@@ -246,7 +246,7 @@ export default function InvestingPage() {
         <button
           onClick={() => setTab("stocks")}
           className={`flex-1 py-2.5 rounded-full font-bold text-sm transition-all ${isStocks
-            ? "bg-white dark:bg-zinc-800 shadow-sm text-purple-600"
+            ? "bg-white dark:bg-zinc-800 shadow-sm text-cashapp"
             : "text-gray-500 hover:text-gray-700"
             }`}
         >
@@ -375,7 +375,7 @@ export default function InvestingPage() {
               <span className="text-xl">📈</span>
               <span>Discover Stocks</span>
             </div>
-            <span className="text-gray-400 group-hover:text-purple-600 transition-colors">
+            <span className="text-gray-400 group-hover:text-cashapp transition-colors">
               Buy
             </span>
           </button>
@@ -521,7 +521,7 @@ export default function InvestingPage() {
                         assetInfo={stock}
                         symbol={stock.symbol}
                         size="w-10 h-10"
-                        textClass="text-purple-600"
+                        textClass="text-cashapp"
                       />
                       <p className="font-bold text-sm text-gray-900 dark:text-gray-100">
                         {stock.name}

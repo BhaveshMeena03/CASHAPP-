@@ -59,5 +59,76 @@ async function getStatement(req, res, next) {
     }
 }
 
-module.exports = { getBalance, getStatement };
+// ────────────────────────────────────────────────────────
+// POST /api/wallet/debit  (for savings goals)
+// ────────────────────────────────────────────────────────
+async function debitForSavings(req, res, next) {
+    try {
+        const { amount, description } = req.body;
+
+        if (!amount || amount < 1) {
+            throw ApiError.badRequest('Amount must be at least 1 cent');
+        }
+
+        const wallet = await walletModel.findByUserId(req.user.id);
+        if (!wallet) throw ApiError.notFound('Wallet not found');
+        if (wallet.balance < amount) {
+            throw ApiError.badRequest('Insufficient balance');
+        }
+
+        await walletModel.debitWallet(wallet.id, amount);
+
+        const updated = await walletModel.findByUserId(req.user.id);
+
+        res.json({
+            success: true,
+            data: {
+                balance: updated.balance,
+                formatted: formatCurrency(updated.balance),
+                deducted: amount,
+                description: description || 'Savings transfer',
+            },
+            message: `Saved ${formatCurrency(amount)} to your goal`,
+            error: '',
+        });
+    } catch (err) {
+        next(err);
+    }
+}
+
+// ────────────────────────────────────────────────────────
+// POST /api/wallet/credit  (withdraw from savings)
+// ────────────────────────────────────────────────────────
+async function creditForSavings(req, res, next) {
+    try {
+        const { amount, description } = req.body;
+
+        if (!amount || amount < 1) {
+            throw ApiError.badRequest('Amount must be at least 1 cent');
+        }
+
+        const wallet = await walletModel.findByUserId(req.user.id);
+        if (!wallet) throw ApiError.notFound('Wallet not found');
+
+        await walletModel.creditWallet(wallet.id, amount);
+
+        const updated = await walletModel.findByUserId(req.user.id);
+
+        res.json({
+            success: true,
+            data: {
+                balance: updated.balance,
+                formatted: formatCurrency(updated.balance),
+                credited: amount,
+                description: description || 'Savings withdrawal',
+            },
+            message: `Withdrew ${formatCurrency(amount)} from savings`,
+            error: '',
+        });
+    } catch (err) {
+        next(err);
+    }
+}
+
+module.exports = { getBalance, getStatement, debitForSavings, creditForSavings };
 

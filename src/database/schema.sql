@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS users (
 CREATE TABLE IF NOT EXISTS wallets (
   id         UUID    PRIMARY KEY DEFAULT uuid_generate_v4(),
   user_id    UUID    NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-  balance    BIGINT  NOT NULL DEFAULT 100000,   -- cents → $1,000.00
+  balance    BIGINT  NOT NULL DEFAULT 0,   -- cents → $0.00
   currency   VARCHAR(3) NOT NULL DEFAULT 'USD',
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
