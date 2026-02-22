@@ -1,6 +1,7 @@
 const alpaca = require("../utils/alpacaService");
 const ApiError = require("../utils/errors");
 const walletModel = require("../models/walletModel");
+const db = require("../config/db");
 
 // ── Account ──────────────────────────────────────────
 exports.getAccount = async (req, res, next) => {
@@ -554,8 +555,63 @@ exports.getPosition = async (req, res, next) => {
 exports.getOrders = async (req, res, next) => {
   try {
     const limit = parseInt(req.query.limit) || 20;
-    const orders = await orderModel.getOrdersByUserId(req.user.id, limit);
 
+    // 1) Fetch local orders
+    let orders = await orderModel.getOrdersByUserId(req.user.id, limit);
+
+    // 2) Sync any pending orders with Alpaca
+    const pendingOrders = orders.filter((o) => o.status === "pending" && o.dw_order_id);
+    if (pendingOrders.length > 0) {
+      let syncOccurred = false;
+      const wallet = await walletModel.findByUserId(req.user.id);
+
+      for (const po of pendingOrders) {
+        try {
+          const alpacaOrder = await alpaca.getOrder(po.dw_order_id);
+          const newStatus = mapAlpacaStatus(alpacaOrder.status);
+
+          if (newStatus !== "pending") {
+            // Update local DB status
+            await db.query("UPDATE orders SET status = $1, updated_at = NOW() WHERE id = $2", [newStatus, po.id]);
+            syncOccurred = true;
+
+            if (newStatus === "filled") {
+              const filledPrice = parseFloat(alpacaOrder.filled_avg_price || 0) * 100;
+              const filledQty = parseFloat(alpacaOrder.filled_qty || 0);
+
+              // Only credit wallet if it was a SELL. If it was a BUY, we already debited their wallet at submission time.
+              if (po.side === "sell") {
+                await walletModel.creditWallet(wallet.id, Math.round(filledQty * filledPrice));
+              }
+
+              // Add to portfolio positions
+              const qtyDelta = po.side === "buy" ? filledQty : -filledQty;
+              await positionModel.upsertPosition(
+                req.user.id,
+                po.symbol,
+                po.asset_type,
+                qtyDelta,
+                Math.round(filledPrice)
+              );
+            } else if (newStatus === "cancelled" || newStatus === "failed") {
+              // If a BUY order failed/cancelled, refund the pre-deducted cash back to their wallet
+              if (po.side === "buy") {
+                await walletModel.creditWallet(wallet.id, po.amount_cents);
+              }
+            }
+          }
+        } catch (e) {
+          console.error(`Failed to sync order ${po.id} from Alpaca:`, e.message);
+        }
+      }
+
+      // If we synced any statuses, re-fetch the cleaned list so the UI gets the updated statuses
+      if (syncOccurred) {
+        orders = await orderModel.getOrdersByUserId(req.user.id, limit);
+      }
+    }
+
+    // 3) Format for UI
     const cleaned = orders.map((o) => ({
       id: o.id,
       symbol: o.symbol,
