@@ -14,7 +14,7 @@ DO $$ BEGIN
   END IF;
 
   IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'transaction_type') THEN
-    CREATE TYPE transaction_type AS ENUM ('send', 'request');
+    CREATE TYPE transaction_type AS ENUM ('send', 'request', 'bitcoin_send');
   END IF;
 
   IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'ledger_entry_type') THEN
