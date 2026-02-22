@@ -37,13 +37,8 @@ async function getNotifications(req, res, next) {
 // ────────────────────────────────────────────────────────
 async function markAsRead(req, res, next) {
     try {
-        const notification = await notificationModel.markAsRead(req.params.id);
-        if (!notification) throw ApiError.notFound('Notification not found');
-
-        // Verify ownership
-        if (notification.user_id !== req.user.id) {
-            throw ApiError.forbidden('Not your notification');
-        }
+        const notification = await notificationModel.markAsRead(req.params.id, req.user.id);
+        if (!notification) throw ApiError.notFound('Notification not found or unauthorized');
 
         res.json({
             success: true,

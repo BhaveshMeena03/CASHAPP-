@@ -23,6 +23,7 @@ router.get('/crypto/bars/:symbol(*)', auth, controller.getCryptoBars);  // /cryp
 
 // ── Orders ───────────────────────────────────────────
 router.post('/order', auth, controller.placeOrder);                 // { symbol, notional, side }
+router.delete('/order/:id', auth, controller.cancelOrder);
 router.get('/orders', auth, controller.getOrders);                  // ?status=all&limit=20
 
 // ── Positions ────────────────────────────────────────

@@ -114,9 +114,9 @@ async function cashIn(req, res, next) {
     const { payment_method_db_id, amount } = req.body;
 
     // Validate amount
-    if (!amount || amount < 100 || amount > 10000000) {
+    if (!Number.isInteger(amount) || amount < 100 || amount > 10000000) {
       throw ApiError.badRequest(
-        "Amount must be between $1.00 (100 cents) and $100,000 (10000000 cents)",
+        "Amount must be an integer between $1.00 (100 cents) and $100,000 (10000000 cents)",
       );
     }
 
@@ -208,8 +208,8 @@ async function cashOut(req, res, next) {
     }
 
     // Validate amount
-    if (!amount || amount < 100) {
-      throw ApiError.badRequest("Minimum withdrawal is $1.00 (100 cents)");
+    if (!Number.isInteger(amount) || amount < 100 || amount > 10000000) {
+      throw ApiError.badRequest("Minimum withdrawal is $1.00 (100 cents), Maximum is $100,000");
     }
 
     const wallet = await walletModel.findByUserId(req.user.id);

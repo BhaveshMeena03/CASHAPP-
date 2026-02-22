@@ -1,11 +1,11 @@
 {
   "/_global-error/page": "/_global-error",
   "/_not-found/page": "/_not-found",
-  "/activity/[id]/page": "/activity/[id]",
+  "/activity/detail/page": "/activity/detail",
   "/activity/page": "/activity",
   "/banking/page": "/banking",
   "/cards/page": "/cards",
-  "/crypto/[symbol]/page": "/crypto/[symbol]",
+  "/crypto/detail/page": "/crypto/detail",
   "/crypto/page": "/crypto",
   "/investing/page": "/investing",
   "/login/page": "/login",
@@ -15,6 +15,6 @@
   "/register/page": "/register",
   "/search/page": "/search",
   "/settings/page": "/settings",
-  "/stocks/[symbol]/page": "/stocks/[symbol]",
+  "/stocks/detail/page": "/stocks/detail",
   "/stocks/page": "/stocks"
 }

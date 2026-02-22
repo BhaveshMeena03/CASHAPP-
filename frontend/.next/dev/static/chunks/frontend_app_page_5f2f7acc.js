@@ -6,7 +6,7 @@
   "static/chunks/9e883_motion-dom_dist_es_0e877b46._.js",
   "static/chunks/9e883_framer-motion_dist_es_cc03f36e._.js",
   "static/chunks/9e883_react-qr-scanner_dist_react-qr-scanner_umd_8b01b490.js",
-  "static/chunks/9e883_a749de15._.js"
+  "static/chunks/9e883_4a937c9f._.js"
 ],
     source: "dynamic"
 });

@@ -6,9 +6,10 @@ const { v4: uuidv4 } = require('uuid');
  * @param {object} data — { userId, message, type, referenceId }
  * @returns {object} the new notification row
  */
-async function createNotification({ userId, message, type, referenceId }) {
+async function createNotification({ userId, message, type, referenceId }, client) {
+    const conn = client || db;
     const id = uuidv4();
-    const { rows } = await db.query(
+    const { rows } = await conn.query(
         `INSERT INTO notifications (id, user_id, message, type, reference_id)
      VALUES ($1, $2, $3, $4, $5)
      RETURNING *`,
@@ -87,10 +88,10 @@ async function findByUserId(userId, { unreadOnly = false } = {}) {
  * @param {string} notificationId
  * @returns {object} the updated notification row
  */
-async function markAsRead(notificationId) {
+async function markAsRead(notificationId, userId) {
     const { rows } = await db.query(
-        `UPDATE notifications SET is_read = TRUE WHERE id = $1 RETURNING *`,
-        [notificationId]
+        `UPDATE notifications SET is_read = TRUE WHERE id = $1 AND user_id = $2 RETURNING *`,
+        [notificationId, userId]
     );
     return rows[0] || null;
 }

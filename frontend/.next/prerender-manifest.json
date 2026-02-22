@@ -50,6 +50,30 @@
         "x-next-revalidate-tag-token"
       ]
     },
+    "/activity/detail": {
+      "experimentalBypassFor": [
+        {
+          "type": "header",
+          "key": "next-action"
+        },
+        {
+          "type": "header",
+          "key": "content-type",
+          "value": "multipart/form-data;.*"
+        }
+      ],
+      "initialRevalidateSeconds": false,
+      "srcRoute": "/activity/detail",
+      "dataRoute": "/activity/detail.rsc",
+      "allowHeader": [
+        "host",
+        "x-matched-path",
+        "x-prerender-revalidate",
+        "x-prerender-revalidate-if-generated",
+        "x-next-revalidated-tags",
+        "x-next-revalidate-tag-token"
+      ]
+    },
     "/activity": {
       "experimentalBypassFor": [
         {
@@ -113,6 +137,30 @@
       "initialRevalidateSeconds": false,
       "srcRoute": "/cards",
       "dataRoute": "/cards.rsc",
+      "allowHeader": [
+        "host",
+        "x-matched-path",
+        "x-prerender-revalidate",
+        "x-prerender-revalidate-if-generated",
+        "x-next-revalidated-tags",
+        "x-next-revalidate-tag-token"
+      ]
+    },
+    "/crypto/detail": {
+      "experimentalBypassFor": [
+        {
+          "type": "header",
+          "key": "next-action"
+        },
+        {
+          "type": "header",
+          "key": "content-type",
+          "value": "multipart/form-data;.*"
+        }
+      ],
+      "initialRevalidateSeconds": false,
+      "srcRoute": "/crypto/detail",
+      "dataRoute": "/crypto/detail.rsc",
       "allowHeader": [
         "host",
         "x-matched-path",
@@ -338,6 +386,30 @@
         "x-next-revalidate-tag-token"
       ]
     },
+    "/stocks/detail": {
+      "experimentalBypassFor": [
+        {
+          "type": "header",
+          "key": "next-action"
+        },
+        {
+          "type": "header",
+          "key": "content-type",
+          "value": "multipart/form-data;.*"
+        }
+      ],
+      "initialRevalidateSeconds": false,
+      "srcRoute": "/stocks/detail",
+      "dataRoute": "/stocks/detail.rsc",
+      "allowHeader": [
+        "host",
+        "x-matched-path",
+        "x-prerender-revalidate",
+        "x-prerender-revalidate-if-generated",
+        "x-next-revalidated-tags",
+        "x-next-revalidate-tag-token"
+      ]
+    },
     "/stocks": {
       "experimentalBypassFor": [
         {
@@ -366,8 +438,8 @@
   "dynamicRoutes": {},
   "notFoundRoutes": [],
   "preview": {
-    "previewModeId": "190bf31a5a7a9410ac30d3ae9b0fae27",
-    "previewModeSigningKey": "6bc3a8914e940d50679539eac232a38048ba9395d8027e272ae5bfe5d941fcb3",
-    "previewModeEncryptionKey": "b1784143f8783b5130618d577e6f52a8a4365651cc1bc8f67d05444ecb81250f"
+    "previewModeId": "5279aa0c870e1d57485a2b3e26da4717",
+    "previewModeSigningKey": "1055dbd2d65ab4bd9832d9a3ee8c54bc98fbbc9ba1a1c30b4d6433bb87304eea",
+    "previewModeEncryptionKey": "bc94741e1383b3b36e12531b7749afb725633b13f30d383f06dbdcdeeaa8bf85"
   }
 }

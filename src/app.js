@@ -36,10 +36,13 @@ app.use(helmet({
 }));
 
 const allowedOrigins = (process.env.CORS_ORIGINS || 'http://localhost:3001').split(',').map(o => o.trim());
+// Add Capacitor native app origins
+const capacitorOrigins = ['http://localhost', 'https://localhost', 'capacitor://localhost'];
+const allAllowedOrigins = [...allowedOrigins, ...capacitorOrigins];
 app.use(cors({
     origin: (origin, cb) => {
         // Allow requests with no origin (server-to-server, curl, mobile apps)
-        if (!origin || allowedOrigins.includes(origin)) return cb(null, true);
+        if (!origin || allAllowedOrigins.includes(origin)) return cb(null, true);
         cb(new Error('Not allowed by CORS'));
     },
     credentials: true,

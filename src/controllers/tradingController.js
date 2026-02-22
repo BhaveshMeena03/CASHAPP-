@@ -248,12 +248,12 @@ exports.placeOrder = async (req, res, next) => {
       return next(ApiError.badRequest('side must be "buy" or "sell"'));
     }
 
-    const amount = parseFloat(notional);
-    if (isNaN(amount) || amount <= 0) {
+    const amountParsed = parseFloat(notional);
+    if (isNaN(amountParsed) || amountParsed <= 0) {
       return next(ApiError.badRequest("notional must be a positive number"));
     }
-
-    const amountCents = Math.round(amount * 100);
+    const amountCents = Math.round(amountParsed * 100);
+    const orderDollars = (amountCents / 100).toFixed(2);
 
     // Verify/deduct local FlowCash balance
     const wallet = await walletModel.findByUserId(req.user.id);
@@ -298,15 +298,15 @@ exports.placeOrder = async (req, res, next) => {
       if (!position || Number(position.quantity) <= 0) {
         return next(ApiError.badRequest(`You do not own any ${normalizedSym} to sell.`));
       }
-      const estQty = amount / estPrice;
+      const estQty = (amountCents / 100) / estPrice;
       if (estQty > Number(position.quantity) * 1.05) {
-        return next(ApiError.badRequest(`Insufficient ${normalizedSym} balance to sell $${amount}.`));
+        return next(ApiError.badRequest(`Insufficient ${normalizedSym} balance to sell $${orderDollars}.`));
       }
     }
 
     const order = await alpaca.placeOrder({
       symbol: normalizedSym,
-      notional: amount,
+      notional: Number(orderDollars),
       side,
       time_in_force: isCrypto ? "ioc" : "day",
     });
@@ -323,7 +323,7 @@ exports.placeOrder = async (req, res, next) => {
         order.status === "new" ||
         order.status === "pending_new")
     ) {
-      const estQty = amount / estPrice;
+      const estQty = (amountCents / 100) / estPrice;
       qtyDelta = side === "buy" ? estQty : -estQty;
       dbStatus = "filled"; // Force DB status to filled
     } else if (!shouldForceFill && !isCrypto) {
@@ -355,6 +355,7 @@ exports.placeOrder = async (req, res, next) => {
       quantity: finalQty,
       priceCents: finalPriceCents,
       status: dbStatus,
+      dwOrderId: order.id,
     });
 
     await positionModel.upsertPosition(
@@ -574,6 +575,42 @@ exports.getOrders = async (req, res, next) => {
     next(
       ApiError.internal(
         "Failed to fetch orders: " +
+        (err.response?.data?.message || err.message),
+      ),
+    );
+  }
+};
+
+exports.cancelOrder = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const order = await orderModel.findById(id);
+
+    if (!order) return next(ApiError.notFound("Order not found"));
+    if (order.user_id !== req.user.id) return next(ApiError.forbidden("Order not found"));
+    if (order.status !== "pending") {
+      return next(ApiError.badRequest("Only pending orders can be cancelled"));
+    }
+
+    // Cancel on Alpaca if a DW order ID is present
+    if (order.dw_order_id) {
+      await alpaca.cancelOrder(order.dw_order_id).catch(err => {
+        console.warn("Alpaca order cancellation failed:", err.message);
+      });
+    }
+
+    // Refund wallet if it was a buy order (sell orders don't debit stock until filled in this app's logic)
+    if (order.side === "buy") {
+      const wallet = await walletModel.findByUserId(req.user.id);
+      await walletModel.creditWallet(wallet.id, order.amount_cents);
+    }
+
+    const updated = await orderModel.updateOrderStatus(id, "cancelled");
+    res.json({ success: true, data: updated });
+  } catch (err) {
+    next(
+      ApiError.internal(
+        "Failed to cancel order: " +
         (err.response?.data?.message || err.message),
       ),
     );

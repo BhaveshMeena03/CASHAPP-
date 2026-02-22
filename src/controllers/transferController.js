@@ -34,8 +34,12 @@ async function sendMoney(req, res, next) {
       }
     }
 
-    if (!amount || amount <= 0) {
-      throw ApiError.badRequest("Amount must be a positive integer (cents)");
+    if (!Number.isInteger(amount) || amount <= 0 || amount > 10000000) {
+      throw ApiError.badRequest("Amount must be a positive integer in cents (max $100,000)");
+    }
+
+    if (note && note.length > 255) {
+      throw ApiError.badRequest("Note cannot exceed 255 characters");
     }
 
     // ── Validate receiver ──
@@ -104,14 +108,14 @@ async function sendMoney(req, res, next) {
       message: `${sender.cashtag} sent you ${formatCurrency(amount)}`,
       type: "payment_received",
       referenceId: tx.id,
-    });
+    }, client);
 
     await notificationModel.createNotification({
       userId: senderId,
       message: `You sent ${formatCurrency(amount)} to ${receiver.cashtag}`,
       type: "payment_sent",
       referenceId: tx.id,
-    });
+    }, client);
 
     await client.query("COMMIT");
 
@@ -154,8 +158,12 @@ async function requestMoney(req, res, next) {
       }
     }
 
-    if (!amount || amount <= 0) {
-      throw ApiError.badRequest("Amount must be a positive integer (cents)");
+    if (!Number.isInteger(amount) || amount <= 0 || amount > 10000000) {
+      throw ApiError.badRequest("Amount must be a positive integer in cents (max $100,000)");
+    }
+
+    if (note && note.length > 255) {
+      throw ApiError.badRequest("Note cannot exceed 255 characters");
     }
 
     const requestedUser = await userModel.findByCashtag(cashtag);
@@ -205,12 +213,23 @@ async function respondToRequest(req, res, next) {
     const { action } = req.body;
     const userId = req.user.id;
 
-    const tx = await transactionModel.findById(transactionId);
-    if (!tx) throw ApiError.notFound("Transaction not found");
-    if (tx.type !== "request")
+    // ── Begin Transaction to Lock Row ──
+    await client.query("BEGIN");
+
+    const { rows: [tx] } = await client.query(
+      "SELECT * FROM transactions WHERE id = $1 FOR UPDATE",
+      [transactionId]
+    );
+
+    if (!tx) {
+      throw ApiError.notFound("Transaction not found");
+    }
+    if (tx.type !== "request") {
       throw ApiError.badRequest("This is not a payment request");
-    if (tx.status !== "pending")
+    }
+    if (tx.status !== "pending") {
       throw ApiError.badRequest(`Request already ${tx.status}`);
+    }
 
     // The sender_id is the person being asked to pay
     if (tx.sender_id !== userId) {
@@ -218,7 +237,7 @@ async function respondToRequest(req, res, next) {
     }
 
     if (action === "decline") {
-      const cancelled = await transactionModel.updateStatus(tx.id, "cancelled");
+      const cancelled = await transactionModel.updateStatus(tx.id, "cancelled", client);
 
       // Notify the requester
       const decliner = await userModel.findById(userId);
@@ -227,7 +246,9 @@ async function respondToRequest(req, res, next) {
         message: `${decliner.cashtag} declined your ${formatCurrency(tx.amount)} request`,
         type: "request_declined",
         referenceId: tx.id,
-      });
+      }, client);
+
+      await client.query("COMMIT");
 
       return res.json({
         success: true,
@@ -245,8 +266,6 @@ async function respondToRequest(req, res, next) {
 
     const receiverWallet = await walletModel.findByUserId(tx.receiver_id);
     if (!receiverWallet) throw ApiError.internal("Receiver wallet not found");
-
-    await client.query("BEGIN");
 
     // 1. Debit sender (the person accepting the request)
     await walletModel.debitWallet(senderWallet.id, tx.amount, client);
@@ -291,14 +310,14 @@ async function respondToRequest(req, res, next) {
       message: `${sender.cashtag} accepted your ${formatCurrency(tx.amount)} request`,
       type: "request_accepted",
       referenceId: tx.id,
-    });
+    }, client);
 
     await notificationModel.createNotification({
       userId: tx.sender_id,
       message: `You paid ${formatCurrency(tx.amount)} to ${receiver.cashtag}`,
       type: "payment_sent",
       referenceId: tx.id,
-    });
+    }, client);
 
     await client.query("COMMIT");
 
@@ -528,14 +547,14 @@ async function sendBitcoin(req, res, next) {
       message: `${sender.cashtag} sent you ${btcFormatted} BTC ($${usdFormatted})`,
       type: "bitcoin_received",
       referenceId: tx.id,
-    });
+    }, client);
 
     await notificationModel.createNotification({
       userId: senderId,
       message: `You sent ${btcFormatted} BTC ($${usdFormatted}) to ${receiver.cashtag}`,
       type: "bitcoin_sent",
       referenceId: tx.id,
-    });
+    }, client);
 
     await client.query("COMMIT");
 

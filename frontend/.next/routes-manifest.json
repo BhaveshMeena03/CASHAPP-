@@ -6,12 +6,26 @@
   "basePath": "",
   "redirects": [
     {
-      "source": "/:path+/",
-      "destination": "/:path+",
+      "source": "/:file((?!\\.well-known(?:/.*)?)(?:[^/]+/)*[^/]+\\.\\w+)/",
+      "destination": "/:file",
+      "internal": true,
+      "priority": true,
+      "missing": [
+        {
+          "type": "header",
+          "key": "x-nextjs-data"
+        }
+      ],
+      "statusCode": 308,
+      "regex": "^(?:/((?!\\.well-known(?:/.*)?)(?:[^/]+/)*[^/]+\\.\\w+))/$"
+    },
+    {
+      "source": "/:notfile((?!\\.well-known(?:/.*)?)(?:[^/]+/)*[^/\\.]+)",
+      "destination": "/:notfile/",
       "internal": true,
       "priority": true,
       "statusCode": 308,
-      "regex": "^(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))/$"
+      "regex": "^(?:/((?!\\.well-known(?:/.*)?)(?:[^/]+/)*[^/\\.]+))$"
     }
   ],
   "headers": [],
@@ -20,32 +34,7 @@
     "afterFiles": [],
     "fallback": []
   },
-  "dynamicRoutes": [
-    {
-      "page": "/activity/[id]",
-      "regex": "^/activity/([^/]+?)(?:/)?$",
-      "routeKeys": {
-        "nxtPid": "nxtPid"
-      },
-      "namedRegex": "^/activity/(?<nxtPid>[^/]+?)(?:/)?$"
-    },
-    {
-      "page": "/crypto/[symbol]",
-      "regex": "^/crypto/([^/]+?)(?:/)?$",
-      "routeKeys": {
-        "nxtPsymbol": "nxtPsymbol"
-      },
-      "namedRegex": "^/crypto/(?<nxtPsymbol>[^/]+?)(?:/)?$"
-    },
-    {
-      "page": "/stocks/[symbol]",
-      "regex": "^/stocks/([^/]+?)(?:/)?$",
-      "routeKeys": {
-        "nxtPsymbol": "nxtPsymbol"
-      },
-      "namedRegex": "^/stocks/(?<nxtPsymbol>[^/]+?)(?:/)?$"
-    }
-  ],
+  "dynamicRoutes": [],
   "staticRoutes": [
     {
       "page": "/",
@@ -72,6 +61,12 @@
       "namedRegex": "^/activity(?:/)?$"
     },
     {
+      "page": "/activity/detail",
+      "regex": "^/activity/detail(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/activity/detail(?:/)?$"
+    },
+    {
       "page": "/banking",
       "regex": "^/banking(?:/)?$",
       "routeKeys": {},
@@ -88,6 +83,12 @@
       "regex": "^/crypto(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/crypto(?:/)?$"
+    },
+    {
+      "page": "/crypto/detail",
+      "regex": "^/crypto/detail(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/crypto/detail(?:/)?$"
     },
     {
       "page": "/investing",
@@ -136,6 +137,12 @@
       "regex": "^/stocks(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/stocks(?:/)?$"
+    },
+    {
+      "page": "/stocks/detail",
+      "regex": "^/stocks/detail(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/stocks/detail(?:/)?$"
     }
   ],
   "dataRoutes": [],

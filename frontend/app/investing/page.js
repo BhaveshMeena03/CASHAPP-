@@ -87,12 +87,13 @@ export default function InvestingPage() {
   const fetchCryptoData = useCallback(async () => {
     setCryptoLoading(true);
     try {
-      const [posRes, chartRes, ordersRes] = await Promise.all([
+      const [posRes, chartRes, ordersRes, transfersRes] = await Promise.all([
         api.get(`/trading/positions`),
         api.get(`/trading/crypto/bars/BTC/USD`, {
           params: getBtcBarParams(timeRange),
         }),
         api.get("/trading/orders?limit=30&status=all"),
+        api.get("/transfer/history?limit=30"),
       ]);
 
       const positions = posRes.data.data || [];
@@ -111,11 +112,23 @@ export default function InvestingPage() {
       setCryptoChart(bars.map((b) => parseFloat(b.c)));
 
       const orders = ordersRes.data.data || [];
-      setCryptoActivity(
-        orders.filter(
-          (o) => o.symbol.includes("/") || o.asset_class === "crypto",
-        ),
+      const cryptoOrders = orders.filter(
+        (o) => o.symbol?.includes("/") || o.asset_class === "crypto",
       );
+
+      // Blend in P2P Bitcoin transfers
+      const transfers = transfersRes.data?.data?.transactions || [];
+      const btcTransfers = transfers.filter((t) => t.type === "bitcoin_send").map(t => ({
+        ...t,
+        symbol: "BTC", // Ensure the UI knows it's Bitcoin
+      }));
+
+      // Sort combined activity by date descending
+      const combinedActivity = [...cryptoOrders, ...btcTransfers].sort(
+        (a, b) => new Date(b.created_at || b.submitted_at || b.filled_at) - new Date(a.created_at || a.submitted_at || a.filled_at)
+      );
+
+      setCryptoActivity(combinedActivity);
     } catch (err) {
       console.error("Failed to fetch crypto data", err);
     } finally {
@@ -415,13 +428,18 @@ export default function InvestingPage() {
                 parseFloat(order.filled_avg_price || 0) *
                 parseFloat(order.filled_qty || 0) ||
                 parseFloat(order.notional) ||
+                parseFloat(order.amount) / 100 ||
                 0;
-              const isBuy = order.side === "buy";
+              const isP2P = order.type === "bitcoin_send";
+              const isReceived = isP2P && order.receiver_id === user.id;
+              const isBuy = !isP2P && order.side === "buy";
               const isCrypto =
-                order.asset_class === "crypto" || order.symbol.includes("/");
-              const symbolStr = isCrypto
-                ? order.symbol.split("/")[0]
-                : order.symbol;
+                isP2P || order.asset_class === "crypto" || order.symbol?.includes("/");
+              const symbolStr = isP2P
+                ? "BTC"
+                : isCrypto
+                  ? order.symbol.split("/")[0]
+                  : order.symbol;
               const date = new Date(
                 order.filled_at || order.submitted_at || order.created_at,
               ).toLocaleDateString(undefined, {
@@ -430,30 +448,45 @@ export default function InvestingPage() {
               });
 
               const assetInfo = isCrypto
-                ? CRYPTOS.find(c => c.symbol === order.symbol || c.alpacaSymbol === order.symbol)
+                ? CRYPTOS.find(c => c.symbol.startsWith(symbolStr) || c.alpacaSymbol === order.symbol)
                 : STOCKS.find(s => s.symbol === order.symbol);
+
+              let actionText = isBuy ? "Bought" : "Sold";
+              if (isP2P) actionText = isReceived ? "Received" : "Sent";
+
+              const isPositiveCashFlow = isP2P ? isReceived : !isBuy;
+
+              let qtyText = "";
+              if (!isP2P && Number(order.filled_qty) > 0) {
+                qtyText = Number(order.filled_qty).toLocaleString(undefined, {
+                  maximumFractionDigits: isCrypto ? 6 : 4,
+                }) + " ";
+              }
+
+              let displayAmount = `${actionText} ${qtyText}${symbolStr}`;
+              if (isP2P) {
+                displayAmount = `${actionText} Bitcoin`;
+                // If the default note format is used (e.g. "0.00500000 BTC ($..."), extract it
+                if (order.note && order.note.match(/^[\d.]+ BTC/)) {
+                  displayAmount = `${actionText} ${order.note.split(' ')[0]} ${symbolStr}`;
+                }
+              }
 
               return (
                 <button
                   key={order.id}
-                  onClick={() => router.push(`/activity/${order.id}`)}
+                  onClick={() => router.push(`/activity/detail?id=${order.id}`)}
                   className="w-full flex items-center justify-between group hover:bg-gray-50 dark:hover:bg-zinc-900 p-2 -mx-2 rounded-xl transition-all"
                 >
                   <div className="flex items-center space-x-4">
                     <StockLogo
                       assetInfo={assetInfo}
-                      symbol={order.symbol}
-                      textClass={isBuy ? "text-cashapp" : "text-red-500"}
+                      symbol={symbolStr}
+                      textClass={isBuy || isReceived ? "text-cashapp" : "text-red-500"}
                     />
                     <div className="text-left">
                       <p className="font-bold text-sm text-gray-900 dark:text-gray-100">
-                        {isBuy ? "Bought" : "Sold"}{" "}
-                        {Number(order.filled_qty) > 0
-                          ? Number(order.filled_qty).toLocaleString(undefined, {
-                            maximumFractionDigits: isCrypto ? 6 : 4,
-                          }) + " "
-                          : ""}
-                        {symbolStr}
+                        {displayAmount}
                       </p>
                       <p className="text-xs text-gray-500 font-medium capitalize">
                         {order.status} • {date}
@@ -469,9 +502,9 @@ export default function InvestingPage() {
                       })}
                     </p>
                     <p
-                      className={`text-xs font-bold ${isBuy ? "text-gray-400" : "text-cashapp"}`}
+                      className={`text-xs font-bold ${isPositiveCashFlow ? "text-cashapp" : "text-gray-400"}`}
                     >
-                      {isBuy ? "-" : "+"}$
+                      {isPositiveCashFlow ? "+" : "-"}$
                       {amount.toLocaleString(undefined, {
                         minimumFractionDigits: 2,
                         maximumFractionDigits: 2,
@@ -514,7 +547,7 @@ export default function InvestingPage() {
                   <div
                     key={stock.symbol}
                     className="flex justify-between items-center cursor-pointer group hover:bg-white dark:hover:bg-zinc-800 p-2 -mx-2 rounded-xl transition-all"
-                    onClick={() => router.push(`/stocks/${stock.symbol}`)}
+                    onClick={() => router.push(`/stocks/detail?symbol=${stock.symbol}`)}
                   >
                     <div className="flex items-center space-x-4">
                       <StockLogo
@@ -568,7 +601,7 @@ export default function InvestingPage() {
                   <div
                     key={stock.symbol}
                     className="flex justify-between items-center cursor-pointer group hover:bg-white dark:hover:bg-zinc-800 p-2 -mx-2 rounded-xl transition-all"
-                    onClick={() => router.push(`/stocks/${stock.symbol}`)}
+                    onClick={() => router.push(`/stocks/detail?symbol=${stock.symbol}`)}
                   >
                     <div className="flex items-center space-x-4">
                       <StockLogo

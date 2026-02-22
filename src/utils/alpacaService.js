@@ -99,6 +99,11 @@ async function placeOrder({ symbol, notional, side, type = 'market', time_in_for
     return res.data;
 }
 
+async function cancelOrder(orderId) {
+    const res = await trading.delete(`/v2/orders/${orderId}`);
+    return res.data;
+}
+
 async function getOrders(status = 'all', limit = 50) {
     const res = await trading.get('/v2/orders', {
         params: { status, limit, direction: 'desc' },
@@ -139,6 +144,7 @@ module.exports = {
     getStockBars,
     getCryptoBars,
     placeOrder,
+    cancelOrder,
     getOrders,
     getOrder,
     getPositions,

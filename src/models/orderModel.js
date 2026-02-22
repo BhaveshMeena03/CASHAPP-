@@ -12,6 +12,7 @@ async function createOrder(
     priceCents,
     status,
     note,
+    dwOrderId,
   },
   client,
 ) {
@@ -19,8 +20,8 @@ async function createOrder(
   const id = uuidv4();
 
   const { rows } = await conn.query(
-    `INSERT INTO orders (id, user_id, symbol, asset_type, side, amount_cents, quantity, price_cents, status, note, fee_cents)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING *`,
+    `INSERT INTO orders (id, user_id, symbol, asset_type, side, amount_cents, quantity, price_cents, status, note, fee_cents, dw_order_id)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING *`,
     [
       id,
       userId,
@@ -33,6 +34,7 @@ async function createOrder(
       status || "pending",
       note || null,
       0,
+      dwOrderId || null,
     ],
   );
   return rows[0];

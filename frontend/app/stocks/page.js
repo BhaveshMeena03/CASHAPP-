@@ -161,7 +161,7 @@ export default function StocksPage() {
               return (
                 <button
                   key={stock.symbol}
-                  onClick={() => router.push(`/stocks/${stock.symbol}`)}
+                  onClick={() => router.push(`/stocks/detail?symbol=${stock.symbol}`)}
                   className="w-full flex items-center justify-between p-4 bg-gray-50 dark:bg-zinc-900 rounded-2xl hover:bg-gray-100 dark:hover:bg-zinc-800 transition-all active:scale-[0.98]"
                 >
                   <div className="flex items-center space-x-4">

@@ -31,6 +31,12 @@ async function register(req, res, next) {
         if (cashtag) {
             // Ensure it starts with $
             if (!cashtag.startsWith('$')) cashtag = `$${cashtag}`;
+
+            const rawTag = cashtag.slice(1);
+            if (!/^[a-zA-Z0-9_]{3,20}$/.test(rawTag)) {
+                throw ApiError.badRequest('Cashtag must be 3-20 characters long and contain only letters, numbers, and underscores');
+            }
+
             const existingTag = await userModel.findByCashtag(cashtag);
             if (existingTag) throw ApiError.conflict(`Cashtag ${cashtag} is already taken`);
         } else {

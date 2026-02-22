@@ -1126,12 +1126,13 @@ function InvestingPage() {
         "InvestingPage.useCallback[fetchCryptoData]": async ()=>{
             setCryptoLoading(true);
             try {
-                const [posRes, chartRes, ordersRes] = await Promise.all([
+                const [posRes, chartRes, ordersRes, transfersRes] = await Promise.all([
                     __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$lib$2f$api$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].get(`/trading/positions`),
                     __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$lib$2f$api$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].get(`/trading/crypto/bars/BTC/USD`, {
                         params: getBtcBarParams(timeRange)
                     }),
-                    __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$lib$2f$api$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].get("/trading/orders?limit=30&status=all")
+                    __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$lib$2f$api$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].get("/trading/orders?limit=30&status=all"),
+                    __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$lib$2f$api$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].get("/transfer/history?limit=30")
                 ]);
                 const positions = posRes.data.data || [];
                 const userCryptoEquity = positions.filter({
@@ -1151,9 +1152,27 @@ function InvestingPage() {
                     "InvestingPage.useCallback[fetchCryptoData]": (b)=>parseFloat(b.c)
                 }["InvestingPage.useCallback[fetchCryptoData]"]));
                 const orders = ordersRes.data.data || [];
-                setCryptoActivity(orders.filter({
-                    "InvestingPage.useCallback[fetchCryptoData]": (o)=>o.symbol.includes("/") || o.asset_class === "crypto"
-                }["InvestingPage.useCallback[fetchCryptoData]"]));
+                const cryptoOrders = orders.filter({
+                    "InvestingPage.useCallback[fetchCryptoData].cryptoOrders": (o)=>o.symbol?.includes("/") || o.asset_class === "crypto"
+                }["InvestingPage.useCallback[fetchCryptoData].cryptoOrders"]);
+                // Blend in P2P Bitcoin transfers
+                const transfers = transfersRes.data?.data?.transactions || [];
+                const btcTransfers = transfers.filter({
+                    "InvestingPage.useCallback[fetchCryptoData].btcTransfers": (t)=>t.type === "bitcoin_send"
+                }["InvestingPage.useCallback[fetchCryptoData].btcTransfers"]).map({
+                    "InvestingPage.useCallback[fetchCryptoData].btcTransfers": (t)=>({
+                            ...t,
+                            symbol: "BTC"
+                        })
+                }["InvestingPage.useCallback[fetchCryptoData].btcTransfers"]);
+                // Sort combined activity by date descending
+                const combinedActivity = [
+                    ...cryptoOrders,
+                    ...btcTransfers
+                ].sort({
+                    "InvestingPage.useCallback[fetchCryptoData].combinedActivity": (a, b)=>new Date(b.created_at || b.submitted_at || b.filled_at) - new Date(a.created_at || a.submitted_at || a.filled_at)
+                }["InvestingPage.useCallback[fetchCryptoData].combinedActivity"]);
+                setCryptoActivity(combinedActivity);
             } catch (err) {
                 console.error("Failed to fetch crypto data", err);
             } finally{
@@ -1274,7 +1293,7 @@ function InvestingPage() {
                         children: "Investing"
                     }, void 0, false, {
                         fileName: "[project]/frontend/app/investing/page.js",
-                        lineNumber: 227,
+                        lineNumber: 240,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1290,12 +1309,12 @@ function InvestingPage() {
                                     }
                                 }, void 0, false, {
                                     fileName: "[project]/frontend/app/investing/page.js",
-                                    lineNumber: 233,
+                                    lineNumber: 246,
                                     columnNumber: 13
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/frontend/app/investing/page.js",
-                                lineNumber: 229,
+                                lineNumber: 242,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1306,19 +1325,19 @@ function InvestingPage() {
                                 children: (user.fullName || user.full_name || "?").charAt(0).toUpperCase()
                             }, void 0, false, {
                                 fileName: "[project]/frontend/app/investing/page.js",
-                                lineNumber: 235,
+                                lineNumber: 248,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/frontend/app/investing/page.js",
-                        lineNumber: 228,
+                        lineNumber: 241,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/frontend/app/investing/page.js",
-                lineNumber: 226,
+                lineNumber: 239,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1330,7 +1349,7 @@ function InvestingPage() {
                         children: "Stocks"
                     }, void 0, false, {
                         fileName: "[project]/frontend/app/investing/page.js",
-                        lineNumber: 246,
+                        lineNumber: 259,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1339,13 +1358,13 @@ function InvestingPage() {
                         children: "Crypto"
                     }, void 0, false, {
                         fileName: "[project]/frontend/app/investing/page.js",
-                        lineNumber: 255,
+                        lineNumber: 268,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/frontend/app/investing/page.js",
-                lineNumber: 245,
+                lineNumber: 258,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1362,7 +1381,7 @@ function InvestingPage() {
                         ]
                     }, void 0, true, {
                         fileName: "[project]/frontend/app/investing/page.js",
-                        lineNumber: 268,
+                        lineNumber: 281,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1379,7 +1398,7 @@ function InvestingPage() {
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/frontend/app/investing/page.js",
-                                lineNumber: 279,
+                                lineNumber: 292,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1392,26 +1411,26 @@ function InvestingPage() {
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/frontend/app/investing/page.js",
-                                lineNumber: 282,
+                                lineNumber: 295,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                 children: "Today"
                             }, void 0, false, {
                                 fileName: "[project]/frontend/app/investing/page.js",
-                                lineNumber: 285,
+                                lineNumber: 298,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/frontend/app/investing/page.js",
-                        lineNumber: 275,
+                        lineNumber: 288,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/frontend/app/investing/page.js",
-                lineNumber: 267,
+                lineNumber: 280,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1422,12 +1441,12 @@ function InvestingPage() {
                         className: "w-8 h-8 animate-spin text-gray-300"
                     }, void 0, false, {
                         fileName: "[project]/frontend/app/investing/page.js",
-                        lineNumber: 293,
+                        lineNumber: 306,
                         columnNumber: 13
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/frontend/app/investing/page.js",
-                    lineNumber: 292,
+                    lineNumber: 305,
                     columnNumber: 11
                 }, this) : chartData.length > 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$components$2f$PriceChart$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
                     data: chartData,
@@ -1435,19 +1454,19 @@ function InvestingPage() {
                     height: 250
                 }, void 0, false, {
                     fileName: "[project]/frontend/app/investing/page.js",
-                    lineNumber: 296,
+                    lineNumber: 309,
                     columnNumber: 11
                 }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                     className: "absolute inset-0 flex items-center justify-center text-gray-500 text-sm",
                     children: "No data available"
                 }, void 0, false, {
                     fileName: "[project]/frontend/app/investing/page.js",
-                    lineNumber: 298,
+                    lineNumber: 311,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/frontend/app/investing/page.js",
-                lineNumber: 290,
+                lineNumber: 303,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1458,12 +1477,12 @@ function InvestingPage() {
                         children: t
                     }, t, false, {
                         fileName: "[project]/frontend/app/investing/page.js",
-                        lineNumber: 307,
+                        lineNumber: 320,
                         columnNumber: 11
                     }, this))
             }, void 0, false, {
                 fileName: "[project]/frontend/app/investing/page.js",
-                lineNumber: 305,
+                lineNumber: 318,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1477,7 +1496,7 @@ function InvestingPage() {
                                 children: "My Investments"
                             }, void 0, false, {
                                 fileName: "[project]/frontend/app/investing/page.js",
-                                lineNumber: 323,
+                                lineNumber: 336,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1487,18 +1506,18 @@ function InvestingPage() {
                                     children: "•••"
                                 }, void 0, false, {
                                     fileName: "[project]/frontend/app/investing/page.js",
-                                    lineNumber: 327,
+                                    lineNumber: 340,
                                     columnNumber: 13
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/frontend/app/investing/page.js",
-                                lineNumber: 326,
+                                lineNumber: 339,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/frontend/app/investing/page.js",
-                        lineNumber: 322,
+                        lineNumber: 335,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1510,7 +1529,7 @@ function InvestingPage() {
                                         className: "h-6 w-24 bg-gray-200 dark:bg-zinc-800 animate-pulse rounded mb-2"
                                     }, void 0, false, {
                                         fileName: "[project]/frontend/app/investing/page.js",
-                                        lineNumber: 334,
+                                        lineNumber: 347,
                                         columnNumber: 15
                                     }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                         className: "text-xl font-bold text-gray-900 dark:text-white",
@@ -1523,7 +1542,7 @@ function InvestingPage() {
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/frontend/app/investing/page.js",
-                                        lineNumber: 336,
+                                        lineNumber: 349,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1531,13 +1550,13 @@ function InvestingPage() {
                                         children: "Total Invested"
                                     }, void 0, false, {
                                         fileName: "[project]/frontend/app/investing/page.js",
-                                        lineNumber: 344,
+                                        lineNumber: 357,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/frontend/app/investing/page.js",
-                                lineNumber: 332,
+                                lineNumber: 345,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1546,7 +1565,7 @@ function InvestingPage() {
                                         className: "h-6 w-24 bg-gray-200 dark:bg-zinc-800 animate-pulse rounded mb-2"
                                     }, void 0, false, {
                                         fileName: "[project]/frontend/app/investing/page.js",
-                                        lineNumber: 351,
+                                        lineNumber: 364,
                                         columnNumber: 15
                                     }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                         className: `text-xl font-bold ${totalGain > 0 ? "text-cashapp" : totalGain < 0 ? "text-red-500" : "text-gray-500"}`,
@@ -1560,7 +1579,7 @@ function InvestingPage() {
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/frontend/app/investing/page.js",
-                                        lineNumber: 353,
+                                        lineNumber: 366,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1568,25 +1587,25 @@ function InvestingPage() {
                                         children: "Total Gain"
                                     }, void 0, false, {
                                         fileName: "[project]/frontend/app/investing/page.js",
-                                        lineNumber: 363,
+                                        lineNumber: 376,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/frontend/app/investing/page.js",
-                                lineNumber: 349,
+                                lineNumber: 362,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/frontend/app/investing/page.js",
-                        lineNumber: 331,
+                        lineNumber: 344,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/frontend/app/investing/page.js",
-                lineNumber: 321,
+                lineNumber: 334,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1603,20 +1622,20 @@ function InvestingPage() {
                                     children: "📈"
                                 }, void 0, false, {
                                     fileName: "[project]/frontend/app/investing/page.js",
-                                    lineNumber: 375,
+                                    lineNumber: 388,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                     children: "Discover Stocks"
                                 }, void 0, false, {
                                     fileName: "[project]/frontend/app/investing/page.js",
-                                    lineNumber: 376,
+                                    lineNumber: 389,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/frontend/app/investing/page.js",
-                            lineNumber: 374,
+                            lineNumber: 387,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1624,13 +1643,13 @@ function InvestingPage() {
                             children: "Buy"
                         }, void 0, false, {
                             fileName: "[project]/frontend/app/investing/page.js",
-                            lineNumber: 378,
+                            lineNumber: 391,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/frontend/app/investing/page.js",
-                    lineNumber: 370,
+                    lineNumber: 383,
                     columnNumber: 11
                 }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                     onClick: ()=>router.push("/crypto"),
@@ -1644,20 +1663,20 @@ function InvestingPage() {
                                     children: "₿"
                                 }, void 0, false, {
                                     fileName: "[project]/frontend/app/investing/page.js",
-                                    lineNumber: 388,
+                                    lineNumber: 401,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                     children: "Explore Crypto"
                                 }, void 0, false, {
                                     fileName: "[project]/frontend/app/investing/page.js",
-                                    lineNumber: 389,
+                                    lineNumber: 402,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/frontend/app/investing/page.js",
-                            lineNumber: 387,
+                            lineNumber: 400,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1665,18 +1684,18 @@ function InvestingPage() {
                             children: "Buy / Sell"
                         }, void 0, false, {
                             fileName: "[project]/frontend/app/investing/page.js",
-                            lineNumber: 391,
+                            lineNumber: 404,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/frontend/app/investing/page.js",
-                    lineNumber: 383,
+                    lineNumber: 396,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/frontend/app/investing/page.js",
-                lineNumber: 368,
+                lineNumber: 381,
                 columnNumber: 7
             }, this),
             activityData.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1690,7 +1709,7 @@ function InvestingPage() {
                                 children: "Activity"
                             }, void 0, false, {
                                 fileName: "[project]/frontend/app/investing/page.js",
-                                lineNumber: 402,
+                                lineNumber: 415,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1699,29 +1718,48 @@ function InvestingPage() {
                                 children: "See All"
                             }, void 0, false, {
                                 fileName: "[project]/frontend/app/investing/page.js",
-                                lineNumber: 405,
+                                lineNumber: 418,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/frontend/app/investing/page.js",
-                        lineNumber: 401,
+                        lineNumber: 414,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: "space-y-4",
                         children: activityData.slice(0, 5).map((order)=>{
-                            const amount = parseFloat(order.filled_avg_price || 0) * parseFloat(order.filled_qty || 0) || parseFloat(order.notional) || 0;
-                            const isBuy = order.side === "buy";
-                            const isCrypto = order.asset_class === "crypto" || order.symbol.includes("/");
-                            const symbolStr = isCrypto ? order.symbol.split("/")[0] : order.symbol;
+                            const amount = parseFloat(order.filled_avg_price || 0) * parseFloat(order.filled_qty || 0) || parseFloat(order.notional) || parseFloat(order.amount) / 100 || 0;
+                            const isP2P = order.type === "bitcoin_send";
+                            const isReceived = isP2P && order.receiver_id === user.id;
+                            const isBuy = !isP2P && order.side === "buy";
+                            const isCrypto = isP2P || order.asset_class === "crypto" || order.symbol?.includes("/");
+                            const symbolStr = isP2P ? "BTC" : isCrypto ? order.symbol.split("/")[0] : order.symbol;
                             const date = new Date(order.filled_at || order.submitted_at || order.created_at).toLocaleDateString(undefined, {
                                 month: "short",
                                 day: "numeric"
                             });
-                            const assetInfo = isCrypto ? __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$lib$2f$assets$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["CRYPTOS"].find((c)=>c.symbol === order.symbol || c.alpacaSymbol === order.symbol) : __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$lib$2f$assets$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["STOCKS"].find((s)=>s.symbol === order.symbol);
+                            const assetInfo = isCrypto ? __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$lib$2f$assets$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["CRYPTOS"].find((c)=>c.symbol.startsWith(symbolStr) || c.alpacaSymbol === order.symbol) : __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$lib$2f$assets$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["STOCKS"].find((s)=>s.symbol === order.symbol);
+                            let actionText = isBuy ? "Bought" : "Sold";
+                            if (isP2P) actionText = isReceived ? "Received" : "Sent";
+                            const isPositiveCashFlow = isP2P ? isReceived : !isBuy;
+                            let qtyText = "";
+                            if (!isP2P && Number(order.filled_qty) > 0) {
+                                qtyText = Number(order.filled_qty).toLocaleString(undefined, {
+                                    maximumFractionDigits: isCrypto ? 6 : 4
+                                }) + " ";
+                            }
+                            let displayAmount = `${actionText} ${qtyText}${symbolStr}`;
+                            if (isP2P) {
+                                displayAmount = `${actionText} Bitcoin`;
+                                // If the default note format is used (e.g. "0.00500000 BTC ($..."), extract it
+                                if (order.note && order.note.match(/^[\d.]+ BTC/)) {
+                                    displayAmount = `${actionText} ${order.note.split(' ')[0]} ${symbolStr}`;
+                                }
+                            }
                             return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                onClick: ()=>router.push(`/activity/${order.id}`),
+                                onClick: ()=>router.push(`/activity/detail?id=${order.id}`),
                                 className: "w-full flex items-center justify-between group hover:bg-gray-50 dark:hover:bg-zinc-900 p-2 -mx-2 rounded-xl transition-all",
                                 children: [
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1729,11 +1767,11 @@ function InvestingPage() {
                                         children: [
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$components$2f$StockLogo$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
                                                 assetInfo: assetInfo,
-                                                symbol: order.symbol,
-                                                textClass: isBuy ? "text-cashapp" : "text-red-500"
+                                                symbol: symbolStr,
+                                                textClass: isBuy || isReceived ? "text-cashapp" : "text-red-500"
                                             }, void 0, false, {
                                                 fileName: "[project]/frontend/app/investing/page.js",
-                                                lineNumber: 443,
+                                                lineNumber: 482,
                                                 columnNumber: 21
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1741,17 +1779,10 @@ function InvestingPage() {
                                                 children: [
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                                         className: "font-bold text-sm text-gray-900 dark:text-gray-100",
-                                                        children: [
-                                                            isBuy ? "Bought" : "Sold",
-                                                            " ",
-                                                            Number(order.filled_qty) > 0 ? Number(order.filled_qty).toLocaleString(undefined, {
-                                                                maximumFractionDigits: isCrypto ? 6 : 4
-                                                            }) + " " : "",
-                                                            symbolStr
-                                                        ]
-                                                    }, void 0, true, {
+                                                        children: displayAmount
+                                                    }, void 0, false, {
                                                         fileName: "[project]/frontend/app/investing/page.js",
-                                                        lineNumber: 449,
+                                                        lineNumber: 488,
                                                         columnNumber: 23
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1763,19 +1794,19 @@ function InvestingPage() {
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/frontend/app/investing/page.js",
-                                                        lineNumber: 458,
+                                                        lineNumber: 491,
                                                         columnNumber: 23
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/frontend/app/investing/page.js",
-                                                lineNumber: 448,
+                                                lineNumber: 487,
                                                 columnNumber: 21
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/frontend/app/investing/page.js",
-                                        lineNumber: 442,
+                                        lineNumber: 481,
                                         columnNumber: 19
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1792,13 +1823,13 @@ function InvestingPage() {
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/frontend/app/investing/page.js",
-                                                lineNumber: 464,
+                                                lineNumber: 497,
                                                 columnNumber: 21
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                                className: `text-xs font-bold ${isBuy ? "text-gray-400" : "text-cashapp"}`,
+                                                className: `text-xs font-bold ${isPositiveCashFlow ? "text-cashapp" : "text-gray-400"}`,
                                                 children: [
-                                                    isBuy ? "-" : "+",
+                                                    isPositiveCashFlow ? "+" : "-",
                                                     "$",
                                                     amount.toLocaleString(undefined, {
                                                         minimumFractionDigits: 2,
@@ -1807,31 +1838,31 @@ function InvestingPage() {
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/frontend/app/investing/page.js",
-                                                lineNumber: 471,
+                                                lineNumber: 504,
                                                 columnNumber: 21
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/frontend/app/investing/page.js",
-                                        lineNumber: 463,
+                                        lineNumber: 496,
                                         columnNumber: 19
                                     }, this)
                                 ]
                             }, order.id, true, {
                                 fileName: "[project]/frontend/app/investing/page.js",
-                                lineNumber: 437,
+                                lineNumber: 476,
                                 columnNumber: 17
                             }, this);
                         })
                     }, void 0, false, {
                         fileName: "[project]/frontend/app/investing/page.js",
-                        lineNumber: 412,
+                        lineNumber: 425,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/frontend/app/investing/page.js",
-                lineNumber: 400,
+                lineNumber: 413,
                 columnNumber: 9
             }, this),
             isStocks && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1845,7 +1876,7 @@ function InvestingPage() {
                                 children: "Most Traded Monthly"
                             }, void 0, false, {
                                 fileName: "[project]/frontend/app/investing/page.js",
-                                lineNumber: 493,
+                                lineNumber: 526,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1853,7 +1884,7 @@ function InvestingPage() {
                                 children: "These stocks were bought and sold more over the last 30 days than any other stocks available on Cash App."
                             }, void 0, false, {
                                 fileName: "[project]/frontend/app/investing/page.js",
-                                lineNumber: 496,
+                                lineNumber: 529,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1861,7 +1892,7 @@ function InvestingPage() {
                                 children: "These stocks were bought and sold more over the last 30 days than any other stocks available."
                             }, void 0, false, {
                                 fileName: "[project]/frontend/app/investing/page.js",
-                                lineNumber: 500,
+                                lineNumber: 533,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1875,7 +1906,7 @@ function InvestingPage() {
                                     if (!stock) return null;
                                     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                         className: "flex justify-between items-center cursor-pointer group hover:bg-white dark:hover:bg-zinc-800 p-2 -mx-2 rounded-xl transition-all",
-                                        onClick: ()=>router.push(`/stocks/${stock.symbol}`),
+                                        onClick: ()=>router.push(`/stocks/detail?symbol=${stock.symbol}`),
                                         children: [
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                 className: "flex items-center space-x-4",
@@ -1887,7 +1918,7 @@ function InvestingPage() {
                                                         textClass: "text-cashapp"
                                                     }, void 0, false, {
                                                         fileName: "[project]/frontend/app/investing/page.js",
-                                                        lineNumber: 520,
+                                                        lineNumber: 553,
                                                         columnNumber: 23
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1895,13 +1926,13 @@ function InvestingPage() {
                                                         children: stock.name
                                                     }, void 0, false, {
                                                         fileName: "[project]/frontend/app/investing/page.js",
-                                                        lineNumber: 526,
+                                                        lineNumber: 559,
                                                         columnNumber: 23
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/frontend/app/investing/page.js",
-                                                lineNumber: 519,
+                                                lineNumber: 552,
                                                 columnNumber: 21
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1915,24 +1946,24 @@ function InvestingPage() {
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/frontend/app/investing/page.js",
-                                                    lineNumber: 531,
+                                                    lineNumber: 564,
                                                     columnNumber: 23
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/frontend/app/investing/page.js",
-                                                lineNumber: 530,
+                                                lineNumber: 563,
                                                 columnNumber: 21
                                             }, this)
                                         ]
                                     }, stock.symbol, true, {
                                         fileName: "[project]/frontend/app/investing/page.js",
-                                        lineNumber: 514,
+                                        lineNumber: 547,
                                         columnNumber: 19
                                     }, this);
                                 })
                             }, void 0, false, {
                                 fileName: "[project]/frontend/app/investing/page.js",
-                                lineNumber: 505,
+                                lineNumber: 538,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1942,40 +1973,40 @@ function InvestingPage() {
                                         className: "w-1.5 h-1.5 rounded-full bg-gray-300"
                                     }, void 0, false, {
                                         fileName: "[project]/frontend/app/investing/page.js",
-                                        lineNumber: 541,
+                                        lineNumber: 574,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                         className: "w-1.5 h-1.5 rounded-full bg-gray-300"
                                     }, void 0, false, {
                                         fileName: "[project]/frontend/app/investing/page.js",
-                                        lineNumber: 542,
+                                        lineNumber: 575,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                         className: "w-1.5 h-1.5 rounded-full bg-gray-300"
                                     }, void 0, false, {
                                         fileName: "[project]/frontend/app/investing/page.js",
-                                        lineNumber: 543,
+                                        lineNumber: 576,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                         className: "w-1.5 h-1.5 rounded-full bg-black dark:bg-white"
                                     }, void 0, false, {
                                         fileName: "[project]/frontend/app/investing/page.js",
-                                        lineNumber: 544,
+                                        lineNumber: 577,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/frontend/app/investing/page.js",
-                                lineNumber: 540,
+                                lineNumber: 573,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/frontend/app/investing/page.js",
-                        lineNumber: 492,
+                        lineNumber: 525,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1986,7 +2017,7 @@ function InvestingPage() {
                                 children: "Biggest Daily Movers"
                             }, void 0, false, {
                                 fileName: "[project]/frontend/app/investing/page.js",
-                                lineNumber: 550,
+                                lineNumber: 583,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1994,7 +2025,7 @@ function InvestingPage() {
                                 children: "These companies gained or lost the most value today of any stock on Cash App."
                             }, void 0, false, {
                                 fileName: "[project]/frontend/app/investing/page.js",
-                                lineNumber: 553,
+                                lineNumber: 586,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2009,7 +2040,7 @@ function InvestingPage() {
                                     const isUp = Math.random() > 0.5;
                                     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                         className: "flex justify-between items-center cursor-pointer group hover:bg-white dark:hover:bg-zinc-800 p-2 -mx-2 rounded-xl transition-all",
-                                        onClick: ()=>router.push(`/stocks/${stock.symbol}`),
+                                        onClick: ()=>router.push(`/stocks/detail?symbol=${stock.symbol}`),
                                         children: [
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                 className: "flex items-center space-x-4",
@@ -2021,7 +2052,7 @@ function InvestingPage() {
                                                         textClass: isUp ? "text-cashapp" : "text-red-500"
                                                     }, void 0, false, {
                                                         fileName: "[project]/frontend/app/investing/page.js",
-                                                        lineNumber: 574,
+                                                        lineNumber: 607,
                                                         columnNumber: 23
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2029,13 +2060,13 @@ function InvestingPage() {
                                                         children: stock.name
                                                     }, void 0, false, {
                                                         fileName: "[project]/frontend/app/investing/page.js",
-                                                        lineNumber: 580,
+                                                        lineNumber: 613,
                                                         columnNumber: 23
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/frontend/app/investing/page.js",
-                                                lineNumber: 573,
+                                                lineNumber: 606,
                                                 columnNumber: 21
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2050,24 +2081,24 @@ function InvestingPage() {
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/frontend/app/investing/page.js",
-                                                    lineNumber: 585,
+                                                    lineNumber: 618,
                                                     columnNumber: 23
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/frontend/app/investing/page.js",
-                                                lineNumber: 584,
+                                                lineNumber: 617,
                                                 columnNumber: 21
                                             }, this)
                                         ]
                                     }, stock.symbol, true, {
                                         fileName: "[project]/frontend/app/investing/page.js",
-                                        lineNumber: 568,
+                                        lineNumber: 601,
                                         columnNumber: 19
                                     }, this);
                                 })
                             }, void 0, false, {
                                 fileName: "[project]/frontend/app/investing/page.js",
-                                lineNumber: 558,
+                                lineNumber: 591,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2077,57 +2108,57 @@ function InvestingPage() {
                                         className: "w-1.5 h-1.5 rounded-full bg-black dark:bg-white"
                                     }, void 0, false, {
                                         fileName: "[project]/frontend/app/investing/page.js",
-                                        lineNumber: 595,
+                                        lineNumber: 628,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                         className: "w-1.5 h-1.5 rounded-full bg-gray-300"
                                     }, void 0, false, {
                                         fileName: "[project]/frontend/app/investing/page.js",
-                                        lineNumber: 596,
+                                        lineNumber: 629,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                         className: "w-1.5 h-1.5 rounded-full bg-gray-300"
                                     }, void 0, false, {
                                         fileName: "[project]/frontend/app/investing/page.js",
-                                        lineNumber: 597,
+                                        lineNumber: 630,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                         className: "w-1.5 h-1.5 rounded-full bg-gray-300"
                                     }, void 0, false, {
                                         fileName: "[project]/frontend/app/investing/page.js",
-                                        lineNumber: 598,
+                                        lineNumber: 631,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/frontend/app/investing/page.js",
-                                lineNumber: 594,
+                                lineNumber: 627,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/frontend/app/investing/page.js",
-                        lineNumber: 549,
+                        lineNumber: 582,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/frontend/app/investing/page.js",
-                lineNumber: 490,
+                lineNumber: 523,
                 columnNumber: 9
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$frontend$2f$components$2f$Navbar$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
                 fileName: "[project]/frontend/app/investing/page.js",
-                lineNumber: 604,
+                lineNumber: 637,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/frontend/app/investing/page.js",
-        lineNumber: 224,
+        lineNumber: 237,
         columnNumber: 5
     }, this);
 }

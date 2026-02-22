@@ -26,6 +26,7 @@ import {
   Search,
   ChevronDown,
   Plus,
+  Trash2,
 } from "lucide-react";
 import { QRCodeSVG } from "qrcode.react";
 import QrScanner from "react-qr-scanner";
@@ -261,6 +262,23 @@ export default function Home() {
     setShowAddCard(false);
     // Select the newly added card (last in the array)
     setSelectedCardIndex(paymentMethods.length); // Will be set after refresh
+  };
+
+  const handleDeleteCard = async (id, e) => {
+    e.stopPropagation();
+    try {
+      await api.delete(`/funding/methods/${id}`);
+      await fetchData();
+      if (selectedCardIndex >= paymentMethods.length - 1) {
+        setSelectedCardIndex(Math.max(0, paymentMethods.length - 2));
+      }
+      if (paymentMethods.length === 1) {
+        setShowCardSelector(false);
+      }
+      toast.success("Card removed successfully");
+    } catch (err) {
+      toast.error("Failed to remove card");
+    }
   };
 
   const handleMarkAsRead = async (id) => {
@@ -891,6 +909,12 @@ export default function Home() {
                         <div className="flex-1">
                           <p className="font-bold text-sm">{pm.brand || "Card"} •••• {pm.last_four || "****"}</p>
                         </div>
+                        <button
+                          onClick={(e) => handleDeleteCard(pm.id, e)}
+                          className="p-2 hover:bg-red-50 dark:hover:bg-red-900/20 text-red-500 rounded-full transition-colors"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
                         {idx === Math.min(selectedCardIndex, paymentMethods.length - 1) && (
                           <Check className="w-4 h-4 text-cashapp" />
                         )}
@@ -1077,7 +1101,7 @@ export default function Home() {
                   className={`flex items-center justify-between py-3.5 cursor-pointer hover:bg-gray-50 dark:hover:bg-zinc-900 px-1 -mx-1 rounded-xl transition-all ${idx < activity.length - 1 ? "border-b border-gray-100 dark:border-zinc-800/50" : ""
                     }`}
                   onClick={() =>
-                    !item.isCashIn && router.push(`/activity/${item.id}`)
+                    !item.isCashIn && router.push(`/activity/detail?id=${item.id}`)
                   }
                 >
                   <div className="flex items-center space-x-3 flex-1 min-w-0">
@@ -1097,8 +1121,8 @@ export default function Home() {
                       />
                     ) : (
                       <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-bold ${item.isCashIn ? "bg-blue-500" :
-                          item.type === "request" ? "bg-orange-500" :
-                            isIncoming ? "bg-cashapp" : "bg-gray-400 dark:bg-zinc-600"
+                        item.type === "request" ? "bg-orange-500" :
+                          isIncoming ? "bg-cashapp" : "bg-gray-400 dark:bg-zinc-600"
                         }`}>
                         {item.isCashIn ? "🏦" :
                           item.type === "request" ? "!" :
@@ -1122,8 +1146,8 @@ export default function Home() {
                     </p>
                     {item.status && item.status !== "completed" && item.status !== "filled" && (
                       <p className={`text-[10px] font-medium mt-0.5 ${item.status === "pending" ? "text-amber-500" :
-                          item.status === "failed" || item.status === "declined" ? "text-red-500" :
-                            "text-gray-400"
+                        item.status === "failed" || item.status === "declined" ? "text-red-500" :
+                          "text-gray-400"
                         }`}>
                         {item.status}
                       </p>

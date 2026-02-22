@@ -305,7 +305,7 @@ export default function ActivityPage() {
                 className={`flex items-center justify-between py-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-zinc-900 px-1 -mx-1 rounded-xl transition-all ${idx < activity.length - 1 ? "border-b border-gray-100 dark:border-zinc-800/50" : ""
                   }`}
                 onClick={() =>
-                  !item.isCashIn && !item.isSavings && router.push(`/activity/${item.id}`)
+                  !item.isCashIn && !item.isSavings && router.push(`/activity/detail?id=${item.id}`)
                 }
               >
                 <div className="flex items-center space-x-3 flex-1 min-w-0">
@@ -330,8 +330,8 @@ export default function ActivityPage() {
                     </div>
                   ) : (
                     <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-bold ${item.isCashIn ? "bg-blue-500" :
-                        item.type === "request" ? "bg-orange-500" :
-                          isIncoming ? "bg-cashapp" : "bg-gray-400 dark:bg-zinc-600"
+                      item.type === "request" ? "bg-orange-500" :
+                        isIncoming ? "bg-cashapp" : "bg-gray-400 dark:bg-zinc-600"
                       }`}>
                       {item.isCashIn ? "🏦" :
                         item.type === "request" ? "!" :
@@ -359,8 +359,8 @@ export default function ActivityPage() {
                   </p>
                   {item.status && item.status !== "completed" && item.status !== "filled" && (
                     <p className={`text-[10px] font-medium mt-0.5 ${item.status === "pending" ? "text-amber-500" :
-                        item.status === "failed" || item.status === "declined" ? "text-red-500" :
-                          "text-gray-400"
+                      item.status === "failed" || item.status === "declined" ? "text-red-500" :
+                        "text-gray-400"
                       }`}>
                       {item.status}
                     </p>

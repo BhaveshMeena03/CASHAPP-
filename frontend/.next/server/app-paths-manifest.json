@@ -1,11 +1,11 @@
 {
   "/_global-error/page": "app/_global-error/page.js",
   "/_not-found/page": "app/_not-found/page.js",
-  "/activity/[id]/page": "app/activity/[id]/page.js",
+  "/activity/detail/page": "app/activity/detail/page.js",
   "/activity/page": "app/activity/page.js",
   "/banking/page": "app/banking/page.js",
   "/cards/page": "app/cards/page.js",
-  "/crypto/[symbol]/page": "app/crypto/[symbol]/page.js",
+  "/crypto/detail/page": "app/crypto/detail/page.js",
   "/crypto/page": "app/crypto/page.js",
   "/investing/page": "app/investing/page.js",
   "/login/page": "app/login/page.js",
@@ -15,6 +15,6 @@
   "/register/page": "app/register/page.js",
   "/search/page": "app/search/page.js",
   "/settings/page": "app/settings/page.js",
-  "/stocks/[symbol]/page": "app/stocks/[symbol]/page.js",
+  "/stocks/detail/page": "app/stocks/detail/page.js",
   "/stocks/page": "app/stocks/page.js"
 }

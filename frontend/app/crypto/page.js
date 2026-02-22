@@ -174,7 +174,7 @@ export default function CryptoPage() {
             {cryptoData.map((crypto) => (
               <button
                 key={crypto.symbol}
-                onClick={() => router.push(`/crypto/${crypto.alpacaSymbol}`)}
+                onClick={() => router.push(`/crypto/detail?symbol=${crypto.alpacaSymbol}`)}
                 className="w-full flex items-center justify-between p-4 bg-gray-50 dark:bg-zinc-900 rounded-2xl hover:bg-gray-100 dark:hover:bg-zinc-800 transition-all active:scale-[0.98]"
               >
                 <div className="flex items-center space-x-4">
