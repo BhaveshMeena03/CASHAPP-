@@ -518,6 +518,10 @@ exports.getPosition = async (req, res, next) => {
       }
     } catch (e) {
       console.error(`Price fetch failed for ${p.symbol}:`, e.message);
+      if (e.response) {
+        console.error(`Alpaca API Error Status: ${e.response.status}`);
+        console.error(`Alpaca API Error Data:`, JSON.stringify(e.response.data));
+      }
     }
 
     const qty = parseFloat(p.quantity);

@@ -1,9 +1,5 @@
 {
-  "/activity/detail/page": "app/activity/detail/page.js",
-  "/activity/page": "app/activity/page.js",
-  "/cards/page": "app/cards/page.js",
-  "/crypto/detail/page": "app/crypto/detail/page.js",
-  "/crypto/page": "app/crypto/page.js",
-  "/investing/page": "app/investing/page.js",
+  "/_not-found/page": "app/_not-found/page.js",
+  "/login/page": "app/login/page.js",
   "/page": "app/page.js"
 }
