@@ -39,13 +39,15 @@ async function getStockQuote(symbol) {
 }
 
 async function getStockSnapshot(symbol) {
-    const res = await data.get(`/v2/stocks/${symbol}/snapshot`);
+    const res = await data.get(`/v2/stocks/${symbol}/snapshot`, {
+        params: { feed: 'iex' }
+    });
     return res.data;
 }
 
 async function getMultiStockSnapshots(symbols) {
     const res = await data.get('/v2/stocks/snapshots', {
-        params: { symbols: symbols.join(',') },
+        params: { symbols: symbols.join(','), feed: 'iex' },
     });
     return res.data;
 }
