@@ -280,7 +280,7 @@ exports.placeOrder = async (req, res, next) => {
     let estPrice = 0;
     const quote = isCrypto
       ? await alpaca.getCryptoSnapshot(normalizedSym).catch(() => ({}))
-      : await alpaca.getStockQuote(normalizedSym).catch(() => ({}));
+      : await alpaca.getStockSnapshot(normalizedSym).catch(() => ({}));
 
     if (isCrypto && quote.snapshots?.[normalizedSym]) {
       const snap = quote.snapshots[normalizedSym];
@@ -422,7 +422,7 @@ exports.getPositions = async (req, res, next) => {
               snap?.latestTrade?.p || snap?.minuteBar?.c || 0,
             );
           } else {
-            const q = await alpaca.getStockQuote(p.symbol);
+            const q = await alpaca.getStockSnapshot(p.symbol);
             currentPrice = parseFloat(q.latestTrade?.p || q.minuteBar?.c || 0);
           }
         } catch (e) {
@@ -513,7 +513,7 @@ exports.getPosition = async (req, res, next) => {
           snap?.latestTrade?.p || snap?.minuteBar?.c || 0,
         );
       } else {
-        const q = await alpaca.getStockQuote(p.symbol);
+        const q = await alpaca.getStockSnapshot(p.symbol);
         currentPrice = parseFloat(q.latestTrade?.p || q.minuteBar?.c || 0);
       }
     } catch (e) {
