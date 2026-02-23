@@ -6,6 +6,7 @@
  */
 
 const axios = require('axios');
+require('dotenv').config();
 
 const TRADING_URL = process.env.ALPACA_BASE_URL || 'https://paper-api.alpaca.markets';
 const DATA_URL = process.env.ALPACA_DATA_URL || 'https://data.alpaca.markets';
