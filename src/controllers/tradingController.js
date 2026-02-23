@@ -602,6 +602,15 @@ exports.getOrders = async (req, res, next) => {
           }
         } catch (e) {
           console.error(`Failed to sync order ${po.id} from Alpaca:`, e.message);
+          // If Alpaca returns 404 Not Found (e.g. order was wiped during developer testing)
+          // we must forcefully cancel it locally to prevent infinite pending loops
+          if (e.response && e.response.status === 404) {
+            await db.query("UPDATE orders SET status = 'cancelled', updated_at = NOW() WHERE id = $1", [po.id]);
+            syncOccurred = true;
+            if (po.side === "buy") {
+              await walletModel.creditWallet(wallet.id, po.amount_cents);
+            }
+          }
         }
       }
 
